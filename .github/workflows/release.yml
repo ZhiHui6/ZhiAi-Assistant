@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Install Wails
+        shell: pwsh
+        run: |
+          go install github.com/wailsapp/wails/v2/cmd/wails@v2.17.1
+          "$(go env GOPATH)\bin" | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding ascii
+
+      - name: Build
+        shell: pwsh
+        run: |
+          $ver = $env:GITHUB_REF_NAME -replace '^v', ''
+          wails build -ldflags "-X zhi-ai-assistant/internal/buildinfo.Version=$ver"
+          if (-not (Test-Path "build\bin\ZhiAi-Assistant.exe")) { throw "build output missing" }
+
+      - name: Checksum
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash "build\bin\ZhiAi-Assistant.exe" -Algorithm SHA256).Hash.ToLower()
+          "$hash  ZhiAi-Assistant.exe" | Out-File -FilePath "build\bin\ZhiAi-Assistant.exe.sha256" -Encoding ascii
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          generate_release_notes: true
+          files: |
+            build/bin/ZhiAi-Assistant.exe
+            build/bin/ZhiAi-Assistant.exe.sha256

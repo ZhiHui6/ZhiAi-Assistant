@@ -1,0 +1,12 @@
+* text=auto eol=crlf
+
+*.png binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.exe binary
+*.dll binary
+*.so binary
+*.zip binary

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "zhi-ai-assistant",
+  "outputfilename": "ZhiAi-Assistant",
+  "frontend:install": "",
+  "frontend:build": "",
+  "author": {
+    "name": "ZhiHui6"
+  },
+  "info": {
+    "companyName": "ZhiHui6",
+    "productName": "智爱小助手",
+    "productVersion": "1.0.0",
+    "copyright": "Copyright (C) 2026 ZhiHui6",
+    "comments": "贴在屏幕边缘的 Windows 桌面侧边栏：日历、待办、随记、收纳、快捷启动、计时与用量"
+  }
+}

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智爱小助手</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="pending">
+<div id="bootScreen" aria-hidden="true">
+  <svg class="boot-logo" viewBox="0 0 32 32">
+    <rect x="6" y="4" width="20" height="24" rx="5" />
+    <rect class="fill" x="10" y="9" width="12" height="2.6" rx="1.3" />
+    <rect class="fill" x="10" y="14" width="8" height="2.6" rx="1.3" />
+    <rect class="fill" x="10" y="19" width="10" height="2.6" rx="1.3" />
+  </svg>
+  <div class="boot-spinner"></div>
+  <div class="boot-text">正在启动…</div>
+</div>
+<div id="sidebarRoot">
+  <svg style="display:none" aria-hidden="true">
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M14 3l7 7-2 2-1-1-4 4v4l-4-4-4 4-1-1 4-4-4-4h4l4-4-1-1 2-2z"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v10H3z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l4 4L19 7"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l4 4"/></symbol>
+    <symbol id="i-hash" viewBox="0 0 24 24"><path d="M9.5 3.5L7.5 20.5M16.5 3.5l-2 17M4 8.5h16M3 15.5h16"/></symbol>
+    <symbol id="i-pin-off" viewBox="0 0 24 24"><path d="M4 20L20 4M14 3l7 7-2 2-1-1-4 4v4l-4-4-4 4-1-1 4-4-4-4h4l4-4-1-1 2-2z"/></symbol>
+    <symbol id="i-tack" viewBox="0 0 24 24"><path d="M10 3h4l-.6 5.4 3 3.1H7.6l3-3.1z"/><path d="M12 11.5V20.5"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 5l4 4"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 7H4V2"/><path d="M4 7a8 8 0 1 1 1 10"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2 5"/><path d="M20 5v6h-6"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24"><path d="M15 7h5V2"/><path d="M20 7a8 8 0 1 0-1 10"/></symbol>
+    <symbol id="i-cut" viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.5"/><circle cx="6" cy="17" r="2.5"/><path d="M8.2 8.8L20 19M8.2 15.2L20 5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-paste" viewBox="0 0 24 24"><path d="M9 4h6v3H9z"/><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="M9 12h6M9 16h4"/></symbol>
+    <symbol id="i-select-all" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M8 12h8"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.7 5.2A9.6 9.6 0 0 1 12 5.1c6.5 0 10 6.9 10 6.9a17.4 17.4 0 0 1-3 3.9M6.5 6.6A16.9 16.9 0 0 0 2 12s3.5 6.9 10 6.9c1.7 0 3.3-.4 4.7-1.1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+    <symbol id="i-signout" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M9 8l-4 4 4 4"/><path d="M5 12h9"/></symbol>
+    <symbol id="i-lang" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.5 3.3 5.3 3.3 8.5s-1.1 6-3.3 8.5c-2.2-2.5-3.3-5.3-3.3-8.5s1.1-6 3.3-8.5z"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M7 4.5h10V20l-5-3.6L7 20z"/></symbol>
+    <symbol id="i-width" viewBox="0 0 24 24"><path d="M4 5.5v13M20 5.5v13M8.5 12h7M8.5 12l2.3-2.3M8.5 12l2.3 2.3M15.5 12l-2.3-2.3M15.5 12l-2.3 2.3"/></symbol>
+    <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 3.8c3.1 3.8 5.4 6.5 5.4 9.2a5.4 5.4 0 0 1-10.8 0c0-2.7 2.3-5.4 5.4-9.2z"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.1 0 1.8-.7 1.8-1.7 0-.7-.4-1.3-.4-1.9 0-1 .8-1.7 1.8-1.7h1.5a4.8 4.8 0 0 0 4.8-4.8c0-3.8-4.3-6.9-9.5-6.9z"/><path d="M7.6 10h.01M10.4 6.9h.01M14.8 7.2h.01"/></symbol>
+    <symbol id="i-columns" viewBox="0 0 24 24"><rect x="4" y="4.5" width="6.5" height="15" rx="1.5"/><rect x="13.5" y="4.5" width="6.5" height="15" rx="1.5"/></symbol>
+    <symbol id="i-rows" viewBox="0 0 24 24"><rect x="4" y="4.5" width="16" height="6.5" rx="1.5"/><rect x="4" y="13" width="16" height="6.5" rx="1.5"/></symbol>
+    <symbol id="i-size" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M4 12.2V5.5A1.5 1.5 0 0 1 5.5 4h6.7L20 11.8a1.5 1.5 0 0 1 0 2.1l-5.1 5.1a1.5 1.5 0 0 1-2.1 0z"/><path d="M8 8h.01"/></symbol>
+    <symbol id="i-launch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M10 8.3l5.7 3.7-5.7 3.7z"/></symbol>
+    <symbol id="i-calendar-check" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 9.5h16M8 3.5v4M16 3.5v4M8.5 14.5l2.2 2.2 4.3-4.3"/></symbol>
+    <symbol id="i-dock" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M15.5 4v16"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="11" rx="2"/><path d="M9.5 20h5M12 16v4"/></symbol>
+    <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3.5v8"/><path d="M7.3 6.5a7 7 0 1 0 9.4 0"/></symbol>
+    <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="3" y="6.5" width="18" height="11" rx="2"/><path d="M6.5 10h.01M10 10h.01M13.5 10h.01M17 10h.01M8 14h8"/></symbol>
+    <symbol id="i-motion" viewBox="0 0 24 24"><path d="M3.5 12h4l2-5 3 10 2-5h6"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 9.5h16M8 3.5v4M16 3.5v4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-storage" viewBox="0 0 24 24"><ellipse cx="12" cy="6.5" rx="7" ry="3"/><path d="M5 6.5v11c0 1.7 3.1 3 7 3s7-1.3 7-3v-11M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></symbol>
+    <symbol id="i-folder-open" viewBox="0 0 24 24"><path d="M3.5 8V6.5A1.5 1.5 0 0 1 5 5h5l2 2.5h5.5A1.5 1.5 0 0 1 19 9v1"/><path d="M3.5 10.5h17l-1.8 7.2a1.5 1.5 0 0 1-1.5 1.3H6.8a1.5 1.5 0 0 1-1.5-1.3z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v10M8.5 11l3.5 3.5 3.5-3.5"/><path d="M5 17.5V19a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19v-1.5"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V5M8.5 8.5L12 5l3.5 3.5"/><path d="M5 17.5V19a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19v-1.5"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 19h16M7 19v-6M12 19V8M17 19v-9"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.6 2.3c-.8.5-1.2 1-1.2 1.9"/><path d="M12 16.6h.01"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><path d="M12 7.6h.01"/></symbol>
+  </svg>
+
+  <div class="panel" id="panel">
+    <header class="topbar">
+      <div class="clock">
+        <div class="clock-time" id="clockTime">--:--</div>
+        <div class="clock-sub" id="clockSub">加载中…</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="btnPin" title="临时保持展开（取消/重启后恢复自动隐藏）" hidden>
+          <svg class="icon"><use href="#i-pin"/></svg>
+        </button>
+        <button class="icon-btn" id="btnSettings" title="设置">
+          <svg class="icon"><use href="#i-gear"/></svg>
+          <span class="settings-dot" id="settingsDot" hidden></span>
+        </button>
+        <button class="icon-btn" id="btnCollapse" title="收起 (Esc)">
+          <svg class="icon"><use href="#i-right"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="update-bar" id="updateBar" hidden>
+      <span class="update-bar-text" id="updateBarText"></span>
+      <button class="link-btn" id="updateBarOpen">查看</button>
+      <button class="icon-btn sm" id="updateBarClose" aria-label="忽略此版本">
+        <svg class="icon"><use href="#i-close"/></svg>
+      </button>
+    </div>
+
+    <section class="calendar" id="calendarCard">
+      <div class="cal-head">
+        <button class="icon-btn sm" id="calPrev"><svg class="icon"><use href="#i-left"/></svg></button>
+        <span class="cal-title" id="calTitle">—</span>
+        <button class="icon-btn sm" id="calNext"><svg class="icon"><use href="#i-right"/></svg></button>
+        <button class="link-btn" id="calToday">今天</button>
+      </div>
+      <div class="cal-week"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+      <div class="cal-grid" id="calGrid"></div>
+    </section>
+
+    <section class="launch-dock rows-1" id="launchDock">
+      <div class="launch-dock-head">
+        <span>快捷启动</span>
+        <button class="link-btn" id="launchCatAdd" type="button"><span class="plus">+</span>分类</button>
+        <button class="link-btn" id="launchAdd" type="button"><span class="plus">+</span>程序</button>
+      </div>
+      <div class="launch-cats-row">
+        <div class="launch-cats" id="launchCats"></div>
+      </div>
+      <div class="launch-dock-list" id="launchList"></div>
+    </section>
+
+    <div class="zone-main" id="tabsZone">
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="notes">随记</button>
+      <button class="tab" data-tab="todos">待办</button>
+      <button class="tab" data-tab="shelf">收纳</button>
+      <button class="tab" data-tab="timers">计时</button>
+      <button class="tab" data-tab="shutdown">关机</button>
+      <button class="tab" data-tab="usage">用量</button>
+    </nav>
+
+    <main class="views" id="views">
+      <section class="view active" id="view-notes">
+        <div class="notes-bar" id="notesBar">
+          <div class="search-row">
+            <svg class="icon dim"><use href="#i-search"/></svg>
+            <input id="noteSearch" />
+            <button class="link-btn" id="noteClear" hidden></button>
+          </div>
+          <button class="link-btn" id="noteAdd">新建</button>
+        </div>
+        <div class="list" id="noteList"></div>
+      </section>
+
+      <section class="view" id="view-todos">
+        <div class="capture-row">
+          <input id="todoInput" placeholder="添加待办，回车确认" />
+          <button class="link-btn" id="todoAdd">添加</button>
+        </div>
+        <div class="chips" id="todoScopes">
+          <button class="chip active" data-scope="today">今天<span class="chip-count"></span></button>
+          <button class="chip" data-scope="week">本周<span class="chip-count"></span></button>
+          <button class="chip" data-scope="overdue">逾期<span class="chip-count"></span></button>
+          <button class="chip" data-scope="open">未完成<span class="chip-count"></span></button>
+          <button class="chip" data-scope="done">已完成<span class="chip-count"></span></button>
+          <button class="chip ghost" id="dateChip" hidden></button>
+        </div>
+        <div class="list" id="todoList"></div>
+      </section>
+
+      <section class="view" id="view-shelf">
+        <div class="view-head">
+          <span class="hint" id="shelfHint">拖入文件收藏，挂载可直接浏览</span>
+          <div class="head-actions">
+            <button class="link-btn" id="shelfAddGroup"><span class="plus">+</span>分组</button>
+            <button class="link-btn" id="mountAdd"><span class="plus">+</span>挂载</button>
+            <button class="link-btn" id="mountBack" hidden>返回收纳</button>
+          </div>
+        </div>
+        <div class="crumb" id="crumb" hidden></div>
+        <div class="list" id="shelfList"></div>
+      </section>
+
+      <section class="view" id="view-timers">
+        <div class="timer-alert" id="timerAlert" hidden>
+          <span id="timerAlertText"></span>
+          <button class="link-btn" id="timerAlertClose">知道了</button>
+        </div>
+
+        <div class="timer-card">
+          <div class="timer-head">
+            <span>闹钟</span>
+            <span class="hint">到点提醒并展开面板</span>
+          </div>
+          <div class="timer-form">
+            <span class="time-wrap"><input type="time" id="alarmTime" tabindex="-1" /><span class="time-shield"></span></span>
+            <input id="alarmLabel" placeholder="标签（可选）" />
+            <label class="timer-check">
+              <input type="checkbox" id="alarmRepeat" />
+              每天
+            </label>
+            <button class="btn sm primary" id="alarmAdd">添加</button>
+          </div>
+          <div class="timer-list" id="alarmList"></div>
+          <div class="timer-sound">
+            <span>铃音</span>
+            <select id="alarmSound"></select>
+            <button class="icon-btn sm" id="alarmSoundTest" aria-label="试听闹钟铃音">
+              <svg class="icon"><use href="#i-play"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="timer-card">
+          <div class="timer-head">
+            <span>倒计时</span>
+            <span class="hint">收起面板后仍继续</span>
+          </div>
+          <div class="countdown-value" id="countdownValue">00:00</div>
+          <div class="chips" id="countdownPresets">
+            <button class="chip" data-min="5">5 分</button>
+            <button class="chip" data-min="10">10 分</button>
+            <button class="chip" data-min="15">15 分</button>
+            <button class="chip" data-min="25">25 分</button>
+            <button class="chip" data-min="45">45 分</button>
+            <button class="chip" data-min="60">60 分</button>
+          </div>
+          <div class="timer-form">
+            <input type="number" id="countdownHour" min="0" max="24" step="1" placeholder="时" />
+            <input type="number" id="countdownMin" min="0" max="59" step="1" placeholder="分" />
+            <input type="number" id="countdownSec" min="0" max="59" step="1" placeholder="秒" />
+            <button class="btn sm primary" id="countdownToggle">开始</button>
+            <button class="btn sm ghost" id="countdownReset">重置</button>
+          </div>
+          <div class="timer-sound">
+            <span>铃音</span>
+            <select id="countdownSound"></select>
+            <button class="icon-btn sm" id="countdownSoundTest" aria-label="试听倒计时铃音">
+              <svg class="icon"><use href="#i-play"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="view" id="view-shutdown">
+        <div class="timer-card">
+          <div class="timer-head">
+            <span>定时关机</span>
+            <span class="hint">由 Windows 执行</span>
+          </div>
+          <div class="shutdown-active" id="shutdownActive" hidden>
+            <span id="shutdownActiveText"></span>
+            <button class="btn sm danger" id="shutdownCancel">取消关机</button>
+          </div>
+          <div class="timer-form shutdown-row">
+            <span class="shutdown-label">倒计时</span>
+            <input type="number" id="shutdownMin" min="1" max="10080" step="1" placeholder="30" />
+            <span class="shutdown-unit">分钟后</span>
+            <button class="btn sm" id="shutdownByMinutes">安排</button>
+          </div>
+          <div class="timer-form shutdown-row">
+            <span class="shutdown-label">指定时间</span>
+            <span class="time-wrap"><input type="time" id="shutdownAt" tabindex="-1" /><span class="time-shield"></span></span>
+            <button class="btn sm" id="shutdownByTime">安排</button>
+          </div>
+          <div class="shutdown-confirm" id="shutdownConfirm" hidden>
+            <span id="shutdownConfirmText"></span>
+            <div class="shutdown-confirm-actions">
+              <button class="btn sm danger" id="shutdownConfirmBtn">确认关机</button>
+              <button class="btn sm ghost" id="shutdownConfirmCancel">取消</button>
+            </div>
+          </div>
+          <p class="timer-warn">确认后由 Windows 执行关机，至少延迟 60 秒；已安排的关机可在上方取消。</p>
+        </div>
+      </section>
+
+      <section class="view" id="view-usage">
+        <div class="view-head">
+          <div class="usage-auto-all" id="usageAutoAll" data-state="off">
+            <span class="usage-auto-dot" aria-hidden="true"></span>
+            <span class="usage-auto-text" id="usageAutoAllState">自动签到已关闭</span>
+          </div>
+          <div class="head-actions">
+            <button class="link-btn" id="usageCheckinAll">一键签到</button>
+            <button class="link-btn" id="usageRefreshAll">刷新全部</button>
+          </div>
+        </div>
+        <div class="list" id="usageList"></div>
+      </section>
+
+    </main>
+    </div>
+
+    <div class="drop-overlay" id="dropOverlay">
+      <div class="drop-box">松手即收纳到侧边栏</div>
+    </div>
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <div class="edge-mark" id="edgeMark" hidden>
+    <svg class="icon edge-mark-icon"><use href="#i-left"/></svg>
+    <span class="edge-mark-label">点击展开</span>
+  </div>
+</div>
+
+<div id="settingsRoot">
+  <div class="win">
+    <div class="s-tabs">
+      <img class="s-logo" src="app-icon.svg" alt="" />
+      <div class="s-title" id="sTitle"></div>
+      <span class="s-status" id="sStatus"></span>
+      <button class="link-btn s-reset" id="restoreSettings">恢复默认</button>
+      <button class="icon-btn sm s-close" id="sClose" aria-label="关闭"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="win-body">
+      <div class="settings-layout">
+      <nav class="s-nav" id="sNav">
+        <div class="s-nav-group">
+          <button class="s-nav-item" data-target="groupAppearance"><svg class="icon s-nav-icon" aria-hidden="true"><use href="#i-palette"/></svg>外观</button>
+          <button class="s-nav-item" data-target="groupLaunch"><svg class="icon s-nav-icon" aria-hidden="true"><use href="#i-launch"/></svg>快捷启动</button>
+          <button class="s-nav-item" data-target="groupUsage"><svg class="icon s-nav-icon" aria-hidden="true"><use href="#i-chart"/></svg>用量</button>
+          <button class="s-nav-item" data-target="groupWindow"><svg class="icon s-nav-icon" aria-hidden="true"><use href="#i-monitor"/></svg>窗口与启动</button>
+          <button class="s-nav-item" data-target="groupClock"><svg class="icon s-nav-icon" aria-hidden="true"><use href="#i-clock"/></svg>时钟与日历</button>
+          <button class="s-nav-item" data-target="groupData"><svg class="icon s-nav-icon" aria-hidden="true"><use href="#i-storage"/></svg>数据</button>
+        </div>
+        <div class="s-nav-sep"></div>
+        <button class="s-nav-item s-nav-page" data-page="help"><svg class="icon s-nav-icon" aria-hidden="true"><use href="#i-help"/></svg>帮助</button>
+        <button class="s-nav-item s-nav-page" data-page="about"><svg class="icon s-nav-icon" aria-hidden="true"><use href="#i-info"/></svg>关于</button>
+      </nav>
+      <div class="settings-col">
+      <div class="s-page" id="pageSettings">
+      <section class="s-sec" id="groupAppearance">
+        <h3>外观</h3>
+        <div class="s-cells">
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-lang"/></svg>界面语言</span></span>
+            <span class="s-cell-ctrl">
+              <select id="setLanguage">
+                <option value="auto">跟随系统</option>
+                <option value="zh-CN">简体中文</option>
+                <option value="zh-TW">繁體中文</option>
+                <option value="en">English</option>
+              </select>
+            </span>
+            <span class="s-cell-foot"><span class="s-cell-hint">界面文字即时切换，无需重启</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-bookmark"/></svg>书签宽度</span><span class="s-cell-head-right"><button class="link-btn field-reset" id="setPeekReset">恢复</button></span></span>
+            <span class="s-cell-ctrl range-row">
+              <input type="range" id="setPeek" min="24" max="40" step="1" />
+              <input type="number" id="setPeekNum" min="24" max="40" step="1" />
+              <span class="unit">px</span>
+            </span>
+            <span class="s-cell-foot"><span class="s-cell-hint">收起后边缘露出的宽度 24–40 px</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-width"/></svg>面板宽度</span><span class="s-cell-head-right"><button class="link-btn field-reset" id="setWidthReset">恢复</button></span></span>
+            <span class="s-cell-ctrl range-row">
+              <input type="range" id="setWidth" min="340" max="560" step="5" />
+              <input type="number" id="setWidthNum" min="340" max="560" step="5" />
+              <span class="unit">px</span>
+            </span>
+            <span class="s-cell-foot"><span class="s-cell-hint" id="widthHint">展开宽度 340–560 px，拖动预览</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-droplet"/></svg>玻璃浓度</span><span class="s-cell-head-right"><button class="link-btn field-reset" id="setOpacityReset">恢复</button></span></span>
+            <span class="s-cell-ctrl range-row">
+              <input type="range" id="setOpacity" min="25" max="90" step="1" />
+              <input type="number" id="setOpacityNum" min="25" max="90" step="1" />
+              <span class="unit">%</span>
+            </span>
+            <span class="s-cell-foot"><span class="s-cell-hint">面板不透明度 25–90 %，越高越不透明</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-palette"/></svg>界面底色</span><span class="s-cell-head-right"><button class="link-btn field-reset" id="setBgReset">恢复</button></span></span>
+            <span class="s-cell-ctrl color-row">
+              <input type="color" id="setBackground" value="#0a0c11" />
+              <div class="bg-swatches" id="bgSwatches">
+                <button type="button" class="bg-swatch" data-bg="#0a0c11" style="background:#454d5a" aria-label="石墨"></button>
+                <button type="button" class="bg-swatch" data-bg="#0d1526" style="background:#2f5192" aria-label="藏蓝"></button>
+                <button type="button" class="bg-swatch" data-bg="#0c1713" style="background:#1f6248" aria-label="墨绿"></button>
+                <button type="button" class="bg-swatch" data-bg="#151020" style="background:#4c387f" aria-label="紫夜"></button>
+                <button type="button" class="bg-swatch" data-bg="#18120f" style="background:#72502c" aria-label="暖褐"></button>
+                <button type="button" class="bg-swatch" data-bg="#081a1c" style="background:#1a6570" aria-label="墨青"></button>
+                <button type="button" class="bg-swatch" data-bg="#0a1224" style="background:#2a4276" aria-label="黛蓝"></button>
+                <button type="button" class="bg-swatch" data-bg="#170e22" style="background:#602962" aria-label="绛紫"></button>
+                <button type="button" class="bg-swatch" data-bg="#1a130d" style="background:#64401f" aria-label="深棕"></button>
+                <button type="button" class="bg-swatch" data-bg="#15171b" style="background:#474a4f" aria-label="碳灰"></button>
+              </div>
+              <output class="s-cell-val" id="setBgOut">#0A0C11</output>
+            </span>
+            <span class="s-cell-foot"><span class="s-cell-hint">面板与书签底色，过浅自动压暗</span></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="s-sec" id="groupLaunch">
+        <h3>快捷启动</h3>
+        <div class="s-cells">
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-columns"/></svg>列数</span><span class="s-cell-head-right"><button class="link-btn field-reset" id="setLaunchColsReset">恢复</button></span></span>
+            <span class="s-cell-ctrl range-row">
+              <input type="range" id="setLaunchCols" min="3" max="8" step="1" value="5" />
+              <input type="number" id="setLaunchColsNum" min="3" max="8" step="1" value="5" />
+              <span class="unit">列</span>
+            </span>
+            <span class="s-cell-foot"><span class="s-cell-hint">每行图标数 3–8，超出可左右滚动</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-rows"/></svg>行数</span><span class="s-cell-head-right"><button class="link-btn field-reset" id="setLaunchRowsReset">恢复</button></span></span>
+            <span class="s-cell-ctrl range-row">
+              <input type="range" id="setLaunchRows" min="1" max="3" step="1" value="1" />
+              <input type="number" id="setLaunchRowsNum" min="1" max="3" step="1" value="1" />
+              <span class="unit">行</span>
+            </span>
+            <span class="s-cell-foot"><span class="s-cell-hint">显示 1–3 行，列×行即一屏</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-size"/></svg>图标大小</span><span class="s-cell-head-right"><button class="link-btn field-reset" id="setLaunchIconReset">恢复</button></span></span>
+            <span class="s-cell-ctrl range-row">
+              <input type="range" id="setLaunchIcon" min="24" max="40" step="2" value="32" />
+              <input type="number" id="setLaunchIconNum" min="24" max="40" step="2" value="32" />
+              <span class="unit">px</span>
+            </span>
+            <span class="s-cell-foot"><span class="s-cell-hint">图标与整格 24–40 px，步进 2</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-tag"/></svg>显示程序名称</span></span>
+            <span class="s-cell-ctrl"><output class="s-cell-state" id="setLaunchNamesState">开</output><input type="checkbox" id="setLaunchNames" class="switch" aria-label="显示程序名称" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">图标下方显示名称，过长悬停看全名</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-launch"/></svg>显示快捷启动</span></span>
+            <span class="s-cell-ctrl"><output class="s-cell-state" id="setShowLaunchState">开</output><input type="checkbox" id="setShowLaunch" class="switch" aria-label="显示快捷启动" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">关闭后隐藏，拖入文件改存收纳页</span></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="s-sec" id="groupUsage">
+        <h3>用量</h3>
+        <div class="s-cells">
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-calendar-check"/></svg>自动签到</span></span>
+            <span class="s-cell-ctrl"><output class="s-cell-state" id="usageAutoMasterState">关</output><input type="checkbox" id="usageAutoMaster" class="switch" aria-label="自动签到" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">已登录平台每天一次，失败重试 3 次</span></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="s-sec" id="groupWindow">
+        <h3>窗口与启动</h3>
+        <div class="s-cells">
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-dock"/></svg>贴边位置</span></span>
+            <span class="s-cell-ctrl">
+              <select id="setEdge">
+                <option value="right">屏幕右侧</option>
+                <option value="left">屏幕左侧</option>
+              </select>
+            </span>
+            <span class="s-cell-foot"><span class="s-cell-hint">停靠屏幕左侧或右侧</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-monitor"/></svg>目标显示器</span></span>
+            <span class="s-cell-ctrl"><select id="setMonitor"></select></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">多屏时选择停靠哪块屏</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-eye-off"/></svg>贴边自动隐藏</span></span>
+            <span class="s-cell-ctrl"><output class="s-cell-state" id="setEdgeEnabledState">开</output><input type="checkbox" id="setEdgeEnabled" class="switch" aria-label="贴边自动隐藏" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">开：靠近展开，移开收起；关：常驻手动收起</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-power"/></svg>开机自启</span></span>
+            <span class="s-cell-ctrl"><output class="s-cell-state" id="setAutostartState">关</output><input type="checkbox" id="setAutostart" class="switch" aria-label="开机自启" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">登录 Windows 后自动运行</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-keyboard"/></svg>全局热键</span><span class="s-cell-head-right"><button class="link-btn field-reset" id="setHotkeyReset">恢复</button></span></span>
+            <span class="s-cell-ctrl"><input type="text" id="setHotkey" class="cell-input" placeholder="ctrl+alt+space" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">唤出或收起，须带修饰键</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-motion"/></svg>减少动画效果</span></span>
+            <span class="s-cell-ctrl"><output class="s-cell-state" id="setAnimationsState">关</output><input type="checkbox" id="setAnimations" class="switch" aria-label="减少动画效果" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">取消收放动画，移开立即收起</span></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="s-sec" id="groupClock">
+        <h3>时钟与日历</h3>
+        <div class="s-cells">
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-calendar"/></svg>显示日历</span></span>
+            <span class="s-cell-ctrl"><output class="s-cell-state" id="setShowCalendarState">开</output><input type="checkbox" id="setShowCalendar" class="switch" aria-label="显示日历" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">隐藏整块日历，顶栏时间保留</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-moon"/></svg>日历显示农历/节日</span></span>
+            <span class="s-cell-ctrl"><output class="s-cell-state" id="setCalendarFestivalsState">开</output><input type="checkbox" id="setCalendarFestivals" class="switch" aria-label="日历显示农历/节日" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">日期格只留公历，悬停看农历</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-clock"/></svg>12 小时制显示</span></span>
+            <span class="s-cell-ctrl"><output class="s-cell-state" id="setClock12State">关</output><input type="checkbox" id="setClock12" class="switch" aria-label="12 小时制显示" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">仅顶栏时钟，其余仍 24 小时</span></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="s-sec" id="groupData">
+        <h3>数据</h3>
+        <div class="s-cells">
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-storage"/></svg>存储位置</span></span>
+            <span class="s-cell-ctrl">
+              <select id="setDataDirMode">
+                <option value="default">系统应用数据（默认）</option>
+                <option value="portable">随程序存放（便携）</option>
+                <option value="custom">自定义路径</option>
+              </select>
+            </span>
+            <span class="s-cell-foot"><span class="s-cell-hint" id="dataDirEffective">读取中…</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-folder"/></svg>自定义路径</span><span class="s-cell-head-right"><button class="link-btn" id="pickDataDir">浏览</button></span></span>
+            <span class="s-cell-ctrl"><input type="text" id="setDataDirCustom" class="cell-input" placeholder="D:\\ZhiAiData" /></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">仅自定义模式可用，需已存在的文件夹</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-folder-open"/></svg>数据目录</span></span>
+            <span class="s-cell-ctrl"><button class="btn ghost" id="setDataDir">打开数据目录</button></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">打开当前生效目录</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-download"/></svg>备份数据</span></span>
+            <span class="s-cell-ctrl"><button class="btn ghost" id="backupNow">导出备份</button></span>
+            <span class="s-cell-foot"><span class="s-cell-hint" id="backupHint">可选内容打包，不含缓存与日志</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-upload"/></svg>导入备份</span></span>
+            <span class="s-cell-ctrl"><button class="btn ghost" id="restoreNow">选择备份</button></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">只覆盖所选内容，导入前自动备份</span></span>
+          </div>
+          <div class="s-cell">
+            <span class="s-cell-head"><span class="s-cell-name"><svg class="icon s-cell-icon" aria-hidden="true"><use href="#i-trash"/></svg>完全重置</span></span>
+            <span class="s-cell-ctrl"><button class="btn danger" id="resetAll">完全重置</button></span>
+            <span class="s-cell-foot"><span class="s-cell-hint">清空全部数据并重启，不可撤销</span></span>
+          </div>
+        </div>
+      </section>
+      </div>
+
+      <div class="s-page" id="pageHelp" hidden>
+        <div class="help-hero">
+          <span class="help-eyebrow">操作指南</span>
+          <h2>快速上手 智爱小助手</h2>
+          <p>拖入文件即可收纳，点「新建」即可记录，设置改动会自动保存；常用操作都在下方。</p>
+        </div>
+
+        <div class="help-list">
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></span>
+            <div class="help-body">
+              <h3>快速开始</h3>
+              <p>面板从上到下依次是日历、快捷启动和六个标签页：随记、待办、收纳、计时、关机、用量。功能区顺序固定，不能拖动调整。</p>
+              <p>把文件、文件夹或程序快捷方式拖到面板上：落到快捷启动是添加程序，落到其它位置会切到收纳页并收藏起来；挂载常用文件夹请在收纳页点「+ 挂载」选择。</p>
+              <p>顶栏齿轮打开独立的设置窗口，设置、帮助与关于都在其中，改动会自动保存。</p>
+            </div>
+          </section>
+
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-dock"/></svg></span>
+            <div class="help-body">
+              <h3>显示与收起</h3>
+              <p>贴边自动隐藏开启时，鼠标靠近屏幕边缘即展开，离开后约 0.2 秒收起；开启「减少动画效果」后立即收起。收起后边缘仍露出书签条，鼠标移到边缘即可再次展开。</p>
+              <p>关闭自动隐藏后侧边栏常驻，用顶栏「收起」按钮或 Esc 手动收起；手动收起后，点击边缘书签展开。</p>
+              <p>图钉按钮仅在贴边自动隐藏开启时出现，钉住期间不会自动收起；取消钉住或重启后恢复自动隐藏。</p>
+              <p>托盘图标左键只唤出面板，不会收起；右键菜单提供显示或收起、钉住、贴边自动隐藏、开机自启、设置与退出。</p>
+            </div>
+          </section>
+
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-edit"/></svg></span>
+            <div class="help-body">
+              <h3>随记</h3>
+              <p>点「新建」立即生成一张空白便签并开始输入，停手约半秒自动保存；回车结束编辑，Ctrl+Enter 另起一段，Shift+Enter 只换行。</p>
+              <p>正文里以 # 开头的词会成为标签，顶部搜索框可同时匹配正文与标签；结果中置顶的排前面，其余按更新时间倒序。每张便签可置顶或删除。</p>
+              <p>悬停便签时，时间行右端出现 9 个颜色点（含默认），可标记颜色；编辑过程中不显示。按 Ctrl+K 可直接定位到搜索框。</p>
+            </div>
+          </section>
+
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar-check"/></svg></span>
+            <div class="help-body">
+              <h3>待办与日历</h3>
+              <p>今天只显示今天到期；本周按自然周统计未完成；逾期单独列出；未完成包含无日期与未来任务；已完成按完成时间倒序，默认显示最近 50 条，可展开更早。</p>
+              <p>在当前视图新增时会自动归入合适位置：逾期与已完成视图会先切回今天，本周视图创建今天到期任务；未完成视图创建无日期任务。</p>
+              <p>待办点击标题进入编辑，回车保存，Esc 取消；完成、删除后列表会保留当前滚动位置。</p>
+              <p>删除待办后 4 秒内可通过底部提示撤销；日历点选日期可直接查看或新增当天任务，节日名被省略时悬停可看完整说明。</p>
+            </div>
+          </section>
+
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg></span>
+            <div class="help-body">
+              <h3>收纳与挂载</h3>
+              <p>「+ 分组」新建收藏分类，双击分组标题改名，右键删除；条目可以拖到其它分组，也能在组内调整顺序。</p>
+              <p>「+ 挂载」选择常用文件夹后可在同一页逐级浏览，用顶部面包屑或「返回收纳」退出；挂载条目右键可把它收纳到侧边栏。</p>
+              <p>删除分组会连同组内条目一起删除，操作前请确认。</p>
+            </div>
+          </section>
+
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-launch"/></svg></span>
+            <div class="help-body">
+              <h3>快捷启动</h3>
+              <p>快捷启动位于日历与标签页之间，可在设置中调整列数、行数、图标大小与名称显隐，或整块隐藏；超出「列 × 行」的程序可在区块内左右滚动，名称过长会省略，悬停显示完整名称。</p>
+              <p>顶部分类可切换与新建；右键分类可重命名或删除。把程序或快捷方式拖入即可添加，右键条目可启动、在资源管理器中显示、重命名、移到其它分类或移除。</p>
+            </div>
+          </section>
+
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
+            <div class="help-body">
+              <h3>计时与关机</h3>
+              <p>计时页的闹钟可设时间、标签与每天重复，到点会展开面板并弹出提示；单次闹钟触发后会自动停用。倒计时支持时、分、秒输入与 5、10、15、25、45、60 分钟预设，最长 24 小时，收起面板后仍继续计时。</p>
+              <p>闹钟与倒计时各自可选铃音：内置 10 种、可试听，也可选静音或自选 WAV 文件。</p>
+              <p>关机页可按分钟倒数或指定时间安排，需二次确认；不足 60 秒会按 60 秒执行，最长 7 天，到点前可随时取消，实际关机由 Windows 执行。</p>
+            </div>
+          </section>
+
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span>
+            <div class="help-body">
+              <h3>用量与签到</h3>
+              <p>用量页汇总 Qoder、WorkBuddy、Trae 的额度、重置日期与更新时间，「刷新全部」重新读取，「一键签到」为支持的平台领取签到奖励。</p>
+              <p>设置中的「自动签到」让已登录的平台每天自动签到一次，失败当天最多重试 3 次；用量面板顶部只显示当前状态。首次进入会先显示使用前确认，未登录时可在卡片内用浏览器登录或从客户端载入。</p>
+              <p>「刷新全部」会跳过未登录的平台；「一键签到」只为当天可领取的平台签到，没有可签到的平台时会提示。</p>
+            </div>
+          </section>
+
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-storage"/></svg></span>
+            <div class="help-body">
+              <h3>数据与备份</h3>
+              <p>存储位置支持系统应用数据、随程序存放与自定义路径；切换时会复制现有数据到新位置并自动重启，原位置保留不动。</p>
+              <p>数据保存在「设置 → 数据 → 存储位置」指定的目录，采用 JSON 原子写入并保留 .bak 备份；无法读取的旧文件会转存为 .corrupt。</p>
+              <p>导出备份时可勾选要包含的内容；导入时只覆盖所选类别，导入前会自动留一份完整备份，完成后关闭设置窗口，侧边栏在运行时会自动重启。</p>
+              <p>用量登录凭据由 Windows 用户加密保存，换机或换用户导入后会失效，需要重新登录。</p>
+              <p>设置 → 数据 → 完全重置 需在弹窗输入「完全重置」才能确认，会退出侧边栏、取消已安排的关机、关闭开机自启并删除当前存储位置的全部数据，操作不可撤销。</p>
+            </div>
+          </section>
+
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span>
+            <div class="help-body">
+              <h3>更新程序</h3>
+              <p>在设置窗口的「关于」页点击检查更新，程序会读取 GitHub Releases 的最新版本。发布包带校验信息时可下载并自动替换；缺少校验文件时只能前往发布页手动下载。</p>
+              <p>内置更新会先关闭侧边栏、校验文件哈希、替换程序并自动重启；数据目录与设置不受影响。</p>
+              <p>自动检查会在启动时与每 6 小时静默进行一次，发现新版本会在侧边栏顶部提示；可在关于页关闭自动检查。</p>
+            </div>
+          </section>
+
+          <section class="help-item">
+            <span class="help-icon"><svg class="icon" aria-hidden="true"><use href="#i-keyboard"/></svg></span>
+            <div class="help-body">
+              <h3>快捷键与设置</h3>
+              <p>默认全局热键为 ctrl+alt+space，可在设置 → 窗口与启动 中修改；写法是用 ctrl、alt、shift、win 加「+」连接主键，主键支持字母、数字、空格、反引号与 F1 至 F12，且必须带至少一个修饰键。</p>
+              <p>启动时若首选组合被占用，会依次尝试备用组合并在托盘提示；在设置中改成被占用的组合不会自动回落，只会提示注册失败。设置窗口中的改动实时预览并自动保存，关闭窗口不会回滚；侧边栏未运行时，部分设置会在下次启动生效。</p>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="s-page" id="pageAbout" hidden>
+        <section class="s-group about-hero">
+          <div class="about-head">
+            <div class="about-logo">
+              <img src="app-icon.svg" alt="" />
+            </div>
+            <div class="about-title">
+              <div class="about-name">
+                <h2>智爱小助手</h2>
+                <p class="about-meta" id="aboutMeta">—</p>
+              </div>
+              <p class="about-sub">Windows 桌面侧边栏 · 日历、随记、待办与用量</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="s-group">
+          <h3>更新</h3>
+          <div class="field-top">
+            <span class="update-current">当前版本 <b id="aboutVersion">—</b></span>
+            <button class="btn sm" id="checkUpdate">检查更新</button>
+          </div>
+          <div class="about-auto">
+            <span>自动检查更新</span>
+            <input type="checkbox" id="autoUpdate" class="switch" aria-label="自动检查更新" checked />
+          </div>
+          <p class="update-status" id="updateStatus">尚未检查更新</p>
+          <div class="update-detail" id="updateDetail" hidden>
+            <div class="update-line">
+              <span id="updateLatest"></span>
+              <span class="update-date" id="updateDate"></span>
+            </div>
+            <div class="update-notes" id="updateNotes"></div>
+            <div class="update-actions">
+              <button class="btn primary" id="installUpdate" hidden>下载并安装</button>
+              <button class="btn" id="openRelease">前往发布页</button>
+            </div>
+            <div class="update-confirm" id="updateConfirm" hidden>
+              <p>更新会关闭并重启侧边栏，校验 SHA-256 后替换程序文件；数据与设置不受影响。</p>
+              <div class="update-confirm-actions">
+                <button class="btn primary" id="updateConfirmYes">确认安装</button>
+                <button class="btn ghost" id="updateConfirmNo">取消</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="s-group">
+          <h3>链接</h3>
+          <button class="about-link" id="openProject"><span>项目主页</span><span class="chev">›</span></button>
+          <button class="about-link" id="openIssues"><span>问题反馈</span><span class="chev">›</span></button>
+        </section>
+
+        <p class="about-copy">智爱小助手 · 桌面侧边栏工具</p>
+      </div>
+      </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-mask" id="restoreDefaultsModal" hidden>
+    <div class="modal-card">
+      <h3>恢复默认设置</h3>
+      <p class="modal-warn">将外观、快捷启动、窗口与启动、时钟与日历、语言与自动签到恢复为初始值；存储位置、备份与数据不受影响。</p>
+      <div class="modal-actions">
+        <button class="btn ghost" id="restoreDefaultsCancel">取消</button>
+        <button class="btn primary" id="restoreDefaultsConfirm">恢复默认</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-mask" id="backupModal" hidden>
+    <div class="modal-card backup-card">
+      <h3 id="backupTitle">导出备份</h3>
+      <p class="modal-warn" id="backupSummary"></p>
+      <div class="backup-list" id="backupList"></div>
+      <div class="backup-tools">
+        <button class="link-btn" id="backupAll">全选</button>
+        <button class="link-btn" id="backupNone">清空</button>
+      </div>
+      <p class="modal-error" id="backupError" hidden></p>
+      <div class="modal-actions">
+        <button class="btn ghost" id="backupCancel">取消</button>
+        <button class="btn primary" id="backupConfirm">选择文件夹并导出</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-mask" id="dataDirModal" hidden>
+    <div class="modal-card">
+      <h3>更改数据存储位置</h3>
+      <p class="modal-warn" id="dataDirSummary"></p>
+      <p class="modal-error" id="dataDirError" hidden></p>
+      <div class="modal-actions">
+        <button class="btn ghost" id="dataDirCancel">取消</button>
+        <button class="btn primary" id="dataDirConfirm">确认更改</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-mask" id="resetModal" hidden>
+    <div class="modal-card">
+      <h3>完全重置 智爱小助手</h3>
+      <p class="modal-warn">将永久删除待办、记事、收纳、快捷启动、挂载、计时数据以及全部设置，并恢复首次启动状态。此操作无法撤销。</p>
+      <label class="modal-field">
+        <span>请输入「完全重置」以确认</span>
+        <input id="resetConfirmInput" autocomplete="off" spellcheck="false" />
+      </label>
+      <p class="modal-error" id="resetError" hidden></p>
+      <div class="modal-actions">
+        <button class="btn ghost" id="resetCancel">取消</button>
+        <button class="btn danger" id="resetConfirm" disabled>确认重置</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

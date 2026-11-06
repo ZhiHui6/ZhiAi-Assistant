@@ -1,0 +1,15 @@
+/build/bin/
+/build/*.bak-*
+/build/windows/*.bak-*
+
+*.log
+*.tmp
+*.exe.old
+*.exe.new
+
+.idea/
+.vscode/
+*.swp
+
+node_modules/
+package-lock.json
