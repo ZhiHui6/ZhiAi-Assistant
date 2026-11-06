@@ -4,9 +4,7 @@
 
 <p align="center">贴在屏幕边缘的 <b>Windows</b> 桌面侧边栏，日历、待办、随记、收纳、快捷启动、计时与用量都在一屏之内</p>
 
-<p align="center">
-  简体中文
-</p>
+<p align="center">简体中文 · <a href="README.en.md">English</a></p>
 
 <p align="center">
   <img alt="Windows 10/11 x64" src="https://img.shields.io/badge/Windows-10%2F11%20x64-0078D6?logo=windows&logoColor=white">
