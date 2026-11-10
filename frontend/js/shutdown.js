@@ -1,5 +1,7 @@
 import { Timers, fmtDuration, fmtTarget, toast } from './api.js';
 import { dataText, t, tp } from './strings.js';
+import { enhanceTime } from './timepicker.js';
+import { enhanceNumber } from './stepper.js';
 
 function errText(err) {
   return dataText(String(err).replace(/^Error:\s*/, ''));
@@ -20,6 +22,9 @@ export function createShutdown() {
 
   let plan = {};
   let pending = 0;
+
+  enhanceTime(atInput, { iconOnly: true });
+  enhanceNumber(minuteInput);
 
   function renderActive() {
     const at = plan.active && plan.at ? Date.parse(plan.at) : NaN;

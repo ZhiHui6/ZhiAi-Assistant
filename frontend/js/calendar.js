@@ -1,49 +1,11 @@
 import { Calendar, el, pad2, todayStr, toast } from './api.js';
 import { dataText, t, tp } from './strings.js';
+import { hideTip, showTip } from './tooltip.js';
 
 const WEEK = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
-let tipEl = null;
-let tipTimer = null;
-
-function hideTip() {
-  if (tipTimer) {
-    clearTimeout(tipTimer);
-    tipTimer = null;
-  }
-  if (tipEl) tipEl.hidden = true;
-}
-
-function ensureTip() {
-  if (!tipEl) {
-    tipEl = el('div', 'cal-tip');
-    tipEl.setAttribute('role', 'tooltip');
-    tipEl.hidden = true;
-    document.body.appendChild(tipEl);
-  }
-  return tipEl;
-}
-
-function showTip(btn, text) {
-  hideTip();
-  tipTimer = setTimeout(() => {
-    tipTimer = null;
-    const tip = ensureTip();
-    tip.textContent = text;
-    tip.hidden = false;
-    tip.style.left = '0px';
-    tip.style.top = '0px';
-    const box = btn.getBoundingClientRect();
-    const tw = tip.offsetWidth;
-    const th = tip.offsetHeight;
-    let left = box.left + box.width / 2 - tw / 2;
-    left = Math.max(6, Math.min(left, window.innerWidth - tw - 6));
-    let top = box.top - th - 6;
-    if (top < 6) top = box.bottom + 6;
-    top = Math.min(top, window.innerHeight - th - 6);
-    tip.style.left = left + 'px';
-    tip.style.top = top + 'px';
-  }, 100);
+function showDayTip(btn, text) {
+  showTip(btn, text, 700);
 }
 
 export function createCalendar({ onSelect }) {
@@ -112,11 +74,11 @@ export function createCalendar({ onSelect }) {
           const text = `${tp('{m}月{d}日', { m: dateObj.getMonth() + 1, d: dateObj.getDate() })} ${t(WEEK[dateObj.getDay()])} · ${detail}`;
           const needsTip = () => !showDetails || (festEl && festEl.scrollWidth > festEl.clientWidth + 1);
           btn.addEventListener('mouseenter', () => {
-            if (needsTip()) showTip(btn, text);
+            if (needsTip()) showDayTip(btn, text);
           });
           btn.addEventListener('mouseleave', hideTip);
           btn.addEventListener('focus', () => {
-            if (needsTip()) showTip(btn, text);
+            if (needsTip()) showDayTip(btn, text);
           });
           btn.addEventListener('blur', hideTip);
         }

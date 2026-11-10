@@ -239,6 +239,23 @@ func (s *Icons) GetOne(path string) string { return platform.IconDataURL(path) }
 
 func (s *Icons) ClearCache() { platform.ClearIconCache() }
 
+type Thumbs struct{}
+
+func NewThumbs() *Thumbs { return &Thumbs{} }
+
+func (s *Thumbs) Get(paths []string) map[string]string {
+	out := make(map[string]string, len(paths))
+	for _, p := range paths {
+		if p == "" {
+			continue
+		}
+		if url := platform.ThumbDataURL(p); url != "" {
+			out[strings.ToLower(p)] = url
+		}
+	}
+	return out
+}
+
 func openFileDialog(title string, multi bool) ([]string, error) {
 	return platform.OpenFileDialog(title, multi)
 }

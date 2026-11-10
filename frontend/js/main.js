@@ -1,7 +1,9 @@
 import { App } from './api.js';
 import { installContextMenu } from './context-menu.js';
+import { installTips } from './tooltip.js';
 
 installContextMenu();
+installTips();
 
 (async () => {
   const mode = await App.mode().catch(() => 'sidebar');

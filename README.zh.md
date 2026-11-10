@@ -10,7 +10,7 @@
   <img alt="Windows 10/11 x64" src="https://img.shields.io/badge/Windows-10%2F11%20x64-0078D6?logo=windows&logoColor=white">
   <img alt="Go 1.27+" src="https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white">
   <img alt="Wails v2" src="https://img.shields.io/badge/Wails-v2-DF0000">
-  <img alt="版本 1.0.0" src="https://img.shields.io/badge/version-1.0.0-2F6FED">
+  <img alt="版本 1.1.0" src="https://img.shields.io/badge/version-1.1.0-2F6FED">
   <img alt="GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-blue">
 </p>
 
@@ -140,7 +140,7 @@ wails build -debug -windowsconsole   # 调试构建，日志输出到当前窗�
 wails build -clean                   # 先清理 build\bin 再构建
 ```
 
-- **版本**：应用内版本取 `internal/buildinfo/buildinfo.go` 的 `Version`（默认 1.0.0），发布前应与 `wails.json` 的 `info.productVersion` 一致，可用 `wails build -ldflags "-X zhi-ai-assistant/internal/buildinfo.Version=<版本>"` 覆盖；发布 tag 需与版本号相同（如 `v1.0.0`），否则「检查更新」会误报。
+- **版本**：应用内版本取 `internal/buildinfo/buildinfo.go` 的 `Version`（默认 1.1.0），发布前应与 `wails.json` 的 `info.productVersion` 一致，可用 `wails build -ldflags "-X zhi-ai-assistant/internal/buildinfo.Version=<版本>"` 覆盖；发布 tag 需与版本号相同（如 `v1.0.0`），否则「检查更新」会误报。
 - **发布**：推送 `v*` tag（如 `v1.0.0`）会触发 `.github/workflows/release.yml`，在 Windows 上自动构建并上传 `ZhiAi-Assistant.exe` 与同名 `.sha256` 校验文件。
 - **更新**：发布资产需包含 `ZhiAi-Assistant.exe` 与 `ZhiAi-Assistant.exe.sha256`（或带 `digest`），否则只能跳转发布页手动下载。
 - **多语言**：源词条在 `tools/i18n/`，`frontend/js/locales.js` 为生成物，改动后运行 `node tools/i18n/build-locales.js`。

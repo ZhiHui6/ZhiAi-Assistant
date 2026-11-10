@@ -28,6 +28,7 @@ const updateBarOpenBtn = document.getElementById('updateBarOpen');
 const updateBarCloseBtn = document.getElementById('updateBarClose');
 const edgeMark = document.getElementById('edgeMark');
 const launchDock = document.getElementById('launchDock');
+const shelfView = document.getElementById('view-shelf');
 const appListEl = document.getElementById('launchList');
 let launchGridCols = 5;
 
@@ -181,10 +182,29 @@ function applyAppearance(s) {
   panel.classList.toggle('edge-left', s.edge === 'left');
   sidebarRoot.classList.toggle('edge-left', s.edge === 'left');
   sidebarRoot.classList.toggle('no-motion', !s.animations);
+  document.body.classList.toggle('no-motion', !s.animations);
   collapseBtn.hidden = !!s.edgeEnabled;
   pinBtn.hidden = !s.edgeEnabled;
   if (typeof s.peek === 'number') peekSetting = s.peek;
   updatePeekVar();
+  applyShelfView(s);
+}
+
+const SHELF_SCALES = {
+  compact: { cell: 48, icon: 24 },
+  normal: { cell: 62, icon: 32 },
+  large: { cell: 86, icon: 46 },
+};
+
+function applyShelfView(s) {
+  const shelf = SHELF_SCALES[s.shelfScale] || SHELF_SCALES.normal;
+  const mount = SHELF_SCALES[s.mountScale] || SHELF_SCALES.normal;
+  document.documentElement.style.setProperty('--shelf-cell', shelf.cell + 'px');
+  document.documentElement.style.setProperty('--shelf-icon', shelf.icon + 'px');
+  document.documentElement.style.setProperty('--mount-cell', mount.cell + 'px');
+  document.documentElement.style.setProperty('--mount-icon', mount.icon + 'px');
+  sidebarRoot.classList.toggle('shelf-view-list', s.shelfView === 'list');
+  sidebarRoot.classList.toggle('mount-view-grid', s.mountView === 'grid');
 }
 
 function updatePeekVar() {
@@ -289,7 +309,6 @@ document.addEventListener('keydown', (e) => {
       return;
     }
     if (active && active.tagName === 'TEXTAREA') active.blur();
-    WindowSvc.collapse().catch(() => {});
   }
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault();
@@ -372,17 +391,43 @@ function isFileDrag(e) {
   return !!e.dataTransfer && Array.from(e.dataTransfer.types || []).indexOf('Files') !== -1;
 }
 
+function clearFileDropTargets() {
+  document.body.classList.remove('file-drag-mount', 'file-drag-shelf');
+  document.querySelectorAll('.shelf-group.file-drop-target').forEach((el) => {
+    el.classList.remove('file-drop-target');
+  });
+}
+
 window.addEventListener('dragover', (e) => {
   if (!isFileDrag(e)) return;
+  const first = document.elementFromPoint(e.clientX, e.clientY);
+  const inLaunch = !!first && !!first.closest('#launchDock');
+  if (!inLaunch && !shelfView.classList.contains('active')) switchTab('shelf');
   const target = document.elementFromPoint(e.clientX, e.clientY);
-  launchDock.classList.toggle('drag-over', !!target && !!target.closest('#launchDock'));
+  const inMount = !!target && !!target.closest('.mount-section');
+  const inShelf = !!target && !!target.closest('.shelf-section');
+  const groupEl = inShelf ? target.closest('.shelf-group') : null;
+  const multiGroup = inShelf && document.querySelectorAll('.shelf-section .shelf-group').length > 1;
+  document.body.classList.toggle('file-drag-mount', inMount);
+  document.body.classList.toggle('file-drag-shelf', inShelf && !groupEl && !multiGroup);
+  document.querySelectorAll('.shelf-group.file-drop-target').forEach((el) => {
+    if (el !== groupEl) el.classList.remove('file-drop-target');
+  });
+  if (groupEl) groupEl.classList.add('file-drop-target');
+  launchDock.classList.toggle('drag-over', inLaunch);
 });
 
 window.addEventListener('dragleave', (e) => {
-  if (!e.relatedTarget) launchDock.classList.remove('drag-over');
+  if (!e.relatedTarget) {
+    launchDock.classList.remove('drag-over');
+    clearFileDropTargets();
+  }
 });
 
-window.addEventListener('drop', () => launchDock.classList.remove('drag-over'));
+window.addEventListener('drop', () => {
+  launchDock.classList.remove('drag-over');
+  clearFileDropTargets();
+});
 
 applyAppearance(initialSettings);
 

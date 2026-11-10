@@ -87,6 +87,7 @@ func runSidebar() {
 			app.Mount(),
 			app.Timers(),
 			app.Icons(),
+			app.Thumbs(),
 			app.Usage(),
 			app.WindowService(),
 		},

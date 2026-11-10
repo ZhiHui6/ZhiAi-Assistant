@@ -140,6 +140,10 @@ type Settings struct {
 	HideLaunchNames       bool     `json:"hideLaunchNames"`
 	HideLaunch            bool     `json:"hideLaunch"`
 	Clock12               bool     `json:"clock12"`
+	ShelfView             string   `json:"shelfView"`
+	ShelfScale            string   `json:"shelfScale"`
+	MountView             string   `json:"mountView"`
+	MountScale            string   `json:"mountScale"`
 }
 
 func DefaultSettings() Settings {
@@ -162,5 +166,9 @@ func DefaultSettings() Settings {
 		LaunchColumns:  5,
 		LaunchRows:     1,
 		LaunchIconSize: 32,
+		ShelfView:      "grid",
+		ShelfScale:     "normal",
+		MountView:      "list",
+		MountScale:     "normal",
 	}
 }

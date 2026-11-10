@@ -9,9 +9,21 @@ import (
 )
 
 type Window struct {
-	hwnd   uintptr
-	lastEx uintptr
-	shown  bool
+	hwnd    uintptr
+	lastEx  uintptr
+	shown   bool
+	last    winstate.Placement
+	placed  bool
+	topmost bool
+	overlay uintptr
+}
+
+func ForegroundWindow() uintptr {
+	return win32.GetForegroundWindow()
+}
+
+func WindowClass(hwnd uintptr) string {
+	return win32.ClassName(hwnd)
 }
 
 func FindMainWindow(className string, timeout time.Duration) (uintptr, error) {
@@ -50,11 +62,56 @@ func (w *Window) prepareExStyle() {
 	ex &^= win32.WS_EX_APPWINDOW
 	w.lastEx = ex
 	win32.SetWindowLongPtr(w.hwnd, win32.GWL_EXSTYLE, ex)
+
+	style := win32.GetWindowLongPtr(w.hwnd, win32.GWL_STYLE)
+	style &^= win32.WS_MINIMIZEBOX | win32.WS_SYSMENU
+	win32.SetWindowLongPtr(w.hwnd, win32.GWL_STYLE, style)
+
 	win32.SetWindowPos(w.hwnd, 0, 0, 0, 0, 0,
 		win32.SWP_NOMOVE|win32.SWP_NOSIZE|win32.SWP_NOZORDER|win32.SWP_NOACTIVATE|win32.SWP_FRAMECHANGED)
 }
 
+func (w *Window) UndoMinimize() bool {
+	if !w.placed {
+		return false
+	}
+	if win32.IsIconic(w.hwnd) {
+		win32.ShowWindow(w.hwnd, win32.SW_RESTORE)
+		w.Apply(w.last)
+		return true
+	}
+	if !w.last.Visible || win32.IsWindowVisible(w.hwnd) {
+		return false
+	}
+	w.Apply(w.last)
+	return true
+}
+
+func (w *Window) SetDesktopOverlay(overlay uintptr) {
+	if overlay != 0 {
+		w.overlay = overlay
+		if !w.topmost {
+			win32.SetWindowPos(w.hwnd, win32.HWND_TOPMOST, 0, 0, 0, 0,
+				win32.SWP_NOMOVE|win32.SWP_NOSIZE|win32.SWP_NOACTIVATE)
+			w.topmost = true
+		}
+		return
+	}
+	if !w.topmost {
+		return
+	}
+	if w.overlay != 0 && win32.IsWindowVisible(w.overlay) {
+		return
+	}
+	win32.SetWindowPos(w.hwnd, win32.HWND_NOTOPMOST, 0, 0, 0, 0,
+		win32.SWP_NOMOVE|win32.SWP_NOSIZE|win32.SWP_NOACTIVATE)
+	w.topmost = false
+	w.overlay = 0
+}
+
 func (w *Window) Apply(p winstate.Placement) {
+	w.last = p
+	w.placed = true
 	ex := w.lastEx
 	if p.NoActivate {
 		ex |= win32.WS_EX_NOACTIVATE

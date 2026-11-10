@@ -68,6 +68,7 @@ type App struct {
 	mountSvc    *Mount
 	timersSvc   *Timers
 	iconsSvc    *Icons
+	thumbsSvc   *Thumbs
 	usageMgr    *usage.Manager
 	usageSvc    *Usage
 
@@ -157,6 +158,7 @@ func NewApp() (*App, error) {
 	a.timersSvc = NewTimers(timersMgr)
 	a.timersSvc.SetFireHandler(a.onTimerFired)
 	a.iconsSvc = NewIcons()
+	a.thumbsSvc = NewThumbs()
 	a.usageSvc = NewUsage(usageMgr, func(state model.UsageState) {
 		a.emit("usage:changed", state)
 	})
@@ -309,6 +311,22 @@ func normalizeSettings(s model.Settings) model.Settings {
 	if s.LaunchIconSize < 24 || s.LaunchIconSize > 40 {
 		s.LaunchIconSize = 32
 	}
+	if s.ShelfView != "list" {
+		s.ShelfView = "grid"
+	}
+	switch s.ShelfScale {
+	case "compact", "normal", "large":
+	default:
+		s.ShelfScale = "normal"
+	}
+	if s.MountView != "grid" {
+		s.MountView = "list"
+	}
+	switch s.MountScale {
+	case "compact", "normal", "large":
+	default:
+		s.MountScale = "normal"
+	}
 	return s
 }
 
@@ -320,6 +338,7 @@ func (a *App) Launch() *Launch        { return a.launchSvc }
 func (a *App) Mount() *Mount          { return a.mountSvc }
 func (a *App) Timers() *Timers        { return a.timersSvc }
 func (a *App) Icons() *Icons          { return a.iconsSvc }
+func (a *App) Thumbs() *Thumbs        { return a.thumbsSvc }
 func (a *App) Usage() *Usage          { return a.usageSvc }
 func (a *App) WindowService() *Window { return a.window }
 

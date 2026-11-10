@@ -180,6 +180,10 @@ export const Icons = {
   getOne: (path) => call('Icons', 'GetOne', path),
 };
 
+export const Thumbs = {
+  get: (paths) => call('Thumbs', 'Get', paths),
+};
+
 export function onEvent(name, handler) {
   if (!window.runtime || !window.runtime.EventsOn) return () => {};
   return window.runtime.EventsOn(name, handler);

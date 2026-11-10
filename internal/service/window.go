@@ -207,6 +207,12 @@ func (w *Window) tick(now time.Time) bool {
 	if w.pw == nil || w.m == nil {
 		return false
 	}
+	w.pw.UndoMinimize()
+	if fg := platform.ForegroundWindow(); fg != 0 && platform.WindowClass(fg) == "WorkerW" {
+		w.pw.SetDesktopOverlay(fg)
+	} else {
+		w.pw.SetDesktopOverlay(0)
+	}
 	if w.app != nil && w.app.Debug() {
 		defer func(t time.Time) {
 			if d := time.Since(t); d > 50*time.Millisecond {

@@ -64,7 +64,7 @@ type ghAsset struct {
 func (a *App) AboutInfo() AboutInfo {
 	version := normalizeVersion(buildinfo.Version)
 	if version == "" {
-		version = "1.0.0"
+		version = "1.1.0"
 	}
 	return AboutInfo{
 		Name:        i18n.T(buildinfo.AppName),

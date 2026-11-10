@@ -4,13 +4,13 @@
 
 <p align="center">A <b>Windows</b> desktop sidebar docked to the screen edge — calendar, todos, notes, shelf, quick launch, timers and usage quotas in one panel</p>
 
-<p align="center">English · <a href="README.en.md">简体中文</a></p>
+<p align="center">English · <a href="README.zh.md">简体中文</a></p>
 
 <p align="center">
   <img alt="Windows 10/11 x64" src="https://img.shields.io/badge/Windows-10%2F11%20x64-0078D6?logo=windows&logoColor=white">
   <img alt="Go 1.27+" src="https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white">
   <img alt="Wails v2" src="https://img.shields.io/badge/Wails-v2-DF0000">
-  <img alt="version 1.0.0" src="https://img.shields.io/badge/version-1.0.0-2F6FED">
+  <img alt="version 1.1.0" src="https://img.shields.io/badge/version-1.1.0-2F6FED">
   <img alt="GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-blue">
 </p>
 
@@ -140,7 +140,7 @@ wails build -debug -windowsconsole   # debug build, logs to the current console 
 wails build -clean                   # clean build\bin first, then build
 ```
 
-- **Version**: the in-app version comes from `Version` in `internal/buildinfo/buildinfo.go` (default 1.0.0). Before a release it should match `info.productVersion` in `wails.json`; override it with `wails build -ldflags "-X zhi-ai-assistant/internal/buildinfo.Version=<version>"`. The release tag must equal the version (e.g. `v1.0.0`), otherwise "Check for updates" reports incorrectly.
+- **Version**: the in-app version comes from `Version` in `internal/buildinfo/buildinfo.go` (default 1.1.0). Before a release it should match `info.productVersion` in `wails.json`; override it with `wails build -ldflags "-X zhi-ai-assistant/internal/buildinfo.Version=<version>"`. The release tag must equal the version (e.g. `v1.0.0`), otherwise "Check for updates" reports incorrectly.
 - **Release**: pushing a `v*` tag (e.g. `v1.0.0`) triggers `.github/workflows/release.yml`, which builds on Windows and uploads `ZhiAi-Assistant.exe` plus a same-named `.sha256` checksum.
 - **Updates**: release assets must include `ZhiAi-Assistant.exe` and `ZhiAi-Assistant.exe.sha256` (or a `digest`); otherwise the app can only open the release page for a manual download.
 - **Locales**: source entries live in `tools/i18n/`; `frontend/js/locales.js` is generated — run `node tools/i18n/build-locales.js` after changing them.

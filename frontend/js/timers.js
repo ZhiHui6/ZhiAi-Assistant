@@ -1,6 +1,8 @@
 import { App, Timers, el, fmtDuration, onEvent, svgIcon, toast } from './api.js';
 import { dataText, t } from './strings.js';
 import { enhanceSelect } from './select.js';
+import { enhanceTime } from './timepicker.js';
+import { enhanceNumber } from './stepper.js';
 
 const SOUND_OPTIONS = [
   ['chime', '清脆铃'],
@@ -112,6 +114,7 @@ export function createTimers() {
   const countdownSoundTest = document.getElementById('countdownSoundTest');
   enhanceSelect(alarmSound);
   enhanceSelect(countdownSound);
+  enhanceTime(alarmTime);
   const countdownValue = document.getElementById('countdownValue');
   const countdownPresets = document.getElementById('countdownPresets');
   const countdownHour = document.getElementById('countdownHour');
@@ -119,8 +122,35 @@ export function createTimers() {
   const countdownSec = document.getElementById('countdownSec');
   const countdownToggle = document.getElementById('countdownToggle');
   const countdownReset = document.getElementById('countdownReset');
+  const countdownCancel = document.getElementById('countdownCancel');
+  const alarmCancel = document.getElementById('alarmCancel');
+  const alarmSetup = document.getElementById('alarmSetup');
+  const alarmBody = document.getElementById('alarmBody');
+  const alarmSetupPanel = document.getElementById('alarmSetupPanel');
+  const countdownSetup = document.getElementById('countdownSetup');
+  const countdownBody = document.getElementById('countdownBody');
+  const countdownSetupPanel = document.getElementById('countdownSetupPanel');
+  const countdownStart = document.getElementById('countdownStart');
+
+  [countdownHour, countdownMin, countdownSec].forEach(enhanceNumber);
 
   let state = { alarms: [], countdown: {} };
+
+  function setSetup(trigger, body, panel, on, idleLabel) {
+    body.hidden = on;
+    panel.hidden = !on;
+    trigger.hidden = on;
+    trigger.textContent = idleLabel;
+    trigger.setAttribute('aria-expanded', String(on));
+  }
+
+  function setAlarmSetup(on) {
+    setSetup(alarmSetup, alarmBody, alarmSetupPanel, on, t('添加'));
+  }
+
+  function setCountdownSetup(on) {
+    setSetup(countdownSetup, countdownBody, countdownSetupPanel, on, t('设置'));
+  }
 
   function countdownRemaining() {
     const c = state.countdown || {};
@@ -197,6 +227,11 @@ export function createTimers() {
     render();
   }
 
+  alarmSetup.addEventListener('click', () => setAlarmSetup(alarmSetupPanel.hidden));
+  countdownSetup.addEventListener('click', () => setCountdownSetup(countdownSetupPanel.hidden));
+  alarmCancel.addEventListener('click', () => setAlarmSetup(false));
+  countdownCancel.addEventListener('click', () => setCountdownSetup(false));
+
   alarmAdd.addEventListener('click', async () => {
     const at = alarmTime.value;
     if (!at) {
@@ -207,6 +242,7 @@ export function createTimers() {
       await Timers.addAlarm(at, alarmLabel.value.trim(), alarmRepeat.checked);
       alarmLabel.value = '';
       await refresh();
+      setAlarmSetup(false);
     } catch (err) {
       toast(errText(err));
     }
@@ -221,6 +257,24 @@ export function createTimers() {
     countdownSec.value = '0';
   });
 
+  countdownStart.addEventListener('click', async () => {
+    const hours = Number(countdownHour.value) || 0;
+    const minutes = Number(countdownMin.value) || 0;
+    const seconds = Number(countdownSec.value) || 0;
+    const total = Math.floor(hours * 3600 + minutes * 60 + seconds);
+    if (total < 1) {
+      toast(t('请设置倒计时时长'));
+      return;
+    }
+    try {
+      await Timers.startCountdown(total, '');
+      await refresh();
+      setCountdownSetup(false);
+    } catch (err) {
+      toast(errText(err));
+    }
+  });
+
   countdownToggle.addEventListener('click', async () => {
     try {
       if (state.countdown?.running) {
@@ -228,15 +282,8 @@ export function createTimers() {
       } else if (countdownRemaining() > 0) {
         await Timers.resumeCountdown();
       } else {
-        const hours = Number(countdownHour.value) || 0;
-        const minutes = Number(countdownMin.value) || 0;
-        const seconds = Number(countdownSec.value) || 0;
-        const total = Math.floor(hours * 3600 + minutes * 60 + seconds);
-        if (total < 1) {
-          toast(t('请设置倒计时时长'));
-          return;
-        }
-        await Timers.startCountdown(total, '');
+        setCountdownSetup(true);
+        return;
       }
       await refresh();
     } catch (err) {
@@ -274,6 +321,24 @@ export function createTimers() {
     setupSound('alarm', alarmSound, alarmSoundTest, settings?.alarmSound);
     setupSound('countdown', countdownSound, countdownSoundTest, settings?.countdownSound);
   }
+
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.key !== 'Escape') return;
+      if (document.querySelector('.tp-pop.open')) return;
+      if (!alarmSetupPanel.hidden) {
+        event.stopPropagation();
+        setAlarmSetup(false);
+        return;
+      }
+      if (!countdownSetupPanel.hidden) {
+        event.stopPropagation();
+        setCountdownSetup(false);
+      }
+    },
+    true,
+  );
 
   initSounds();
   setInterval(updateLive, 1000);

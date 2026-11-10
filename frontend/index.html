@@ -19,7 +19,7 @@
 </div>
 <div id="sidebarRoot">
   <svg style="display:none" aria-hidden="true">
-    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M14 3l7 7-2 2-1-1-4 4v4l-4-4-4 4-1-1 4-4-4-4h4l4-4-1-1 2-2z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M16 9V4h1a1 1 0 0 0 0-2H7a1 1 0 0 0 0 2h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></symbol>
     <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
     <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
@@ -53,6 +53,7 @@
     <symbol id="i-columns" viewBox="0 0 24 24"><rect x="4" y="4.5" width="6.5" height="15" rx="1.5"/><rect x="13.5" y="4.5" width="6.5" height="15" rx="1.5"/></symbol>
     <symbol id="i-rows" viewBox="0 0 24 24"><rect x="4" y="4.5" width="16" height="6.5" rx="1.5"/><rect x="4" y="13" width="16" height="6.5" rx="1.5"/></symbol>
     <symbol id="i-size" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></symbol>
     <symbol id="i-tag" viewBox="0 0 24 24"><path d="M4 12.2V5.5A1.5 1.5 0 0 1 5.5 4h6.7L20 11.8a1.5 1.5 0 0 1 0 2.1l-5.1 5.1a1.5 1.5 0 0 1-2.1 0z"/><path d="M8 8h.01"/></symbol>
     <symbol id="i-launch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M10 8.3l5.7 3.7-5.7 3.7z"/></symbol>
     <symbol id="i-calendar-check" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 9.5h16M8 3.5v4M16 3.5v4M8.5 14.5l2.2 2.2 4.3-4.3"/></symbol>
@@ -87,7 +88,7 @@
           <svg class="icon"><use href="#i-gear"/></svg>
           <span class="settings-dot" id="settingsDot" hidden></span>
         </button>
-        <button class="icon-btn" id="btnCollapse" title="收起 (Esc)">
+        <button class="icon-btn" id="btnCollapse" title="收起">
           <svg class="icon"><use href="#i-right"/></svg>
         </button>
       </div>
@@ -184,55 +185,74 @@
 
         <div class="timer-card">
           <div class="timer-head">
-            <span>闹钟</span>
-            <span class="hint">到点提醒并展开面板</span>
+            <span>倒计时</span>
+            <span class="hint">选好时长后点开始</span>
+            <button class="btn sm" id="countdownSetup" aria-expanded="false">设置</button>
           </div>
-          <div class="timer-form">
-            <span class="time-wrap"><input type="time" id="alarmTime" tabindex="-1" /><span class="time-shield"></span></span>
-            <input id="alarmLabel" placeholder="标签（可选）" />
-            <label class="timer-check">
-              <input type="checkbox" id="alarmRepeat" />
-              每天
-            </label>
-            <button class="btn sm primary" id="alarmAdd">添加</button>
+          <div class="timer-body" id="countdownBody">
+            <div class="countdown-value" id="countdownValue">00:00</div>
+            <div class="timer-form">
+              <button class="btn sm primary" id="countdownToggle">开始</button>
+              <button class="btn sm ghost" id="countdownReset">重置</button>
+            </div>
           </div>
-          <div class="timer-list" id="alarmList"></div>
-          <div class="timer-sound">
-            <span>铃音</span>
-            <select id="alarmSound"></select>
-            <button class="icon-btn sm" id="alarmSoundTest" aria-label="试听闹钟铃音">
-              <svg class="icon"><use href="#i-play"/></svg>
-            </button>
+          <div class="timer-setup" id="countdownSetupPanel" hidden>
+            <div class="chips" id="countdownPresets">
+              <button class="chip" data-min="5">5 分</button>
+              <button class="chip" data-min="10">10 分</button>
+              <button class="chip" data-min="15">15 分</button>
+              <button class="chip" data-min="25">25 分</button>
+              <button class="chip" data-min="45">45 分</button>
+              <button class="chip" data-min="60">60 分</button>
+            </div>
+            <div class="timer-form">
+              <input type="number" id="countdownHour" min="0" max="24" step="1" placeholder="时" />
+              <input type="number" id="countdownMin" min="0" max="59" step="1" placeholder="分" />
+              <input type="number" id="countdownSec" min="0" max="59" step="1" placeholder="秒" />
+            </div>
+            <div class="timer-sound">
+              <span>铃音</span>
+              <select id="countdownSound"></select>
+              <button class="icon-btn sm" id="countdownSoundTest" aria-label="试听倒计时铃音">
+                <svg class="icon"><use href="#i-play"/></svg>
+              </button>
+            </div>
+            <div class="timer-setup-actions">
+              <button class="btn sm ghost" id="countdownCancel">取消</button>
+              <button class="btn sm primary" id="countdownStart">开始</button>
+            </div>
           </div>
         </div>
 
         <div class="timer-card">
           <div class="timer-head">
-            <span>倒计时</span>
-            <span class="hint">收起面板后仍继续</span>
+            <span>闹钟</span>
+            <span class="hint">选好时间后点确认</span>
+            <button class="btn sm" id="alarmSetup" aria-expanded="false">添加</button>
           </div>
-          <div class="countdown-value" id="countdownValue">00:00</div>
-          <div class="chips" id="countdownPresets">
-            <button class="chip" data-min="5">5 分</button>
-            <button class="chip" data-min="10">10 分</button>
-            <button class="chip" data-min="15">15 分</button>
-            <button class="chip" data-min="25">25 分</button>
-            <button class="chip" data-min="45">45 分</button>
-            <button class="chip" data-min="60">60 分</button>
+          <div class="timer-body" id="alarmBody">
+            <div class="timer-list" id="alarmList"></div>
           </div>
-          <div class="timer-form">
-            <input type="number" id="countdownHour" min="0" max="24" step="1" placeholder="时" />
-            <input type="number" id="countdownMin" min="0" max="59" step="1" placeholder="分" />
-            <input type="number" id="countdownSec" min="0" max="59" step="1" placeholder="秒" />
-            <button class="btn sm primary" id="countdownToggle">开始</button>
-            <button class="btn sm ghost" id="countdownReset">重置</button>
-          </div>
-          <div class="timer-sound">
-            <span>铃音</span>
-            <select id="countdownSound"></select>
-            <button class="icon-btn sm" id="countdownSoundTest" aria-label="试听倒计时铃音">
-              <svg class="icon"><use href="#i-play"/></svg>
-            </button>
+          <div class="timer-setup" id="alarmSetupPanel" hidden>
+            <div class="timer-form">
+              <span class="time-wrap"><input type="time" id="alarmTime" /></span>
+              <input id="alarmLabel" placeholder="标签（可选）" />
+              <label class="timer-check">
+                <input type="checkbox" id="alarmRepeat" />
+                每天
+              </label>
+            </div>
+            <div class="timer-sound">
+              <span>铃音</span>
+              <select id="alarmSound"></select>
+              <button class="icon-btn sm" id="alarmSoundTest" aria-label="试听闹钟铃音">
+                <svg class="icon"><use href="#i-play"/></svg>
+              </button>
+            </div>
+            <div class="timer-setup-actions">
+              <button class="btn sm ghost" id="alarmCancel">取消</button>
+              <button class="btn sm primary" id="alarmAdd">确认</button>
+            </div>
           </div>
         </div>
 
@@ -256,7 +276,7 @@
           </div>
           <div class="timer-form shutdown-row">
             <span class="shutdown-label">指定时间</span>
-            <span class="time-wrap"><input type="time" id="shutdownAt" tabindex="-1" /><span class="time-shield"></span></span>
+            <span class="time-wrap"><input type="time" id="shutdownAt" /></span>
             <button class="btn sm" id="shutdownByTime">安排</button>
           </div>
           <div class="shutdown-confirm" id="shutdownConfirm" hidden>
@@ -572,7 +592,7 @@
             <div class="help-body">
               <h3>显示与收起</h3>
               <p>贴边自动隐藏开启时，鼠标靠近屏幕边缘即展开，离开后约 0.2 秒收起；开启「减少动画效果」后立即收起。收起后边缘仍露出书签条，鼠标移到边缘即可再次展开。</p>
-              <p>关闭自动隐藏后侧边栏常驻，用顶栏「收起」按钮或 Esc 手动收起；手动收起后，点击边缘书签展开。</p>
+              <p>关闭自动隐藏后侧边栏常驻，用顶栏「收起」按钮手动收起；手动收起后，点击边缘书签展开。</p>
               <p>图钉按钮仅在贴边自动隐藏开启时出现，钉住期间不会自动收起；取消钉住或重启后恢复自动隐藏。</p>
               <p>托盘图标左键只唤出面板，不会收起；右键菜单提供显示或收起、钉住、贴边自动隐藏、开机自启、设置与退出。</p>
             </div>

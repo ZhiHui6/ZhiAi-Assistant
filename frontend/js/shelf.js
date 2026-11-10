@@ -1,4 +1,4 @@
-import { App, Icons, Mount, Shelf, el, fmtSize, openContextMenu, svgIcon, toast } from './api.js';
+import { App, Icons, Mount, Shelf, Thumbs, el, fmtSize, openContextMenu, svgIcon, toast } from './api.js';
 import { t, tp } from './strings.js';
 
 export function createShelf({ onChanged }) {
@@ -9,6 +9,8 @@ export function createShelf({ onChanged }) {
   const addGroupBtn = document.getElementById('shelfAddGroup');
   const mountAddBtn = document.getElementById('mountAdd');
   const iconCache = new Map();
+  const thumbCache = new Map();
+  const IMAGE_RE = /\.(png|jpe?g|gif)$/i;
   let data = { groups: [], items: [] };
   let mounts = [];
   let browsing = null;
@@ -29,6 +31,7 @@ export function createShelf({ onChanged }) {
     syncHead();
     render();
     loadIcons(data.items.filter((it) => it.kind !== 'url').map((it) => it.path));
+    loadThumbs(data.items.filter((it) => IMAGE_RE.test(it.path || '')).map((it) => it.path));
   }
 
   function loadIcons(paths) {
@@ -62,9 +65,49 @@ export function createShelf({ onChanged }) {
     })();
   }
 
+  function loadThumbs(paths) {
+    const missing = [];
+    const seen = new Set();
+    paths.forEach((path) => {
+      if (!path) return;
+      const key = path.toLowerCase();
+      if (thumbCache.has(key) || seen.has(key)) return;
+      seen.add(key);
+      missing.push(path);
+    });
+    if (!missing.length) {
+      applyThumbs();
+      return;
+    }
+    (async () => {
+      for (let i = 0; i < missing.length; i += 8) {
+        const batch = missing.slice(i, i + 8);
+        try {
+          const map = await Thumbs.get(batch);
+          Object.entries(map || {}).forEach(([k, v]) => thumbCache.set(k, v));
+        } catch (err) {
+          if (window.__debug) App.debugLog('thumbs failed: ' + String(err));
+          break;
+        }
+      }
+      applyThumbs();
+    })();
+  }
+
+  function applyThumbs() {
+    listEl.querySelectorAll('img[data-thumb-path]').forEach((img) => {
+      const src = thumbCache.get(img.dataset.thumbPath.toLowerCase());
+      if (!src || img.dataset.thumbApplied) return;
+      img.src = src;
+      img.dataset.thumbApplied = '1';
+      img.classList.add('shelf-thumb');
+    });
+  }
+
   function applyIcons() {
     let applied = 0;
     listEl.querySelectorAll('img[data-path]').forEach((img) => {
+      if (img.dataset.thumbApplied) return;
       const key = img.dataset.path.toLowerCase();
       const src = iconCache.get(key);
       if (src && img.src !== src) {
@@ -120,10 +163,21 @@ export function createShelf({ onChanged }) {
     const line = ensureDropLine();
     const nodes = [...grid.querySelectorAll('.shelf-item')].filter((node) => node.dataset.itemId !== draggedId);
     line.style.display = 'block';
+    const gridRect = grid.getBoundingClientRect();
+    if (grid.closest('.shelf-view-list')) {
+      const top = index < nodes.length
+        ? nodes[index].getBoundingClientRect().top
+        : (nodes.length ? nodes[nodes.length - 1].getBoundingClientRect().bottom : gridRect.top);
+      line.style.left = gridRect.left + 4 + 'px';
+      line.style.width = gridRect.width - 8 + 'px';
+      line.style.height = '2px';
+      line.style.top = top - 1 + 'px';
+      return;
+    }
+    line.style.width = '2px';
     if (!nodes.length) {
-      const rect = grid.getBoundingClientRect();
-      line.style.left = rect.left + 6 + 'px';
-      line.style.top = rect.top + 4 + 'px';
+      line.style.left = gridRect.left + 6 + 'px';
+      line.style.top = gridRect.top + 4 + 'px';
       line.style.height = '24px';
       return;
     }
@@ -140,19 +194,17 @@ export function createShelf({ onChanged }) {
     }
   }
 
-  function attachGroupDrop(head, grid, group) {
+  function attachGroupDrop(groupEl, head, grid, group) {
     const isInternal = () => !!draggedId;
-    const setTarget = (on) => {
-      head.classList.toggle('drop-target', on);
-      if (grid) grid.classList.toggle('drop-target', on);
-    };
+    const setTarget = (on) => groupEl.classList.toggle('drop-target', on);
     const onOver = (e) => {
       if (!isInternal()) return;
       e.preventDefault();
       e.stopPropagation();
       if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
       setTarget(true);
-      if (grid && e.currentTarget === grid) {
+      const onGrid = !!grid && !!e.target.closest && !!e.target.closest('.grid');
+      if (onGrid) {
         showDropLine(grid, gridIndex(grid, e.clientX, e.clientY, draggedId));
       } else {
         hideDropLine();
@@ -161,7 +213,7 @@ export function createShelf({ onChanged }) {
     const onLeave = (e) => {
       if (!isInternal()) return;
       const next = e.relatedTarget;
-      if (next && (head.contains(next) || (grid && grid.contains(next)))) return;
+      if (next && groupEl.contains(next)) return;
       setTarget(false);
       hideDropLine();
     };
@@ -170,7 +222,8 @@ export function createShelf({ onChanged }) {
       e.preventDefault();
       e.stopPropagation();
       const id = draggedId;
-      const index = grid && e.currentTarget === grid
+      const onGrid = !!grid && !!e.target.closest && !!e.target.closest('.grid');
+      const index = onGrid
         ? gridIndex(grid, e.clientX, e.clientY, id)
         : itemsOf(group.id).filter((it) => it.id !== id).length;
       draggedId = null;
@@ -186,19 +239,14 @@ export function createShelf({ onChanged }) {
       }
     };
 
-    head.addEventListener('dragover', onOver);
-    head.addEventListener('dragleave', onLeave);
-    head.addEventListener('drop', onDrop);
-    if (grid) {
-      grid.addEventListener('dragover', onOver);
-      grid.addEventListener('dragleave', onLeave);
-      grid.addEventListener('drop', onDrop);
-    }
+    groupEl.addEventListener('dragover', onOver);
+    groupEl.addEventListener('dragleave', onLeave);
+    groupEl.addEventListener('drop', onDrop);
   }
 
   function syncHead() {
     if (browsing) {
-      hintEl.textContent = browsing.rel || browsing.mount.label || browsing.mount.path;
+      hintEl.textContent = '';
       crumbEl.hidden = false;
       backBtn.hidden = false;
       addGroupBtn.hidden = true;
@@ -214,14 +262,29 @@ export function createShelf({ onChanged }) {
 
   function render() {
     listEl.innerHTML = '';
-    if (mounts.length) {
-      renderMounts();
-    }
+    renderMounts();
+    const section = el('div', 'shelf-section');
+    listEl.appendChild(section);
+    const title = el('div', 'shelf-title');
+    const titleIcon = el('span', 'shelf-title-icon');
+    titleIcon.appendChild(svgIcon('i-bookmark'));
+    title.appendChild(titleIcon);
+    title.appendChild(el('span', '', t('文件收纳')));
+    title.appendChild(el('span', 'spacer'));
+    const shelfViewBtn = viewButton();
+    bindViewButton(shelfViewBtn, 'shelfView', 'shelfScale');
+    title.appendChild(shelfViewBtn);
+    section.appendChild(title);
     if (!data.groups.length) {
-      listEl.appendChild(el('div', 'empty', t('还没有分组')));
+      section.classList.add('is-empty');
+      section.appendChild(el('div', 'empty', t('拖入文件即自动分组')));
       return;
     }
     data.groups.forEach((group) => {
+      const groupEl = el('div', 'shelf-group');
+      groupEl.dataset.groupId = group.id;
+      section.appendChild(groupEl);
+
       const head = el('div', 'group-head');
       head.dataset.groupId = group.id;
 
@@ -238,14 +301,17 @@ export function createShelf({ onChanged }) {
       nameEl.title = t('双击重命名');
       nameEl.addEventListener('dblclick', () => startRenameGroup(head, nameEl, group));
 
-      const count = el('span', 'count', String(itemsOf(group.id).length));
+      const count = el('span', 'count');
+      const bracket = el('span', 'count-num', String(itemsOf(group.id).length));
+      count.appendChild(bracket);
+      count.appendChild(el('span', 'count-unit', t('项')));
       const spacer = el('span', 'spacer');
 
       head.appendChild(toggle);
       head.appendChild(nameEl);
-      head.appendChild(count);
       head.appendChild(spacer);
-      listEl.appendChild(head);
+      head.appendChild(count);
+      groupEl.appendChild(head);
 
       head.addEventListener('contextmenu', (e) => {
         e.preventDefault();
@@ -265,7 +331,7 @@ export function createShelf({ onChanged }) {
       });
 
       if (group.collapsed) {
-        attachGroupDrop(head, null, group);
+        attachGroupDrop(groupEl, head, null, group);
         return;
       }
 
@@ -279,26 +345,32 @@ export function createShelf({ onChanged }) {
       } else {
         items.forEach((it) => grid.appendChild(renderItem(it, group)));
       }
-      listEl.appendChild(grid);
-      attachGroupDrop(head, grid, group);
+      groupEl.appendChild(grid);
+      attachGroupDrop(groupEl, head, grid, group);
     });
   }
 
   function renderMounts() {
     const section = el('div', 'mount-section');
-    const head = el('div', 'group-head mount-head');
+    const head = el('div', 'mount-title');
+    const titleIcon = el('span', 'mount-title-icon');
+    titleIcon.appendChild(svgIcon('i-folder-open'));
+    head.appendChild(titleIcon);
     head.appendChild(el('span', '', t('挂载目录')));
-    head.appendChild(el('span', 'count', String(mounts.length)));
     head.appendChild(el('span', 'spacer'));
+    const mountViewBtn = viewButton();
+    bindViewButton(mountViewBtn, 'mountView', 'mountScale');
+    head.appendChild(mountViewBtn);
     section.appendChild(head);
 
     const box = el('div', 'mount-list');
+    if (!mounts.length) {
+      box.appendChild(el('div', 'mount-empty', t('拖入文件夹以挂载')));
+    }
     mounts.forEach((m) => {
       const row = el('div', 'entry-row mount-row');
       row.title = m.path;
       const icon = el('div', 'shelf-fallback');
-      icon.style.width = '20px';
-      icon.style.height = '20px';
       icon.appendChild(svgIcon('i-folder'));
       const nameWrap = el('div', 'entry-name');
       nameWrap.appendChild(el('div', '', m.label || m.path));
@@ -377,6 +449,7 @@ export function createShelf({ onChanged }) {
 
   function renderEntries(entries) {
     const { mount, rel, stack } = browsing;
+    hintEl.textContent = tp('{n} 项', { n: entries.length });
     listEl.innerHTML = '';
     if (!entries.length) {
       listEl.appendChild(el('div', 'empty', t('这个文件夹是空的')));
@@ -474,6 +547,15 @@ export function createShelf({ onChanged }) {
       iconEl.dataset.path = item.path;
       const cached = iconCache.get(item.path.toLowerCase());
       if (cached) iconEl.src = cached;
+      if (IMAGE_RE.test(item.path || '')) {
+        iconEl.dataset.thumbPath = item.path;
+        const thumb = thumbCache.get(item.path.toLowerCase());
+        if (thumb) {
+          iconEl.src = thumb;
+          iconEl.dataset.thumbApplied = '1';
+          iconEl.classList.add('shelf-thumb');
+        }
+      }
       iconEl.addEventListener('error', () => {
         const fallback = el('div', 'shelf-fallback', (item.path.split('.').pop() || '?').slice(0, 4));
         iconEl.replaceWith(fallback);
@@ -643,10 +725,18 @@ export function createShelf({ onChanged }) {
     let groupId = groupIdAt(x, y);
     if (!groupId) {
       if (!data.groups.length) {
-        toast(t('请先创建一个分组'));
-        return;
+        try {
+          const created = await Shelf.createGroup(t('新分组'));
+          groupId = created && created.id;
+        } catch (err) {
+        }
+      } else {
+        groupId = data.groups[0].id;
       }
-      groupId = data.groups[0].id;
+    }
+    if (!groupId) {
+      toast(t('请先创建一个分组'));
+      return;
     }
     try {
       const added = await Shelf.addPaths(groupId, paths);
@@ -656,6 +746,38 @@ export function createShelf({ onChanged }) {
     } catch (err) {
       toast(String(err).replace(/^Error:\s*/, ''));
     }
+  }
+
+  function viewButton() {
+    const btn = el('button', 'icon-btn sm view-btn');
+    btn.title = t('显示方式');
+    btn.appendChild(svgIcon('i-grid'));
+    return btn;
+  }
+
+  function bindViewButton(btn, viewKey, scaleKey) {
+    btn.addEventListener('click', async () => {
+      let current;
+      try {
+        current = await App.getSettings();
+      } catch (err) {
+        toast(t('操作失败'));
+        return;
+      }
+      const apply = (patch) => {
+        App.updateSettings({ ...current, ...patch }).catch(() => toast(t('操作失败')));
+      };
+      const mark = (on) => (on ? '• ' : '');
+      const rect = btn.getBoundingClientRect();
+      openContextMenu(Math.max(4, rect.right - 150), rect.bottom + 4, [
+        { label: mark(current[viewKey] !== 'list') + t('网格'), action: () => apply({ [viewKey]: 'grid' }) },
+        { label: mark(current[viewKey] === 'list') + t('列表'), action: () => apply({ [viewKey]: 'list' }) },
+        { sep: true },
+        { label: mark(current[scaleKey] === 'compact') + t('紧凑'), action: () => apply({ [scaleKey]: 'compact' }) },
+        { label: mark(current[scaleKey] === 'normal' || !current[scaleKey]) + t('标准'), action: () => apply({ [scaleKey]: 'normal' }) },
+        { label: mark(current[scaleKey] === 'large') + t('大图标'), action: () => apply({ [scaleKey]: 'large' }) },
+      ]);
+    });
   }
 
   addGroupBtn.addEventListener('click', async () => {

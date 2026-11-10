@@ -64,6 +64,8 @@ var (
 	procSetWindowRgn             = user32.NewProc("SetWindowRgn")
 	procCreateRoundRectRgn       = gdi32.NewProc("CreateRoundRectRgn")
 	procIsWindowVisible          = user32.NewProc("IsWindowVisible")
+	procIsIconic                 = user32.NewProc("IsIconic")
+	procGetClassNameW            = user32.NewProc("GetClassNameW")
 	procMessageBeep              = user32.NewProc("MessageBeep")
 	procPlaySoundW               = winmm.NewProc("PlaySoundW")
 
@@ -233,6 +235,20 @@ func ShowWindow(hwnd uintptr, cmd int32) bool {
 func IsWindowVisible(hwnd uintptr) bool {
 	r1, _, _ := procIsWindowVisible.Call(hwnd)
 	return r1 != 0
+}
+
+func IsIconic(hwnd uintptr) bool {
+	r1, _, _ := procIsIconic.Call(hwnd)
+	return r1 != 0
+}
+
+func ClassName(hwnd uintptr) string {
+	buf := make([]uint16, 128)
+	n, _, _ := procGetClassNameW.Call(hwnd, uintptr(unsafe.Pointer(&buf[0])), uintptr(len(buf)))
+	if n == 0 {
+		return ""
+	}
+	return UTF16ToString(buf[:n])
 }
 
 func MessageBeep(kind uint32) {

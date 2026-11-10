@@ -110,6 +110,11 @@ export function enhanceSelect(select) {
     }
   }
 
+  function onScroll(event) {
+    if (state.menu && state.menu.contains(event.target)) return;
+    close();
+  }
+
   function open() {
     if (state.open || btn.disabled) return;
     if (!state.menu) {
@@ -127,7 +132,7 @@ export function enhanceSelect(select) {
     document.addEventListener('mousedown', onDocDown, true);
     document.addEventListener('keydown', onKey, true);
     window.addEventListener('resize', place);
-    window.addEventListener('scroll', close, true);
+    window.addEventListener('scroll', onScroll, true);
   }
 
   function close() {
@@ -138,7 +143,7 @@ export function enhanceSelect(select) {
     document.removeEventListener('mousedown', onDocDown, true);
     document.removeEventListener('keydown', onKey, true);
     window.removeEventListener('resize', place);
-    window.removeEventListener('scroll', close, true);
+    window.removeEventListener('scroll', onScroll, true);
   }
 
   function choose(index) {

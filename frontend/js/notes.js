@@ -191,8 +191,9 @@ export function createNotes() {
     }
 
     const meta = el('div', 'card-meta card-meta-view');
-    meta.append(timeEl, tintPop, actions);
-
+    const tools = el('div', 'card-hover-tools');
+    tools.append(tintPop, actions);
+    meta.append(timeEl, tools);
     const tagBar = el('div', 'card-meta card-meta-edit');
     const tagHash = el('span', 'tag-hash');
     tagHash.appendChild(svgIcon('i-hash'));
@@ -203,12 +204,17 @@ export function createNotes() {
     tagInput.placeholder = t('添加标签，回车确认');
     tagBar.append(tagHash, chips, tagInput);
 
+    const viewTags = el('div', 'note-tags-view');
+    meta.insertBefore(viewTags, tools);
+
     row.append(ta);
     card.append(row, tagBar, meta);
 
     function renderTags() {
       chips.innerHTML = '';
-      (ref.note.tags || []).forEach((tag) => {
+      viewTags.innerHTML = '';
+      const tags = ref.note.tags || [];
+      tags.forEach((tag) => {
         const chip = el('span', 'tag-chip');
         chip.appendChild(el('span', '', '#' + tag));
         const remove = el('button', 'tag-x', '×');
@@ -220,7 +226,10 @@ export function createNotes() {
         });
         chip.appendChild(remove);
         chips.appendChild(chip);
+
+        viewTags.appendChild(el('span', 'tag-chip', '#' + tag));
       });
+      viewTags.hidden = !tags.length;
     }
 
     async function saveTags(tags) {

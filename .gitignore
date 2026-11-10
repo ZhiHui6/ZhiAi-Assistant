@@ -1,6 +1,8 @@
 /build/bin/
 /build/*.bak-*
 /build/windows/*.bak-*
+/.trae
+/docs/posters/
 
 *.log
 *.tmp
