@@ -2,7 +2,7 @@ package buildinfo
 
 import "runtime"
 
-var Version = "1.2.0"
+var Version = "1.2.1"
 
 const (
 	AppName = "智爱小助手"

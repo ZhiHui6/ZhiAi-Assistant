@@ -1,5 +1,11 @@
 # 更新日志
 
+## [1.2.1]
+
+### 维护
+
+- 构建流水线升级：GitHub Actions（checkout、setup-go、gh-release）迁移至 Node 24 运行时，消除构建日志中的弃用警告；应用功能无变化。
+
 ## [1.2.0]
 
 ### 新增
@@ -42,6 +48,7 @@
 
 首个公开版本。
 
+[1.2.1]: https://github.com/ZhiHui6/ZhiAi-Assistant/releases/tag/v1.2.1
 [1.2.0]: https://github.com/ZhiHui6/ZhiAi-Assistant/releases/tag/v1.2.0
 [1.1.0]: https://github.com/ZhiHui6/ZhiAi-Assistant/releases/tag/v1.1.0
 [1.0.0]: https://github.com/ZhiHui6/ZhiAi-Assistant/releases/tag/v1.0.0

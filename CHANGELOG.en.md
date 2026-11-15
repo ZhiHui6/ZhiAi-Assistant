@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.1]
+
+### Maintenance
+
+- Build pipeline upgrade: GitHub Actions (checkout, setup-go, gh-release) moved to the Node 24 runtime, removing the deprecation warnings from build logs; no app functionality changed.
+
 ## [1.2.0]
 
 ### Added
@@ -45,6 +51,7 @@
 
 First public release.
 
+[1.2.1]: https://github.com/ZhiHui6/ZhiAi-Assistant/releases/tag/v1.2.1
 [1.2.0]: https://github.com/ZhiHui6/ZhiAi-Assistant/releases/tag/v1.2.0
 [1.1.0]: https://github.com/ZhiHui6/ZhiAi-Assistant/releases/tag/v1.1.0
 [1.0.0]: https://github.com/ZhiHui6/ZhiAi-Assistant/releases/tag/v1.0.0
