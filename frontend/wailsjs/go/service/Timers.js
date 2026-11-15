@@ -30,6 +30,10 @@ export function ScheduleShutdown(arg1) {
   return window['go']['service']['Timers']['ScheduleShutdown'](arg1);
 }
 
+export function SetAlarmLimit(arg1) {
+  return window['go']['service']['Timers']['SetAlarmLimit'](arg1);
+}
+
 export function SetFireHandler(arg1) {
   return window['go']['service']['Timers']['SetFireHandler'](arg1);
 }

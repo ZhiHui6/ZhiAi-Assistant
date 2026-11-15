@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform/win32"
 	"zhi-ai-assistant/internal/winstate"
 )
@@ -34,7 +35,7 @@ func FindMainWindow(className string, timeout time.Duration) (uintptr, error) {
 			return hwnd, nil
 		}
 		if time.Now().After(deadline) {
-			return 0, errors.New("未找到主窗口: " + className)
+			return 0, errors.New(i18n.T("未找到主窗口: ") + className)
 		}
 		time.Sleep(50 * time.Millisecond)
 	}

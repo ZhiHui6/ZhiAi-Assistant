@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform"
 )
 
@@ -46,17 +47,17 @@ func dataLocationTarget(mode, custom string) (string, error) {
 	case store.LocationPortable:
 		dir := store.PortableDir()
 		if err := os.MkdirAll(dir, 0o755); err != nil {
-			return "", errors.New("无法在程序目录创建数据文件夹")
+			return "", errors.New(i18n.T("无法在程序目录创建数据文件夹"))
 		}
 		return dir, nil
 	case store.LocationCustom:
 		path := filepath.Clean(custom)
 		if err := store.ValidateDir(path); err != nil {
-			return "", errors.New("自定义路径需要是一个已存在且可写入的文件夹")
+			return "", errors.New(i18n.T("自定义路径需要是一个已存在且可写入的文件夹"))
 		}
 		return path, nil
 	default:
-		return "", errors.New("未知的存储方式")
+		return "", errors.New(i18n.T("未知的存储方式"))
 	}
 }
 
@@ -69,12 +70,12 @@ func dataLocationRecord(mode, custom string) store.Location {
 
 func (a *App) SetDataLocation(mode, custom string) error {
 	if !a.settingsOnly {
-		return errors.New("请在设置窗口中修改存储位置")
+		return errors.New(i18n.T("请在设置窗口中修改存储位置"))
 	}
 	a.mu.Lock()
 	if a.locationBusy {
 		a.mu.Unlock()
-		return errors.New("存储位置正在修改")
+		return errors.New(i18n.T("存储位置正在修改"))
 	}
 	a.locationBusy = true
 	a.mu.Unlock()
@@ -97,11 +98,11 @@ func (a *App) SetDataLocation(mode, custom string) error {
 	wasRunning := platform.SidebarRunning()
 	if wasRunning {
 		if err := writeSettingsCommand(settingsCommand{Action: actionQuit}); err != nil {
-			return errors.New("无法通知侧边栏退出")
+			return errors.New(i18n.T("无法通知侧边栏退出"))
 		}
 		platform.NotifySettingsCommand()
 		if !waitSidebarExit(20 * time.Second) {
-			return errors.New("侧边栏尚未退出，存储位置未修改")
+			return errors.New(i18n.T("侧边栏尚未退出，存储位置未修改"))
 		}
 		time.Sleep(500 * time.Millisecond)
 	}
@@ -109,21 +110,21 @@ func (a *App) SetDataLocation(mode, custom string) error {
 		if wasRunning {
 			startSidebar()
 		}
-		return errors.New("复制数据失败，仍使用原位置：" + err.Error())
+		return errors.New(i18n.T("复制数据失败，仍使用原位置：") + err.Error())
 	}
 	if err := store.WriteLocation(loc); err != nil {
 		if wasRunning {
 			startSidebar()
 		}
-		return errors.New("写入位置记录失败，仍使用原位置")
+		return errors.New(i18n.T("写入位置记录失败，仍使用原位置"))
 	}
 	if wasRunning {
 		exe, err := os.Executable()
 		if err != nil {
-			return errors.New("存储位置已修改，请手动重新打开程序")
+			return errors.New(i18n.T("存储位置已修改，请手动重新打开程序"))
 		}
 		if err := exec.Command(exe).Start(); err != nil {
-			return errors.New("存储位置已修改，但自动启动失败，请手动重新打开程序")
+			return errors.New(i18n.T("存储位置已修改，但自动启动失败，请手动重新打开程序"))
 		}
 	}
 	return nil

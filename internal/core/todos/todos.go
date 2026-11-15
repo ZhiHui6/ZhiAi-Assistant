@@ -9,6 +9,7 @@ import (
 	"zhi-ai-assistant/internal/core/id"
 	"zhi-ai-assistant/internal/core/model"
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 const dateLayout = "2006-01-02"
@@ -151,7 +152,7 @@ func keep(t model.Todo, f Filter, today, weekStart, weekEnd string) bool {
 func (m *Manager) Create(in Input) (model.Todo, error) {
 	title := strings.TrimSpace(in.Title)
 	if title == "" {
-		return model.Todo{}, errors.New("标题不能为空")
+		return model.Todo{}, errors.New(i18n.T("标题不能为空"))
 	}
 	if in.Priority < 0 || in.Priority > 2 {
 		in.Priority = 1
@@ -237,7 +238,7 @@ func (m *Manager) Update(id string, p Patch) (model.Todo, error) {
 		}
 	})
 	if !found {
-		return model.Todo{}, errors.New("待办不存在")
+		return model.Todo{}, errors.New(i18n.T("待办不存在"))
 	}
 	return res, nil
 }
@@ -258,7 +259,7 @@ func (m *Manager) Delete(id string) error {
 		}
 	})
 	if !found {
-		return errors.New("待办不存在")
+		return errors.New(i18n.T("待办不存在"))
 	}
 	return nil
 }
@@ -266,7 +267,7 @@ func (m *Manager) Delete(id string) error {
 func (m *Manager) Restore(t model.Todo) (model.Todo, error) {
 	t.Title = strings.TrimSpace(t.Title)
 	if t.Title == "" {
-		return model.Todo{}, errors.New("标题不能为空")
+		return model.Todo{}, errors.New(i18n.T("标题不能为空"))
 	}
 	if t.Priority < 0 || t.Priority > 2 {
 		t.Priority = 1

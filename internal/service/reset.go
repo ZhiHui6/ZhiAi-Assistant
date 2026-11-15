@@ -8,15 +8,16 @@ import (
 	"time"
 
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform"
 )
 
 func (a *App) ResetAll() error {
 	if !a.settingsOnly {
-		return errors.New("请在设置窗口中执行重置")
+		return errors.New(i18n.T("请在设置窗口中执行重置"))
 	}
 	if a.resetting {
-		return errors.New("重置正在进行")
+		return errors.New(i18n.T("重置正在进行"))
 	}
 	a.mu.Lock()
 	a.resetBusy = true
@@ -29,11 +30,11 @@ func (a *App) ResetAll() error {
 	wasRunning := platform.SidebarRunning()
 	if wasRunning {
 		if err := writeSettingsCommand(settingsCommand{Action: actionQuit}); err != nil {
-			return errors.New("无法通知侧边栏退出")
+			return errors.New(i18n.T("无法通知侧边栏退出"))
 		}
 		platform.NotifySettingsCommand()
 		if !waitSidebarExit(8 * time.Second) {
-			return errors.New("侧边栏尚未退出，重置已取消")
+			return errors.New(i18n.T("侧边栏尚未退出，重置已取消"))
 		}
 		time.Sleep(500 * time.Millisecond)
 	}
@@ -45,14 +46,14 @@ func (a *App) ResetAll() error {
 		if wasRunning {
 			startSidebar()
 		}
-		return errors.New("删除数据失败，请关闭程序后手动清理数据目录")
+		return errors.New(i18n.T("删除数据失败，请关闭程序后手动清理数据目录"))
 	}
 	exe, err := os.Executable()
 	if err != nil {
-		return errors.New("重置完成，但无法自动启动，请手动打开程序")
+		return errors.New(i18n.T("重置完成，但无法自动启动，请手动打开程序"))
 	}
 	if err := exec.Command(exe).Start(); err != nil {
-		return errors.New("重置完成，但自动启动失败，请手动打开程序")
+		return errors.New(i18n.T("重置完成，但自动启动失败，请手动打开程序"))
 	}
 	return nil
 }

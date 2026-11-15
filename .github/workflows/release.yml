@@ -32,11 +32,15 @@ jobs:
           wails build -ldflags "-X zhi-ai-assistant/internal/buildinfo.Version=$ver"
           if (-not (Test-Path "build\bin\ZhiAi-Assistant.exe")) { throw "build output missing" }
 
-      - name: Checksum
+      - name: Package
         shell: pwsh
         run: |
-          $hash = (Get-FileHash "build\bin\ZhiAi-Assistant.exe" -Algorithm SHA256).Hash.ToLower()
-          "$hash  ZhiAi-Assistant.exe" | Out-File -FilePath "build\bin\ZhiAi-Assistant.exe.sha256" -Encoding ascii
+          $ver = $env:GITHUB_REF_NAME -replace '^v', ''
+          $name = "ZhiAi-Assistant-$ver-win-x64.exe"
+          Copy-Item "build\bin\ZhiAi-Assistant.exe" "build\bin\$name"
+          $hash = (Get-FileHash "build\bin\$name" -Algorithm SHA256).Hash.ToLower()
+          "$hash  $name" | Out-File -FilePath "build\bin\$name.sha256" -Encoding ascii
+          Write-Host "release asset: $name"
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
@@ -44,5 +48,5 @@ jobs:
           draft: false
           generate_release_notes: true
           files: |
-            build/bin/ZhiAi-Assistant.exe
-            build/bin/ZhiAi-Assistant.exe.sha256
+            build/bin/ZhiAi-Assistant-*-win-x64.exe
+            build/bin/ZhiAi-Assistant-*-win-x64.exe.sha256

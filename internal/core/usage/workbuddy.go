@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"zhi-ai-assistant/internal/core/model"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 const (
@@ -98,7 +99,7 @@ func parseWorkBuddyAuth(raw []byte) (Auth, error) {
 	dec := json.NewDecoder(strings.NewReader(string(raw)))
 	dec.UseNumber()
 	if err := dec.Decode(&root); err != nil {
-		return Auth{}, fmt.Errorf("%w：登录文件无法解析", ErrNoAuth)
+		return Auth{}, fmt.Errorf(i18n.T("%w：登录文件无法解析"), ErrNoAuth)
 	}
 	return parseWorkBuddyDoc(root)
 }
@@ -114,7 +115,7 @@ func parseWorkBuddyDoc(root map[string]any) (Auth, error) {
 	}
 	token, ok := tokenValue.(string)
 	if !ok {
-		return Auth{}, fmt.Errorf("%w：请使用浏览器登录", ErrEncrypted)
+		return Auth{}, fmt.Errorf(i18n.T("%w：请使用浏览器登录"), ErrEncrypted)
 	}
 	if strings.TrimSpace(token) == "" {
 		return Auth{}, ErrNoAuth
@@ -132,13 +133,13 @@ func parseWorkBuddyDoc(root map[string]any) (Auth, error) {
 	}
 	lowerDomain := strings.ToLower(auth.Domain)
 	if strings.Contains(lowerDomain, "workbuddy.ai") || strings.Contains(lowerDomain, "codebuddy.ai") {
-		return Auth{}, fmt.Errorf("%w：暂不支持 WorkBuddy 国际区", ErrUnsupported)
+		return Auth{}, fmt.Errorf(i18n.T("%w：暂不支持 WorkBuddy 国际区"), ErrUnsupported)
 	}
 	if expires, ok := lookup(authMap, "expiresAt", "expires_at", "expireAt", "expire_at"); ok {
 		auth.ExpiresAt = timeValue(expires)
 	}
 	if !auth.ExpiresAt.IsZero() && auth.ExpiresAt.Before(pNow()) {
-		return Auth{}, fmt.Errorf("%w：请在 WorkBuddy 中重新登录", ErrExpired)
+		return Auth{}, fmt.Errorf(i18n.T("%w：请在 WorkBuddy 中重新登录"), ErrExpired)
 	}
 	return auth, nil
 }
@@ -249,7 +250,7 @@ func (p *workBuddyProvider) Fetch(ctx context.Context, auth Auth) (model.UsageSn
 		if lastErr != nil {
 			return model.UsageSnapshot{}, lastErr
 		}
-		return model.UsageSnapshot{}, errors.New("WorkBuddy 额度数据为空")
+		return model.UsageSnapshot{}, errors.New(i18n.T("WorkBuddy 额度数据为空"))
 	}
 	checked, available, daily, message := p.workBuddyCheckin(ctx, auth)
 	snapshot.CheckedIn = checked
@@ -269,7 +270,7 @@ func (p *workBuddyProvider) Claim(ctx context.Context, auth Auth) (ClaimResult, 
 	}
 	root, _ := decodeMap(raw)
 	if code := workBuddyCode(root); code != 0 && code != 14018 {
-		return ClaimResult{}, fmt.Errorf("WorkBuddy 返回错误码 %d", code)
+		return ClaimResult{}, errors.New(i18n.TF("WorkBuddy 返回错误码 %d", code))
 	}
 	amount, _ := num(root, "credit", "credits", "amount", "dailyCredit")
 	if data := unwrapMap(root, "data"); data != nil {
@@ -339,9 +340,9 @@ func workBuddyQuota(raw []byte) (float64, float64, float64, string, string, []mo
 	}
 	if code := workBuddyCode(root); code != 0 {
 		if code == 14018 {
-			return 0, 0, 0, "", "", nil, errors.New("额度已用尽")
+			return 0, 0, 0, "", "", nil, errors.New(i18n.T("额度已用尽"))
 		}
-		return 0, 0, 0, "", "", nil, fmt.Errorf("WorkBuddy 返回错误码 %d", code)
+		return 0, 0, 0, "", "", nil, errors.New(i18n.TF("WorkBuddy 返回错误码 %d", code))
 	}
 	accounts := findArray(root, "Accounts", "accounts")
 	var total, used, remaining float64
@@ -417,7 +418,7 @@ func workBuddyEnterpriseQuota(raw []byte) (float64, float64, float64, string, st
 	}
 	total, ok := num(data, "limitNum", "limit", "total")
 	if !ok || total <= 0 {
-		return 0, 0, 0, "", "", nil, errors.New("WorkBuddy 额度数据为空")
+		return 0, 0, 0, "", "", nil, errors.New(i18n.T("WorkBuddy 额度数据为空"))
 	}
 	used, _ := num(data, "credit", "used", "consumed")
 	remaining := total - used
@@ -431,17 +432,17 @@ func workBuddyEnterpriseQuota(raw []byte) (float64, float64, float64, string, st
 
 func workBuddyError(err error) error {
 	if err == nil {
-		return errors.New("WorkBuddy 请求失败")
+		return errors.New(i18n.T("WorkBuddy 请求失败"))
 	}
 	var httpErr *HTTPError
 	if errors.As(err, &httpErr) {
 		switch httpErr.Status {
 		case http.StatusUnauthorized:
-			return fmt.Errorf("%w：请在 WorkBuddy 中重新登录或填写 Token", ErrExpired)
+			return fmt.Errorf(i18n.T("%w：请在 WorkBuddy 中重新登录或填写 Token"), ErrExpired)
 		case http.StatusForbidden:
-			return fmt.Errorf("%w：WorkBuddy 拒绝了非官方客户端请求", ErrBlocked)
+			return fmt.Errorf(i18n.T("%w：WorkBuddy 拒绝了非官方客户端请求"), ErrBlocked)
 		}
-		return fmt.Errorf("WorkBuddy 请求失败（HTTP %d）", httpErr.Status)
+		return errors.New(i18n.TF("WorkBuddy 请求失败（HTTP %d）", httpErr.Status))
 	}
 	return err
 }

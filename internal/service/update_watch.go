@@ -9,6 +9,7 @@ import (
 
 	"zhi-ai-assistant/internal/buildinfo"
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 type updateCacheState struct {
@@ -203,7 +204,7 @@ func readSettingsNav() settingsNavRequest {
 
 func (a *App) ShowSettingsPage(page string) error {
 	if a.settingsOnly {
-		return errors.New("请在侧边栏中打开设置")
+		return errors.New(i18n.T("请在侧边栏中打开设置"))
 	}
 	switch page {
 	case "about", "help", "settings":

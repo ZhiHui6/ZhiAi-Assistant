@@ -2,7 +2,7 @@
   <img src="build/appicon.png" width="40" alt="智爱小助手应用图标"> 智爱小助手 · ZhiAi Assistant
 </h1>
 
-<p align="center">贴在屏幕边缘的 <b>Windows</b> 桌面侧边栏，日历、待办、随记、收纳、快捷启动、计时与用量都在一屏之内</p>
+<p align="center">贴在屏幕边缘的 <b>Windows</b> 桌面侧边栏，日历、待办、速记、收纳、快捷启动、计时与用量都在一屏之内</p>
 
 <p align="center">简体中文 · <a href="README.md">English</a></p>
 
@@ -10,7 +10,7 @@
   <img alt="Windows 10/11 x64" src="https://img.shields.io/badge/Windows-10%2F11%20x64-0078D6?logo=windows&logoColor=white">
   <img alt="Go 1.27+" src="https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white">
   <img alt="Wails v2" src="https://img.shields.io/badge/Wails-v2-DF0000">
-  <img alt="版本 1.1.0" src="https://img.shields.io/badge/version-1.1.0-2F6FED">
+  <img alt="版本 1.2.0" src="https://img.shields.io/badge/version-1.2.0-2F6FED">
   <img alt="GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-blue">
 </p>
 
@@ -21,8 +21,8 @@
 <table align="center">
   <tr>
     <td align="center" width="33%">
-      <a href="docs/screenshots/notes.png"><img src="docs/screenshots/notes.png" width="210" alt="随记：标签、搜索与颜色标记"></a><br>
-      <sub>随记 · #标签、搜索与颜色标记</sub>
+      <a href="docs/screenshots/notes.png"><img src="docs/screenshots/notes.png" width="210" alt="速记：标签、搜索、颜色标记与附件"></a><br>
+      <sub>速记 · #标签、搜索、颜色与附件</sub>
     </td>
     <td align="center" width="33%">
       <a href="docs/screenshots/todos.png"><img src="docs/screenshots/todos.png" width="210" alt="待办：今天、本周与逾期筛选"></a><br>
@@ -83,11 +83,12 @@
 
 > **记录与收纳**
 
-### 5. 随记
+### 5. 速记
 
 点「新建」立即落库并进入编辑，停手自动保存，不打断思路。
 
 - `#标签` 归类、全文搜索、置顶与 9 种颜色标记。
+- 回形针按钮可添加图片、音频、视频、文本文件或超链接，也可以把文件直接拖到速记卡片上；附件会复制到数据目录并随备份导出。
 - `Enter` 结束编辑，`Ctrl+Enter` 另起一段，`Shift+Enter` 只换行。
 
 ### 6. 收纳
@@ -111,6 +112,7 @@
 汇总 Qoder、WorkBuddy、Trae 的额度、重置日期与更新时间，不必逐个打开客户端确认。
 
 - **一键签到**：自动签到每天执行一次，失败最多重试 3 次。
+- **按需显示**：可在设置中单独隐藏 Qoder、WorkBuddy 或 Trae。
 - **登录方式**：Qoder / Trae 复用本机客户端已保存的登录态；WorkBuddy 在卡片内用浏览器完成授权。
 - 首次进入用量页会显示使用前确认，凭据由 Windows 用户级加密（DPAPI）保存。
 
@@ -140,10 +142,10 @@ wails build -debug -windowsconsole   # 调试构建，日志输出到当前窗�
 wails build -clean                   # 先清理 build\bin 再构建
 ```
 
-- **版本**：应用内版本取 `internal/buildinfo/buildinfo.go` 的 `Version`（默认 1.1.0），发布前应与 `wails.json` 的 `info.productVersion` 一致，可用 `wails build -ldflags "-X zhi-ai-assistant/internal/buildinfo.Version=<版本>"` 覆盖；发布 tag 需与版本号相同（如 `v1.0.0`），否则「检查更新」会误报。
+- **版本**：应用内版本取 `internal/buildinfo/buildinfo.go` 的 `Version`（默认 1.2.0），发布前应与 `wails.json` 的 `info.productVersion` 一致，可用 `wails build -ldflags "-X zhi-ai-assistant/internal/buildinfo.Version=<版本>"` 覆盖；发布 tag 需与版本号相同（如 `v1.0.0`），否则「检查更新」会误报。
 - **发布**：推送 `v*` tag（如 `v1.0.0`）会触发 `.github/workflows/release.yml`，在 Windows 上自动构建并上传 `ZhiAi-Assistant.exe` 与同名 `.sha256` 校验文件。
 - **更新**：发布资产需包含 `ZhiAi-Assistant.exe` 与 `ZhiAi-Assistant.exe.sha256`（或带 `digest`），否则只能跳转发布页手动下载。
-- **多语言**：源词条在 `tools/i18n/`，`frontend/js/locales.js` 为生成物，改动后运行 `node tools/i18n/build-locales.js`。
+- **多语言**：界面词条在 `tools/i18n/strings.json`（`"中文": ["English", "繁體中文"]`），后端词条在 `internal/i18n/`，`frontend/js/locales.js` 为生成物；改动后运行 `node tools/i18n/build-locales.js` 重新生成，`node tools/i18n/check-i18n.js` 校验两套词典的缺失与废弃词条。
 - **检查**：`npx eslint --config eslint.config.check.mjs frontend/js` 检查前端语法与未定义引用（先 `npm i -D eslint globals`）；项目暂不含自动化测试。
 
 ## 使用要点
@@ -168,7 +170,7 @@ wails build -clean                   # 先清理 build\bin 再构建
 ```
 main.go                  程序入口与 Wails 装配（侧边栏 / 设置窗口）
 internal/buildinfo/      应用名、版本号与仓库地址
-internal/core/           领域模块：日历/节假日、随记、待办、收纳、挂载、快捷启动、计时、用量
+internal/core/           领域模块：日历/节假日、速记、待办、收纳、挂载、快捷启动、计时、用量
 internal/i18n/           界面语言
 internal/platform/       Win32 窗口壳、托盘、热键、通知、对话框、开机自启
 internal/service/        暴露给前端的绑定层、设置、备份与更新逻辑

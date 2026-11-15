@@ -11,6 +11,7 @@ import (
 	"zhi-ai-assistant/internal/core/id"
 	"zhi-ai-assistant/internal/core/model"
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 var programExts = map[string]bool{
@@ -151,7 +152,7 @@ func (m *Launcher) Get(itemID string) (model.LaunchShortcut, error) {
 		}
 	})
 	if !found {
-		return model.LaunchShortcut{}, errors.New("程序不存在")
+		return model.LaunchShortcut{}, errors.New(i18n.T("程序不存在"))
 	}
 	return res, nil
 }
@@ -228,13 +229,13 @@ func (m *Launcher) AddPaths(categoryID string, paths []string) ([]model.LaunchSh
 		}
 	})
 	if noTarget {
-		return nil, errors.New("请先创建一个分类再添加程序")
+		return nil, errors.New(i18n.T("请先创建一个分类再添加程序"))
 	}
 	if len(added) == 0 {
 		if rejected > 0 {
-			return nil, errors.New("只支持程序或快捷方式，且不能重复")
+			return nil, errors.New(i18n.T("只支持程序或快捷方式，且不能重复"))
 		}
-		return nil, errors.New("没有可添加的程序")
+		return nil, errors.New(i18n.T("没有可添加的程序"))
 	}
 	return added, nil
 }
@@ -251,7 +252,7 @@ func (m *Launcher) Remove(itemID string) error {
 		}
 	})
 	if !found {
-		return errors.New("程序不存在")
+		return errors.New(i18n.T("程序不存在"))
 	}
 	return nil
 }
@@ -279,7 +280,7 @@ func (m *Launcher) Rename(itemID, name string) error {
 		}
 	})
 	if !found {
-		return errors.New("程序不存在")
+		return errors.New(i18n.T("程序不存在"))
 	}
 	return nil
 }
@@ -313,7 +314,7 @@ func (m *Launcher) Move(itemID, categoryID string) error {
 		}
 	})
 	if !found {
-		return errors.New("程序不存在或分类无效")
+		return errors.New(i18n.T("程序不存在或分类无效"))
 	}
 	return nil
 }
@@ -321,7 +322,7 @@ func (m *Launcher) Move(itemID, categoryID string) error {
 func (m *Launcher) AddCategory(name string) (model.LaunchCategory, error) {
 	name = strings.TrimSpace(name)
 	if name == "" {
-		return model.LaunchCategory{}, errors.New("分类名不能为空")
+		return model.LaunchCategory{}, errors.New(i18n.T("分类名不能为空"))
 	}
 	dup := false
 	category := model.LaunchCategory{ID: id.New(), Name: name}
@@ -336,7 +337,7 @@ func (m *Launcher) AddCategory(name string) (model.LaunchCategory, error) {
 		d.Categories = append(d.Categories, category)
 	})
 	if dup {
-		return model.LaunchCategory{}, errors.New("分类已存在")
+		return model.LaunchCategory{}, errors.New(i18n.T("分类已存在"))
 	}
 	return category, nil
 }
@@ -344,7 +345,7 @@ func (m *Launcher) AddCategory(name string) (model.LaunchCategory, error) {
 func (m *Launcher) RenameCategory(categoryID, name string) error {
 	name = strings.TrimSpace(name)
 	if name == "" {
-		return errors.New("分类名不能为空")
+		return errors.New(i18n.T("分类名不能为空"))
 	}
 	found := false
 	m.doc.Update(func(d *model.LaunchData) {
@@ -362,14 +363,14 @@ func (m *Launcher) RenameCategory(categoryID, name string) error {
 		}
 	})
 	if !found {
-		return errors.New("分类不存在或名称重复")
+		return errors.New(i18n.T("分类不存在或名称重复"))
 	}
 	return nil
 }
 
 func (m *Launcher) RemoveCategory(categoryID string) error {
 	if len(m.List().Categories) <= 1 {
-		return errors.New("至少保留一个分类")
+		return errors.New(i18n.T("至少保留一个分类"))
 	}
 	found := false
 	m.doc.Update(func(d *model.LaunchData) {
@@ -408,7 +409,7 @@ func (m *Launcher) RemoveCategory(categoryID string) error {
 		found = true
 	})
 	if !found {
-		return errors.New("分类不存在")
+		return errors.New(i18n.T("分类不存在"))
 	}
 	return nil
 }

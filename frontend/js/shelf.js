@@ -797,7 +797,7 @@ export function createShelf({ onChanged }) {
         toast(t('已挂载'));
       }
     } catch (err) {
-      if (!/取消/.test(String(err))) toast(t('挂载失败'));
+      if (!/cancel|取消/i.test(String(err))) toast(t('挂载失败'));
     }
   });
 

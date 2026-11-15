@@ -58,11 +58,11 @@ export function Launch():Promise<service.Launch>;
 
 export function Locale():Promise<string>;
 
+export function Memos():Promise<service.Memos>;
+
 export function Mode():Promise<string>;
 
 export function Mount():Promise<service.Mount>;
-
-export function Notes():Promise<service.Notes>;
 
 export function OpenDataDir():Promise<void>;
 

@@ -178,35 +178,40 @@ export namespace model {
 		}
 	}
 	
-	export class Mount {
+	export class MemoAttachment {
 	    id: string;
-	    path: string;
-	    label: string;
-	    order: number;
+	    kind: string;
+	    name: string;
+	    path?: string;
+	    url?: string;
+	    size?: number;
 	
 	    static createFrom(source: any = {}) {
-	        return new Mount(source);
+	        return new MemoAttachment(source);
 	    }
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
+	        this.kind = source["kind"];
+	        this.name = source["name"];
 	        this.path = source["path"];
-	        this.label = source["label"];
-	        this.order = source["order"];
+	        this.url = source["url"];
+	        this.size = source["size"];
 	    }
 	}
-	export class Note {
+	export class Memo {
 	    id: string;
 	    text: string;
 	    tags?: string[];
 	    tint?: string;
 	    pinned: boolean;
+	    attachments?: MemoAttachment[];
 	    createdAt: time.Time;
 	    updatedAt: time.Time;
 	
 	    static createFrom(source: any = {}) {
-	        return new Note(source);
+	        return new Memo(source);
 	    }
 	
 	    constructor(source: any = {}) {
@@ -216,6 +221,7 @@ export namespace model {
 	        this.tags = source["tags"];
 	        this.tint = source["tint"];
 	        this.pinned = source["pinned"];
+	        this.attachments = this.convertValues(source["attachments"], MemoAttachment);
 	        this.createdAt = this.convertValues(source["createdAt"], time.Time);
 	        this.updatedAt = this.convertValues(source["updatedAt"], time.Time);
 	    }
@@ -238,6 +244,25 @@ export namespace model {
 		    return a;
 		}
 	}
+	
+	export class Mount {
+	    id: string;
+	    path: string;
+	    label: string;
+	    order: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Mount(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.path = source["path"];
+	        this.label = source["label"];
+	        this.order = source["order"];
+	    }
+	}
 	export class Settings {
 	    edge: string;
 	    panelWidth: number;
@@ -255,11 +280,15 @@ export namespace model {
 	    hideCalendarFestivals: boolean;
 	    alarmSound: string;
 	    countdownSound: string;
+	    ringEffect: string;
+	    maxAlarms: number;
 	    launchColumns: number;
 	    launchRows: number;
 	    launchIconSize: number;
 	    hideLaunchNames: boolean;
 	    hideLaunch: boolean;
+	    hiddenUsagePlatforms: string[];
+	    memoAttachmentLimit: number;
 	    clock12: boolean;
 	    shelfView: string;
 	    shelfScale: string;
@@ -288,11 +317,15 @@ export namespace model {
 	        this.hideCalendarFestivals = source["hideCalendarFestivals"];
 	        this.alarmSound = source["alarmSound"];
 	        this.countdownSound = source["countdownSound"];
+	        this.ringEffect = source["ringEffect"];
+	        this.maxAlarms = source["maxAlarms"];
 	        this.launchColumns = source["launchColumns"];
 	        this.launchRows = source["launchRows"];
 	        this.launchIconSize = source["launchIconSize"];
 	        this.hideLaunchNames = source["hideLaunchNames"];
 	        this.hideLaunch = source["hideLaunch"];
+	        this.hiddenUsagePlatforms = source["hiddenUsagePlatforms"];
+	        this.memoAttachmentLimit = source["memoAttachmentLimit"];
 	        this.clock12 = source["clock12"];
 	        this.shelfView = source["shelfView"];
 	        this.shelfScale = source["shelfScale"];
@@ -893,11 +926,59 @@ export namespace service {
 	
 	    }
 	}
-	export class Mount {
+	export class MemoAttachResult {
+	    memo: model.Memo;
+	    added: number;
+	    skipped: string[];
+	
+	    static createFrom(source: any = {}) {
+	        return new MemoAttachResult(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.memo = this.convertValues(source["memo"], model.Memo);
+	        this.added = source["added"];
+	        this.skipped = source["skipped"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class MemoPayload {
+	    name: string;
+	    data: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new MemoPayload(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.data = source["data"];
+	    }
+	}
+	export class Memos {
 	
 	
 	    static createFrom(source: any = {}) {
-	        return new Mount(source);
+	        return new Memos(source);
 	    }
 	
 	    constructor(source: any = {}) {
@@ -905,11 +986,11 @@ export namespace service {
 	
 	    }
 	}
-	export class Notes {
+	export class Mount {
 	
 	
 	    static createFrom(source: any = {}) {
-	        return new Notes(source);
+	        return new Mount(source);
 	    }
 	
 	    constructor(source: any = {}) {

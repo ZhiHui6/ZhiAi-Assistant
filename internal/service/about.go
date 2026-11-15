@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -64,7 +63,7 @@ type ghAsset struct {
 func (a *App) AboutInfo() AboutInfo {
 	version := normalizeVersion(buildinfo.Version)
 	if version == "" {
-		version = "1.1.0"
+		version = "1.2.0"
 	}
 	return AboutInfo{
 		Name:        i18n.T(buildinfo.AppName),
@@ -86,7 +85,7 @@ func (a *App) CheckUpdate() (UpdateInfo, error) {
 	}
 	info.Latest = normalizeVersion(rel.TagName)
 	if info.Latest == "" {
-		return info, errors.New("发布信息缺少版本号")
+		return info, errors.New(i18n.T("发布信息缺少版本号"))
 	}
 	info.Notes = strings.TrimSpace(rel.Body)
 	info.PageURL = rel.HTMLURL
@@ -117,25 +116,25 @@ func (a *App) CheckUpdate() (UpdateInfo, error) {
 
 func (a *App) InstallUpdate() error {
 	if !a.settingsOnly {
-		return errors.New("请在设置窗口中执行更新")
+		return errors.New(i18n.T("请在设置窗口中执行更新"))
 	}
 	info, err := a.CheckUpdate()
 	if err != nil {
 		return err
 	}
 	if !info.HasUpdate {
-		return errors.New("当前已是最新版本")
+		return errors.New(i18n.T("当前已是最新版本"))
 	}
 	if !info.CanInstall {
-		return errors.New("发布包缺少校验文件，请前往发布页手动下载")
+		return errors.New(i18n.T("发布包缺少校验文件，请前往发布页手动下载"))
 	}
 	exe, err := os.Executable()
 	if err != nil {
-		return errors.New("无法定位程序文件")
+		return errors.New(i18n.T("无法定位程序文件"))
 	}
 	exe, err = filepath.Abs(exe)
 	if err != nil {
-		return errors.New("无法定位程序文件")
+		return errors.New(i18n.T("无法定位程序文件"))
 	}
 	tmp := exe + ".new"
 	_ = os.Remove(tmp)
@@ -151,23 +150,23 @@ func (a *App) InstallUpdate() error {
 	got, err := fileSHA256(tmp)
 	if err != nil {
 		_ = os.Remove(tmp)
-		return errors.New("无法校验更新包")
+		return errors.New(i18n.T("无法校验更新包"))
 	}
 	if !strings.EqualFold(got, want) {
 		_ = os.Remove(tmp)
-		return errors.New("更新包校验失败，已中止")
+		return errors.New(i18n.T("更新包校验失败，已中止"))
 	}
 
 	wasRunning := platform.SidebarRunning()
 	if wasRunning {
 		if err := writeSettingsCommand(settingsCommand{Action: actionQuit}); err != nil {
 			_ = os.Remove(tmp)
-			return errors.New("无法通知侧边栏退出")
+			return errors.New(i18n.T("无法通知侧边栏退出"))
 		}
 		platform.NotifySettingsCommand()
 		if !waitSidebarExit(8 * time.Second) {
 			_ = os.Remove(tmp)
-			return errors.New("侧边栏尚未退出，更新已取消")
+			return errors.New(i18n.T("侧边栏尚未退出，更新已取消"))
 		}
 	}
 
@@ -178,7 +177,7 @@ func (a *App) InstallUpdate() error {
 		if wasRunning {
 			_ = exec.Command(exe).Start()
 		}
-		return errors.New("无法替换程序文件，请确认程序目录可写，或前往发布页手动下载")
+		return errors.New(i18n.T("无法替换程序文件，请确认程序目录可写，或前往发布页手动下载"))
 	}
 	if err := os.Rename(tmp, exe); err != nil {
 		_ = os.Rename(old, exe)
@@ -186,11 +185,11 @@ func (a *App) InstallUpdate() error {
 		if wasRunning {
 			_ = exec.Command(exe).Start()
 		}
-		return errors.New("写入新版本失败，已回滚")
+		return errors.New(i18n.T("写入新版本失败，已回滚"))
 	}
 	if wasRunning {
 		if err := exec.Command(exe).Start(); err != nil {
-			return errors.New("更新已写入，但自动启动失败，请手动启动程序")
+			return errors.New(i18n.T("更新已写入，但自动启动失败，请手动启动程序"))
 		}
 	}
 	return nil
@@ -206,21 +205,21 @@ func fetchLatestRelease() (ghRelease, error) {
 	client := &http.Client{Timeout: 12 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		return ghRelease{}, errors.New("无法连接更新服务，请检查网络")
+		return ghRelease{}, errors.New(i18n.T("无法连接更新服务，请检查网络"))
 	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case http.StatusOK:
 	case http.StatusNotFound:
-		return ghRelease{}, errors.New("项目尚未发布版本")
+		return ghRelease{}, errors.New(i18n.T("项目尚未发布版本"))
 	case http.StatusForbidden:
-		return ghRelease{}, errors.New("GitHub 访问受限，请稍后重试或直接打开发布页")
+		return ghRelease{}, errors.New(i18n.T("GitHub 访问受限，请稍后重试或直接打开发布页"))
 	default:
-		return ghRelease{}, fmt.Errorf("检查更新失败（HTTP %d）", resp.StatusCode)
+		return ghRelease{}, errors.New(i18n.TF("检查更新失败（HTTP %d）", resp.StatusCode))
 	}
 	var rel ghRelease
 	if err := json.NewDecoder(io.LimitReader(resp.Body, 2<<20)).Decode(&rel); err != nil {
-		return ghRelease{}, errors.New("更新信息解析失败")
+		return ghRelease{}, errors.New(i18n.T("更新信息解析失败"))
 	}
 	return rel, nil
 }
@@ -263,10 +262,10 @@ func resolveChecksum(info UpdateInfo) (string, error) {
 		return strings.ToLower(info.Sha256), nil
 	}
 	if info.ChecksumURL == "" {
-		return "", errors.New("发布包缺少校验文件，请前往发布页手动下载")
+		return "", errors.New(i18n.T("发布包缺少校验文件，请前往发布页手动下载"))
 	}
 	if !strings.HasPrefix(info.ChecksumURL, "https://") {
-		return "", errors.New("校验文件地址不安全，已中止")
+		return "", errors.New(i18n.T("校验文件地址不安全，已中止"))
 	}
 	req, err := http.NewRequest(http.MethodGet, info.ChecksumURL, nil)
 	if err != nil {
@@ -276,15 +275,15 @@ func resolveChecksum(info UpdateInfo) (string, error) {
 	client := &http.Client{Timeout: 12 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", errors.New("下载校验文件失败，请检查网络")
+		return "", errors.New(i18n.T("下载校验文件失败，请检查网络"))
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("下载校验文件失败（HTTP %d）", resp.StatusCode)
+		return "", errors.New(i18n.TF("下载校验文件失败（HTTP %d）", resp.StatusCode))
 	}
 	raw, err := io.ReadAll(io.LimitReader(resp.Body, 4096))
 	if err != nil {
-		return "", errors.New("读取校验文件失败")
+		return "", errors.New(i18n.T("读取校验文件失败"))
 	}
 	for _, field := range strings.Fields(string(raw)) {
 		if len(field) == 64 {
@@ -293,37 +292,37 @@ func resolveChecksum(info UpdateInfo) (string, error) {
 			}
 		}
 	}
-	return "", errors.New("校验文件格式无效，请前往发布页手动下载")
+	return "", errors.New(i18n.T("校验文件格式无效，请前往发布页手动下载"))
 }
 
 func downloadFile(url, dst string) error {
 	if !strings.HasPrefix(url, "https://") {
-		return errors.New("更新地址不安全，已中止")
+		return errors.New(i18n.T("更新地址不安全，已中止"))
 	}
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return errors.New("更新地址无效")
+		return errors.New(i18n.T("更新地址无效"))
 	}
 	req.Header.Set("User-Agent", buildinfo.AppSlug+"/"+normalizeVersion(buildinfo.Version))
 	client := &http.Client{Timeout: 5 * time.Minute}
 	resp, err := client.Do(req)
 	if err != nil {
-		return errors.New("下载更新失败，请检查网络")
+		return errors.New(i18n.T("下载更新失败，请检查网络"))
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("下载更新失败（HTTP %d）", resp.StatusCode)
+		return errors.New(i18n.TF("下载更新失败（HTTP %d）", resp.StatusCode))
 	}
 	f, err := os.Create(dst)
 	if err != nil {
-		return errors.New("无法写入程序目录，请确认目录可写")
+		return errors.New(i18n.T("无法写入程序目录，请确认目录可写"))
 	}
 	if _, err := io.Copy(f, io.LimitReader(resp.Body, 256<<20)); err != nil {
 		f.Close()
-		return errors.New("下载中断，请重试")
+		return errors.New(i18n.T("下载中断，请重试"))
 	}
 	if err := f.Close(); err != nil {
-		return errors.New("保存更新包失败")
+		return errors.New(i18n.T("保存更新包失败"))
 	}
 	return nil
 }

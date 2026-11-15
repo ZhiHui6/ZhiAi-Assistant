@@ -10,6 +10,8 @@ import (
 	"net/url"
 	"sync"
 	"time"
+
+	"zhi-ai-assistant/internal/i18n"
 )
 
 const (
@@ -38,7 +40,7 @@ func (o *workBuddyOAuth) start(ctx context.Context, doer Doer) (LoginStart, erro
 	}
 	root, err := decodeMap(raw)
 	if err != nil {
-		return LoginStart{}, errors.New("WorkBuddy 登录服务返回异常")
+		return LoginStart{}, errors.New(i18n.T("WorkBuddy 登录服务返回异常"))
 	}
 	data := unwrapMap(root, "data")
 	if data == nil {
@@ -46,7 +48,7 @@ func (o *workBuddyOAuth) start(ctx context.Context, doer Doer) (LoginStart, erro
 	}
 	state := text(data, "state")
 	if state == "" {
-		return LoginStart{}, errors.New("WorkBuddy 未返回登录 state")
+		return LoginStart{}, errors.New(i18n.T("WorkBuddy 未返回登录 state"))
 	}
 	authURL := text(data, "authUrl", "auth_url", "url", "Url")
 	if authURL == "" {

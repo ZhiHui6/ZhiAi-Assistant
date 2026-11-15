@@ -16,6 +16,7 @@ import (
 
 	"zhi-ai-assistant/internal/buildinfo"
 	"zhi-ai-assistant/internal/core/model"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 const (
@@ -64,7 +65,7 @@ func (p *traeProvider) ReadLocal(env Env) (Auth, error) {
 		if token != "" {
 			uid, exp := traeJWTInfo(token)
 			if !exp.IsZero() && exp.Before(pNow()) {
-				return Auth{}, fmt.Errorf("%w：请在 Trae 中重新登录", ErrExpired)
+				return Auth{}, fmt.Errorf(i18n.T("%w：请在 Trae 中重新登录"), ErrExpired)
 			}
 			return Auth{Token: token, UserID: uid, ExpiresAt: exp, Source: SourceLocal}, nil
 		}
@@ -77,7 +78,7 @@ func parseTraeStorage(raw []byte, appDir string) (Auth, error) {
 	dec := json.NewDecoder(strings.NewReader(string(raw)))
 	dec.UseNumber()
 	if err := dec.Decode(&root); err != nil {
-		return Auth{}, fmt.Errorf("%w：Trae 登录文件无法解析", ErrNoAuth)
+		return Auth{}, fmt.Errorf(i18n.T("%w：Trae 登录文件无法解析"), ErrNoAuth)
 	}
 	value, ok := root[traeStorageKey]
 	if !ok {
@@ -95,7 +96,7 @@ func parseTraeStorage(raw []byte, appDir string) (Auth, error) {
 			plain = decoded
 		}
 		if err := json.Unmarshal([]byte(plain), &authMap); err != nil {
-			return Auth{}, fmt.Errorf("%w：Trae 登录内容无法解析", ErrEncrypted)
+			return Auth{}, fmt.Errorf(i18n.T("%w：Trae 登录内容无法解析"), ErrEncrypted)
 		}
 	case map[string]any:
 		authMap = typed
@@ -140,10 +141,10 @@ func parseTraeStorage(raw []byte, appDir string) (Auth, error) {
 	}
 	host := strings.ToLower(auth.Domain)
 	if host != "" && !strings.Contains(host, "trae.cn") {
-		return Auth{}, fmt.Errorf("%w：暂不支持 Trae 国际区", ErrUnsupported)
+		return Auth{}, fmt.Errorf(i18n.T("%w：暂不支持 Trae 国际区"), ErrUnsupported)
 	}
 	if !auth.ExpiresAt.IsZero() && auth.ExpiresAt.Before(pNow()) {
-		return Auth{}, fmt.Errorf("%w：请在 Trae 中重新登录", ErrExpired)
+		return Auth{}, fmt.Errorf(i18n.T("%w：请在 Trae 中重新登录"), ErrExpired)
 	}
 	return auth, nil
 }
@@ -213,7 +214,7 @@ func (p *traeProvider) Fetch(ctx context.Context, auth Auth) (model.UsageSnapsho
 	}
 	total, ratio, plan, reset, packList, ok := traeUsage(root)
 	if !ok {
-		return model.UsageSnapshot{}, errors.New("Trae 用量数据格式变化，暂时无法解析")
+		return model.UsageSnapshot{}, errors.New(i18n.T("Trae 用量数据格式变化，暂时无法解析"))
 	}
 	used := total * ratio
 	if used < 0 {
@@ -246,7 +247,7 @@ func (p *traeProvider) Fetch(ctx context.Context, auth Auth) (model.UsageSnapsho
 
 func (p *traeProvider) Claim(ctx context.Context, auth Auth) (ClaimResult, error) {
 	if auth.DeviceID == "" {
-		return ClaimResult{}, errors.New("缺少设备标识，请先在 Trae 客户端登录并签到一次")
+		return ClaimResult{}, errors.New(i18n.T("缺少设备标识，请先在 Trae 客户端登录并签到一次"))
 	}
 	raw, err := requestJSON(ctx, p.doer, http.MethodPost, traeClaimURL, traeHeaders(auth), map[string]any{})
 	if err != nil {
@@ -430,11 +431,11 @@ func traeBusinessError(code int, root map[string]any) error {
 	}
 	switch code {
 	case 9004:
-		return errors.New("缺少设备标识：" + message)
+		return errors.New(i18n.T("缺少设备标识：") + message)
 	case 9095:
 		return ErrAlreadyClaim
 	case 20403:
-		return errors.New("Trae 设备校验失败：" + message)
+		return errors.New(i18n.T("Trae 设备校验失败：") + message)
 	}
 	return errors.New(message)
 }
@@ -444,11 +445,11 @@ func traeHTTPError(err error) error {
 	if errors.As(err, &httpErr) {
 		switch httpErr.Status {
 		case http.StatusUnauthorized:
-			return fmt.Errorf("%w：请在 Trae 中重新登录", ErrExpired)
+			return fmt.Errorf(i18n.T("%w：请在 Trae 中重新登录"), ErrExpired)
 		case http.StatusForbidden:
-			return fmt.Errorf("%w：Trae 拒绝了该请求", ErrBlocked)
+			return fmt.Errorf(i18n.T("%w：Trae 拒绝了该请求"), ErrBlocked)
 		}
-		return fmt.Errorf("Trae 请求失败（HTTP %d）", httpErr.Status)
+		return errors.New(i18n.TF("Trae 请求失败（HTTP %d）", httpErr.Status))
 	}
 	return err
 }

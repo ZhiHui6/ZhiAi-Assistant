@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"zhi-ai-assistant/internal/core/model"
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform"
 )
 
@@ -89,7 +90,7 @@ func parseQoderAuth(raw []byte) (Auth, error) {
 				return parseQoderAuthMap(root)
 			}
 		}
-		return Auth{}, fmt.Errorf("%w：登录文件格式暂不支持，请填写 Token", ErrEncrypted)
+		return Auth{}, fmt.Errorf(i18n.T("%w：登录文件格式暂不支持，请填写 Token"), ErrEncrypted)
 	}
 	return parseQoderAuthMap(root)
 }
@@ -102,7 +103,7 @@ func parseQoderAuthMap(root map[string]any) (Auth, error) {
 	token := text(authRoot, "token", "accessToken", "access_token")
 	if token == "" {
 		if _, ok := lookup(authRoot, "token", "accessToken", "access_token"); ok {
-			return Auth{}, fmt.Errorf("%w：请在 Qoder 中重新登录", ErrEncrypted)
+			return Auth{}, fmt.Errorf(i18n.T("%w：请在 Qoder 中重新登录"), ErrEncrypted)
 		}
 		return Auth{}, ErrNoAuth
 	}
@@ -119,7 +120,7 @@ func parseQoderAuthMap(root map[string]any) (Auth, error) {
 		auth.ExpiresAt = timeValue(expires)
 	}
 	if !auth.ExpiresAt.IsZero() && auth.ExpiresAt.Before(pNow()) {
-		return Auth{}, fmt.Errorf("%w：请在 Qoder 中重新登录", ErrExpired)
+		return Auth{}, fmt.Errorf(i18n.T("%w：请在 Qoder 中重新登录"), ErrExpired)
 	}
 	return auth, nil
 }
@@ -158,7 +159,7 @@ func (p *qoderProvider) Fetch(ctx context.Context, auth Auth) (model.UsageSnapsh
 	}
 	total, used, remaining, unit, plan, reset, packs, ok := qoderQuota(root)
 	if !ok {
-		return model.UsageSnapshot{}, fmt.Errorf("Qoder 用量数据格式变化，暂时无法解析")
+		return model.UsageSnapshot{}, errors.New(i18n.T("Qoder 用量数据格式变化，暂时无法解析"))
 	}
 	snapshot := model.UsageSnapshot{
 		Account:    maskAccount(firstNonEmpty(auth.Name, auth.Email, auth.UserID)),
@@ -203,7 +204,7 @@ func (p *qoderProvider) Claim(ctx context.Context, auth Auth) (ClaimResult, erro
 		if already {
 			return ClaimResult{Already: true, Message: "今日已领取"}, nil
 		}
-		return ClaimResult{}, errors.New("当前没有可领取的签到活动")
+		return ClaimResult{}, errors.New(i18n.T("当前没有可领取的签到活动"))
 	}
 	url := qoderCampaignURL + "/" + claimable.id + "/claim"
 	raw, err := requestJSON(ctx, p.doer, http.MethodPost, url, qoderHeaders(auth), map[string]any{})
@@ -379,13 +380,13 @@ func qoderHTTPError(err error) error {
 	if errors.As(err, &httpErr) {
 		switch httpErr.Status {
 		case http.StatusUnauthorized:
-			return fmt.Errorf("%w：请在 Qoder 中重新登录", ErrExpired)
+			return fmt.Errorf(i18n.T("%w：请在 Qoder 中重新登录"), ErrExpired)
 		case http.StatusForbidden:
-			return fmt.Errorf("%w：Qoder 拒绝了该请求", ErrBlocked)
+			return fmt.Errorf(i18n.T("%w：Qoder 拒绝了该请求"), ErrBlocked)
 		case http.StatusTooManyRequests:
-			return fmt.Errorf("%w：请求过于频繁，请稍后再试", ErrBlocked)
+			return fmt.Errorf(i18n.T("%w：请求过于频繁，请稍后再试"), ErrBlocked)
 		}
-		return fmt.Errorf("Qoder 请求失败（HTTP %d）", httpErr.Status)
+		return errors.New(i18n.TF("Qoder 请求失败（HTTP %d）", httpErr.Status))
 	}
 	return err
 }

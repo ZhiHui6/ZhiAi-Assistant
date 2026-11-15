@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform"
 )
 
@@ -94,7 +95,7 @@ func wbAtRestKey(ctx context.Context, env Env) ([]byte, error) {
 	cmd.Stdout = &out
 	cmd.Stderr = nil
 	if err := cmd.Start(); err != nil {
-		wbKeyCache.keyErr, wbKeyCache.failAt = fmt.Errorf("无法启动 WorkBuddy 客户端：%w", err), now
+		wbKeyCache.keyErr, wbKeyCache.failAt = fmt.Errorf(i18n.T("无法启动 WorkBuddy 客户端：%w"), err), now
 		return nil, wbKeyCache.keyErr
 	}
 	done := make(chan error, 1)
@@ -103,12 +104,12 @@ func wbAtRestKey(ctx context.Context, env Env) ([]byte, error) {
 	case <-time.After(wbKeyFetchTimeout):
 		_ = cmd.Process.Kill()
 		<-done
-		wbKeyCache.keyErr, wbKeyCache.failAt = errors.New("WorkBuddy 客户端响应超时"), now
+		wbKeyCache.keyErr, wbKeyCache.failAt = errors.New(i18n.T("WorkBuddy 客户端响应超时")), now
 		return nil, wbKeyCache.keyErr
 	case waitErr := <-done:
 		payload := strings.TrimSpace(out.String())
 		if waitErr != nil || payload == "" {
-			wbKeyCache.keyErr, wbKeyCache.failAt = errors.New("WorkBuddy 客户端未能提供静置密钥"), now
+			wbKeyCache.keyErr, wbKeyCache.failAt = errors.New(i18n.T("WorkBuddy 客户端未能提供静置密钥")), now
 			return nil, wbKeyCache.keyErr
 		}
 	}
@@ -116,7 +117,7 @@ func wbAtRestKey(ctx context.Context, env Env) ([]byte, error) {
 		AtRestSecretKey string `json:"atRestSecretKey"`
 	}
 	if err := json.Unmarshal([]byte(out.String()), &doc); err != nil || doc.AtRestSecretKey == "" {
-		wbKeyCache.keyErr, wbKeyCache.failAt = errors.New("WorkBuddy 静置密钥格式异常"), now
+		wbKeyCache.keyErr, wbKeyCache.failAt = errors.New(i18n.T("WorkBuddy 静置密钥格式异常")), now
 		return nil, wbKeyCache.keyErr
 	}
 	sum := sha256.Sum256([]byte(doc.AtRestSecretKey))
@@ -153,7 +154,7 @@ func wbDecodeBase64(value string) ([]byte, error) {
 func wbOpenEncryptedField(wrapper map[string]any, key []byte) (string, error) {
 	envelopeRaw, ok := wrapper["envelope"].(string)
 	if !ok || envelopeRaw == "" {
-		return "", errors.New("WorkBuddy 加密字段缺少 envelope")
+		return "", errors.New(i18n.T("WorkBuddy 加密字段缺少 envelope"))
 	}
 	var envelope struct {
 		Suite      uint32 `json:"suite"`
@@ -164,27 +165,27 @@ func wbOpenEncryptedField(wrapper map[string]any, key []byte) (string, error) {
 	}
 	envelopeJSON, err := wbDecodeBase64(envelopeRaw)
 	if err != nil || json.Unmarshal(envelopeJSON, &envelope) != nil {
-		return "", errors.New("WorkBuddy 加密信封无法解析")
+		return "", errors.New(i18n.T("WorkBuddy 加密信封无法解析"))
 	}
 	if !wbKeyIDPattern.MatchString(envelope.KeyID) {
-		return "", errors.New("WorkBuddy 加密信封 keyId 非法")
+		return "", errors.New(i18n.T("WorkBuddy 加密信封 keyId 非法"))
 	}
 	sum := sha256.Sum256(key)
 	expectedKeyID := fmt.Sprintf("%x", sum[:16])
 	if envelope.KeyID != expectedKeyID {
-		return "", fmt.Errorf("WorkBuddy 加密字段属于另一把密钥（%s）", envelope.KeyID)
+		return "", errors.New(i18n.TF("WorkBuddy 加密字段属于另一把密钥（%s）", envelope.KeyID))
 	}
 	nonce, err := wbDecodeBase64(envelope.Nonce)
 	if err != nil || len(nonce) != 12 {
-		return "", errors.New("WorkBuddy 加密信封 nonce 非法")
+		return "", errors.New(i18n.T("WorkBuddy 加密信封 nonce 非法"))
 	}
 	tag, err := wbDecodeBase64(envelope.AuthTag)
 	if err != nil || len(tag) != 16 {
-		return "", errors.New("WorkBuddy 加密信封 authTag 非法")
+		return "", errors.New(i18n.T("WorkBuddy 加密信封 authTag 非法"))
 	}
 	ciphertext, err := wbDecodeBase64(envelope.Ciphertext)
 	if err != nil {
-		return "", errors.New("WorkBuddy 加密信封 ciphertext 非法")
+		return "", errors.New(i18n.T("WorkBuddy 加密信封 ciphertext 非法"))
 	}
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -196,7 +197,7 @@ func wbOpenEncryptedField(wrapper map[string]any, key []byte) (string, error) {
 	}
 	plain, err := gcm.Open(nil, nonce, append(ciphertext, tag...), wbFieldAAD(envelope.KeyID, envelope.Suite))
 	if err != nil {
-		return "", errors.New("WorkBuddy 加密字段校验失败")
+		return "", errors.New(i18n.T("WorkBuddy 加密字段校验失败"))
 	}
 	return string(plain), nil
 }

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"zhi-ai-assistant/internal/core/model"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 const (
@@ -22,14 +23,14 @@ const (
 )
 
 var (
-	ErrNoAuth       = errors.New("未找到本机登录态")
-	ErrNotLoggedIn  = errors.New("请先登录")
-	ErrExpired      = errors.New("登录状态已过期")
-	ErrEncrypted    = errors.New("登录信息已加密")
-	ErrBlocked      = errors.New("平台拒绝了该请求")
-	ErrUnsupported  = errors.New("暂不支持该区域")
-	ErrAlreadyClaim = errors.New("今日已领取")
-	ErrSignedOut    = errors.New("已退出登录")
+	ErrNoAuth       = errors.New(i18n.T("未找到本机登录态"))
+	ErrNotLoggedIn  = errors.New(i18n.T("请先登录"))
+	ErrExpired      = errors.New(i18n.T("登录状态已过期"))
+	ErrEncrypted    = errors.New(i18n.T("登录信息已加密"))
+	ErrBlocked      = errors.New(i18n.T("平台拒绝了该请求"))
+	ErrUnsupported  = errors.New(i18n.T("暂不支持该区域"))
+	ErrAlreadyClaim = errors.New(i18n.T("今日已领取"))
+	ErrSignedOut    = errors.New(i18n.T("已退出登录"))
 )
 
 type Env struct {

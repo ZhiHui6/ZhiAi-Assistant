@@ -4,6 +4,8 @@ let tipEl = null;
 let tipTimer = null;
 let activeNode = null;
 let installed = false;
+let previewEl = null;
+const previews = new WeakMap();
 
 export function hideTip() {
   if (tipTimer) {
@@ -11,6 +13,14 @@ export function hideTip() {
     tipTimer = null;
   }
   if (tipEl) tipEl.hidden = true;
+  if (previewEl) {
+    previewEl.hidden = true;
+    previewEl.replaceChildren();
+  }
+}
+
+export function setTipPreview(node, build) {
+  previews.set(node, build);
 }
 
 function ensureTip() {
@@ -21,6 +31,37 @@ function ensureTip() {
     document.body.appendChild(tipEl);
   }
   return tipEl;
+}
+
+function ensurePreview() {
+  if (!previewEl) {
+    previewEl = el('div', 'tip-preview');
+    previewEl.hidden = true;
+    document.body.appendChild(previewEl);
+  }
+  return previewEl;
+}
+
+function placePreview(node) {
+  const build = previews.get(node);
+  if (!build) return;
+  const content = build();
+  if (!content) return;
+  const box = ensurePreview();
+  box.replaceChildren(content);
+  box.hidden = false;
+  box.style.left = '0px';
+  box.style.top = '0px';
+  const tip = tipEl.getBoundingClientRect();
+  const bw = box.offsetWidth;
+  const bh = box.offsetHeight;
+  let left = tip.left + tip.width / 2 - bw / 2;
+  left = Math.max(6, Math.min(left, window.innerWidth - bw - 6));
+  let top = tip.top - bh - 8;
+  if (top < 6) top = tip.bottom + 8;
+  top = Math.min(top, window.innerHeight - bh - 6);
+  box.style.left = left + 'px';
+  box.style.top = top + 'px';
 }
 
 export function showTip(node, text, delay = 700) {
@@ -50,6 +91,7 @@ export function showTip(node, text, delay = 700) {
     tip.style.setProperty('--tip-arrow', arrow + 'px');
     tip.style.left = left + 'px';
     tip.style.top = top + 'px';
+    placePreview(node);
   }, delay);
 }
 

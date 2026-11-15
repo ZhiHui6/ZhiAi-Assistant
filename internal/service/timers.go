@@ -35,6 +35,8 @@ func (s *Timers) SetFireHandler(fn func(kind, label string)) {
 
 func (s *Timers) State() model.TimerData { return s.mgr.Snapshot() }
 
+func (s *Timers) SetAlarmLimit(n int) { s.mgr.SetAlarmLimit(n) }
+
 func (s *Timers) AddAlarm(at, label string, repeat bool) (model.Alarm, error) {
 	return s.mgr.AddAlarm(at, label, repeat)
 }
@@ -71,13 +73,13 @@ func (s *Timers) ScheduleShutdown(atUnix int64) (model.ShutdownPlan, error) {
 		delay = 60
 	}
 	if delay > 7*24*3600 {
-		return model.ShutdownPlan{}, errors.New("关机时间不能超过 7 天")
+		return model.ShutdownPlan{}, errors.New(i18n.T("关机时间不能超过 7 天"))
 	}
 	if s.mgr.Snapshot().Shutdown.Active {
 		_ = platform.AbortShutdown()
 	}
 	if err := platform.ScheduleShutdown(delay); err != nil {
-		return model.ShutdownPlan{}, errors.New("无法安排系统关机")
+		return model.ShutdownPlan{}, errors.New(i18n.T("无法安排系统关机"))
 	}
 	target := now.Add(time.Duration(delay) * time.Second)
 	return s.mgr.SetShutdown(target), nil
@@ -97,13 +99,13 @@ func (a *App) SetTimerSound(kind, sound string) (model.Settings, error) {
 	if strings.HasPrefix(sound, "file:") {
 		path := strings.TrimSpace(strings.TrimPrefix(sound, "file:"))
 		if path == "" {
-			return current, errors.New("铃音路径为空")
+			return current, errors.New(i18n.T("铃音路径为空"))
 		}
 		if !strings.EqualFold(filepath.Ext(path), ".wav") {
-			return current, errors.New("铃音需为 .wav 文件")
+			return current, errors.New(i18n.T("铃音需为 .wav 文件"))
 		}
 		if _, err := os.Stat(path); err != nil {
-			return current, errors.New("铃音文件不存在")
+			return current, errors.New(i18n.T("铃音文件不存在"))
 		}
 		sound = "file:" + path
 	}
@@ -113,7 +115,7 @@ func (a *App) SetTimerSound(kind, sound string) (model.Settings, error) {
 	case "countdown":
 		current.CountdownSound = sound
 	default:
-		return current, errors.New("未知计时类型")
+		return current, errors.New(i18n.T("未知计时类型"))
 	}
 	return a.UpdateSettings(current)
 }
@@ -128,7 +130,7 @@ func (a *App) PickSound() (string, error) {
 		return "", err
 	}
 	if len(paths) == 0 {
-		return "", errors.New("未选择文件")
+		return "", errors.New(i18n.T("未选择文件"))
 	}
 	path := paths[0]
 	if !strings.EqualFold(filepath.Ext(path), ".wav") {

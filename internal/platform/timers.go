@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform/win32"
 )
 
@@ -41,10 +42,10 @@ func PlayTimerSound(choice string) error {
 		if strings.HasPrefix(choice, "file:") {
 			path := strings.TrimSpace(strings.TrimPrefix(choice, "file:"))
 			if path == "" {
-				return errors.New("铃音路径为空")
+				return errors.New(i18n.T("铃音路径为空"))
 			}
 			if !win32.PlaySoundFile(path) {
-				return errors.New("无法播放铃音")
+				return errors.New(i18n.T("无法播放铃音"))
 			}
 			return nil
 		}

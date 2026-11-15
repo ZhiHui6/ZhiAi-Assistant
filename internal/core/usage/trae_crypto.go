@@ -7,6 +7,8 @@ import (
 	"encoding/base64"
 	"errors"
 	"strings"
+
+	"zhi-ai-assistant/internal/i18n"
 )
 
 var (
@@ -19,7 +21,7 @@ var (
 func decryptTraeStorageValue(encoded string) (string, error) {
 	raw, err := base64.StdEncoding.DecodeString(strings.TrimSpace(encoded))
 	if err != nil || len(raw) <= 102 {
-		return "", errors.New("Trae 登录数据长度异常")
+		return "", errors.New(i18n.T("Trae 登录数据长度异常"))
 	}
 	header := raw[:6]
 	var salt []byte
@@ -29,7 +31,7 @@ func decryptTraeStorageValue(encoded string) (string, error) {
 	case string(header) == string([]byte{18, 57, 32, 32, 2, 3}):
 		salt = xorBytes(traeSaltC, traeSaltD)
 	default:
-		return "", errors.New("Trae 登录数据格式不受支持")
+		return "", errors.New(i18n.T("Trae 登录数据格式不受支持"))
 	}
 	random := raw[6:38]
 	encrypted := raw[38:]
@@ -44,13 +46,13 @@ func decryptTraeStorageValue(encoded string) (string, error) {
 	cipher.NewCBCDecrypter(block, derived[16:32]).CryptBlocks(plain, encrypted)
 	plain, err = pkcs7Unpad(plain)
 	if err != nil || len(plain) < 64 {
-		return "", errors.New("Trae 登录数据校验失败")
+		return "", errors.New(i18n.T("Trae 登录数据校验失败"))
 	}
 	expected := plain[:64]
 	body := plain[64:]
 	actual := sha512.Sum512(body)
 	if string(expected) != string(actual[:]) {
-		return "", errors.New("Trae 登录数据完整性校验失败")
+		return "", errors.New(i18n.T("Trae 登录数据完整性校验失败"))
 	}
 	return string(body), nil
 }
@@ -69,15 +71,15 @@ func xorBytes(a, b []byte) []byte {
 
 func pkcs7Unpad(data []byte) ([]byte, error) {
 	if len(data) == 0 {
-		return nil, errors.New("空数据")
+		return nil, errors.New(i18n.T("空数据"))
 	}
 	padding := int(data[len(data)-1])
 	if padding == 0 || padding > 16 || padding > len(data) {
-		return nil, errors.New("填充错误")
+		return nil, errors.New(i18n.T("填充错误"))
 	}
 	for _, value := range data[len(data)-padding:] {
 		if int(value) != padding {
-			return nil, errors.New("填充错误")
+			return nil, errors.New(i18n.T("填充错误"))
 		}
 	}
 	return data[:len(data)-padding], nil

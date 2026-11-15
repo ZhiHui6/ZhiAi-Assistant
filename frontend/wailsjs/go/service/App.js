@@ -110,16 +110,16 @@ export function Locale() {
   return window['go']['service']['App']['Locale']();
 }
 
+export function Memos() {
+  return window['go']['service']['App']['Memos']();
+}
+
 export function Mode() {
   return window['go']['service']['App']['Mode']();
 }
 
 export function Mount() {
   return window['go']['service']['App']['Mount']();
-}
-
-export function Notes() {
-  return window['go']['service']['App']['Notes']();
 }
 
 export function OpenDataDir() {

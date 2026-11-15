@@ -74,7 +74,7 @@ function setupSound(kind, selectEl, testBtn, initial) {
         await App.setTimerSound(kind, stored);
         saved = stored;
       } catch (err) {
-        if (!/取消|未选择/.test(String(err))) toast(errText(err));
+        if (!/cancel|no file|取消|未選|未选/i.test(String(err))) toast(errText(err));
         selectEl.value = saved;
       }
       return;
@@ -97,6 +97,37 @@ function setupSound(kind, selectEl, testBtn, initial) {
 
 function errText(err) {
   return dataText(String(err).replace(/^Error:\s*/, ''));
+}
+
+const RING_CLASSES = ['ringing', 'pulse', 'sweep', 'flash'];
+const RING_LIMIT = 60000;
+let ringEffect = 'pulse';
+let ringTimer = null;
+
+function normalizeRing(value) {
+  return value === 'sweep' || value === 'flash' || value === 'off' ? value : 'pulse';
+}
+
+function stopRing() {
+  if (ringTimer) {
+    clearTimeout(ringTimer);
+    ringTimer = null;
+  }
+  document.body.classList.remove(...RING_CLASSES);
+}
+
+function startRing() {
+  stopRing();
+  if (ringEffect === 'off') return;
+  document.body.classList.add('ringing', ringEffect);
+  ringTimer = setTimeout(stopRing, RING_LIMIT);
+}
+
+function setRingEffect(value) {
+  const next = normalizeRing(value);
+  if (next === ringEffect) return;
+  ringEffect = next;
+  if (document.body.classList.contains('ringing')) startRing();
 }
 
 export function createTimers() {
@@ -135,6 +166,7 @@ export function createTimers() {
   [countdownHour, countdownMin, countdownSec].forEach(enhanceNumber);
 
   let state = { alarms: [], countdown: {} };
+  let maxAlarms = 8;
 
   function setSetup(trigger, body, panel, on, idleLabel) {
     body.hidden = on;
@@ -215,6 +247,10 @@ export function createTimers() {
   function render() {
     renderAlarms();
     updateLive();
+    const full = (state.alarms || []).length >= maxAlarms;
+    alarmSetup.disabled = full;
+    if (full) alarmSetup.setAttribute('title', t('闹钟数量已达上限'));
+    else alarmSetup.removeAttribute('title');
   }
 
   async function refresh() {
@@ -302,6 +338,7 @@ export function createTimers() {
 
   alertClose.addEventListener('click', () => {
     alertEl.hidden = true;
+    stopRing();
   });
 
   onEvent('timer:fired', async (payload) => {
@@ -309,8 +346,19 @@ export function createTimers() {
       alertText.textContent = payload.label;
       alertEl.hidden = false;
     }
+    startRing();
     toast(payload?.label || t('计时结束'));
     await refresh();
+  });
+
+  onEvent('settings:changed', (next) => {
+    if (!next) return;
+    setRingEffect(next.ringEffect);
+    const nextMax = Number(next.maxAlarms) || 8;
+    if (nextMax !== maxAlarms) {
+      maxAlarms = nextMax;
+      render();
+    }
   });
 
   async function initSounds() {
@@ -318,8 +366,11 @@ export function createTimers() {
     try {
       settings = await App.getSettings();
     } catch (err) {}
+    ringEffect = normalizeRing(settings?.ringEffect);
+    maxAlarms = Number(settings?.maxAlarms) || 8;
     setupSound('alarm', alarmSound, alarmSoundTest, settings?.alarmSound);
     setupSound('countdown', countdownSound, countdownSoundTest, settings?.countdownSound);
+    render();
   }
 
   document.addEventListener(

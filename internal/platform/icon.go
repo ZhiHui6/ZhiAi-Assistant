@@ -16,6 +16,7 @@ import (
 	"unsafe"
 
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform/win32"
 )
 
@@ -103,7 +104,7 @@ func ExtractIconPNG(path string) ([]byte, error) {
 	}
 	info, ok := win32.SHGetFileInfo(path, attrs, flags)
 	if !ok || info.HIcon == 0 {
-		return nil, errors.New("SHGetFileInfo 未返回图标")
+		return nil, errors.New(i18n.T("SHGetFileInfo 未返回图标"))
 	}
 	defer win32.DestroyIcon(info.HIcon)
 	return hiconToPNG(info.HIcon)
@@ -112,7 +113,7 @@ func ExtractIconPNG(path string) ([]byte, error) {
 func hiconToPNG(hicon uintptr) ([]byte, error) {
 	ii, ok := win32.GetIconInfo(hicon)
 	if !ok {
-		return nil, errors.New("GetIconInfo 失败")
+		return nil, errors.New(i18n.T("GetIconInfo 失败"))
 	}
 	if ii.HbmColor != 0 {
 		defer win32.DeleteObject(ii.HbmColor)
@@ -121,21 +122,21 @@ func hiconToPNG(hicon uintptr) ([]byte, error) {
 		defer win32.DeleteObject(ii.HbmMask)
 	}
 	if ii.HbmColor == 0 {
-		return nil, errors.New("图标无彩色位图")
+		return nil, errors.New(i18n.T("图标无彩色位图"))
 	}
 
 	var bm win32.BITMAP
 	if win32.GetObject(ii.HbmColor, unsafe.Pointer(&bm), int32(unsafe.Sizeof(bm))) == 0 {
-		return nil, errors.New("GetObject 失败")
+		return nil, errors.New(i18n.T("GetObject 失败"))
 	}
 	w, h := int(bm.BmWidth), int(bm.BmHeight)
 	if w <= 0 || h <= 0 || w > 512 || h > 512 {
-		return nil, errors.New("图标尺寸异常")
+		return nil, errors.New(i18n.T("图标尺寸异常"))
 	}
 
 	hdc := win32.GetDC(0)
 	if hdc == 0 {
-		return nil, errors.New("GetDC 失败")
+		return nil, errors.New(i18n.T("GetDC 失败"))
 	}
 	defer win32.ReleaseDC(0, hdc)
 
@@ -149,7 +150,7 @@ func hiconToPNG(hicon uintptr) ([]byte, error) {
 	}
 	buf := make([]byte, w*h*4)
 	if win32.GetDIBits(hdc, ii.HbmColor, 0, uint32(h), unsafe.Pointer(&buf[0]), &bi) == 0 {
-		return nil, errors.New("GetDIBits 失败")
+		return nil, errors.New(i18n.T("GetDIBits 失败"))
 	}
 
 	hasAlpha := false

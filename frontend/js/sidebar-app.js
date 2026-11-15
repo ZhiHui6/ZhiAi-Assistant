@@ -1,7 +1,7 @@
 import { App, Calendar, WindowSvc, onEvent, toast } from './api.js';
 import { initClock } from './clock.js';
 import { createCalendar } from './calendar.js';
-import { createNotes } from './notes.js';
+import { createMemos } from './memos.js';
 import { createTodos } from './todos.js';
 import { createShelf } from './shelf.js';
 import { createLaunch } from './launch.js';
@@ -45,7 +45,7 @@ if (typeof ResizeObserver !== 'undefined' && appListEl) {
 }
 window.addEventListener('resize', updateLaunchCells);
 
-let activeTab = 'notes';
+let activeTab = 'memos';
 let pinned = false;
 let peekSetting = 6;
 let windowDpi = 96;
@@ -78,7 +78,7 @@ const calendar = createCalendar({
   },
 });
 
-const notes = createNotes();
+const memos = createMemos();
 
 const todos = createTodos({
   onChanged() {
@@ -128,7 +128,7 @@ onLocaleChange(() => {
   applyTodaySuffix();
   clock.refresh();
   calendar.refresh();
-  notes.refresh();
+  memos.refresh();
   todos.refresh();
   shelf.refresh();
   launcher.refresh();
@@ -165,6 +165,7 @@ function applyAppearance(s) {
   const calendarCard = document.getElementById('calendarCard');
   if (calendarCard) calendarCard.hidden = s.showCalendar === false;
   if (launchDock) launchDock.hidden = !!s.hideLaunch;
+  usage.setHiddenPlatforms(s.hiddenUsagePlatforms);
   if (calendar) calendar.setShowDetails(!s.hideCalendarFestivals);
 
   const cols = Math.max(3, Math.min(8, Number(s.launchColumns) || 5));
@@ -312,8 +313,8 @@ document.addEventListener('keydown', (e) => {
   }
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault();
-    switchTab('notes');
-    const search = document.getElementById('noteSearch');
+    switchTab('memos');
+    const search = document.getElementById('memoSearch');
     if (search) search.focus();
   }
 });
@@ -331,7 +332,7 @@ onEvent('panel:shown', (payload) => {
   const view = payload && payload.view;
   if (view) switchTab(view);
   if (activeTab === 'todos') todos.refresh();
-  if (activeTab === 'notes') notes.refresh();
+  if (activeTab === 'memos') memos.refresh();
   if (activeTab === 'shelf') shelf.refresh();
   if (activeTab === 'timers') timers.refresh();
   if (activeTab === 'shutdown') shutdown.refresh();
@@ -366,7 +367,21 @@ onEvent('calendar:holidays', () => {
 
 async function handleFileDrop(x, y, paths) {
   if (!paths || !paths.length) return;
+  const memoId = hoverMemoId;
+  hoverMemoId = '';
+  if (memoId) {
+    const card = document.querySelector(`#memoList .memo[data-memo-id="${memoId}"]`);
+    if (card) card.classList.remove('memo-drop-target');
+    await memos.addPaths(memoId, paths);
+    return;
+  }
   const target = document.elementFromPoint(x, y);
+  const memoCard = target && target.closest('#memoList .memo[data-memo-id]');
+  if (memoCard) {
+    memoCard.classList.remove('memo-drop-target');
+    await memos.addPaths(memoCard.dataset.memoId, paths);
+    return;
+  }
   const inLaunch = target && target.closest('#launchDock');
   if (inLaunch) {
     await launcher.handleDrop(x, y, paths);
@@ -391,10 +406,16 @@ function isFileDrag(e) {
   return !!e.dataTransfer && Array.from(e.dataTransfer.types || []).indexOf('Files') !== -1;
 }
 
+let hoverMemoId = '';
+let shelfSwitchTimer = null;
+
 function clearFileDropTargets() {
-  document.body.classList.remove('file-drag-mount', 'file-drag-shelf');
+  document.body.classList.remove('file-drag-mount', 'file-drag-shelf', 'file-drag-memo');
   document.querySelectorAll('.shelf-group.file-drop-target').forEach((el) => {
     el.classList.remove('file-drop-target');
+  });
+  document.querySelectorAll('.memo-drop-target').forEach((el) => {
+    el.classList.remove('memo-drop-target');
   });
 }
 
@@ -402,7 +423,20 @@ window.addEventListener('dragover', (e) => {
   if (!isFileDrag(e)) return;
   const first = document.elementFromPoint(e.clientX, e.clientY);
   const inLaunch = !!first && !!first.closest('#launchDock');
-  if (!inLaunch && !shelfView.classList.contains('active')) switchTab('shelf');
+  const memoCard = first && first.closest('#memoList .memo[data-memo-id]');
+  hoverMemoId = memoCard ? memoCard.dataset.memoId : '';
+  if (!inLaunch && !memoCard && !shelfView.classList.contains('active')) {
+    if (!shelfSwitchTimer) {
+      shelfSwitchTimer = setTimeout(() => {
+        shelfSwitchTimer = null;
+        if (hoverMemoId || shelfView.classList.contains('active')) return;
+        switchTab('shelf');
+      }, 450);
+    }
+  } else if (shelfSwitchTimer) {
+    clearTimeout(shelfSwitchTimer);
+    shelfSwitchTimer = null;
+  }
   const target = document.elementFromPoint(e.clientX, e.clientY);
   const inMount = !!target && !!target.closest('.mount-section');
   const inShelf = !!target && !!target.closest('.shelf-section');
@@ -414,11 +448,21 @@ window.addEventListener('dragover', (e) => {
     if (el !== groupEl) el.classList.remove('file-drop-target');
   });
   if (groupEl) groupEl.classList.add('file-drop-target');
+  document.querySelectorAll('.memo-drop-target').forEach((el) => {
+    if (el !== memoCard) el.classList.remove('memo-drop-target');
+  });
+  if (memoCard) memoCard.classList.add('memo-drop-target');
+  document.body.classList.toggle('file-drag-memo', !!memoCard);
   launchDock.classList.toggle('drag-over', inLaunch);
 });
 
 window.addEventListener('dragleave', (e) => {
   if (!e.relatedTarget) {
+    hoverMemoId = '';
+    if (shelfSwitchTimer) {
+      clearTimeout(shelfSwitchTimer);
+      shelfSwitchTimer = null;
+    }
     launchDock.classList.remove('drag-over');
     clearFileDropTargets();
   }
@@ -444,7 +488,7 @@ function reportLayout(tag) {
   try {
     const rects = {};
     document
-      .querySelectorAll('.tab, #todoInput, #noteSearch, #btnPin, #btnSettings, #btnCollapse')
+      .querySelectorAll('.tab, #todoInput, #memoSearch, #btnPin, #btnSettings, #btnCollapse')
       .forEach((node, i) => {
         const r = node.getBoundingClientRect();
         if (r.width === 0 && r.height === 0) return;
@@ -463,11 +507,11 @@ App.isDebug()
   })
   .catch(() => {});
 
-['notes', 'todos', 'shelf', 'timers', 'shutdown', 'usage'].forEach((tab) => {
+['memos', 'todos', 'shelf', 'timers', 'shutdown', 'usage'].forEach((tab) => {
   document.querySelector(`.tab[data-tab="${tab}"]`).addEventListener('click', () => {
     if (tab === 'shelf') shelf.refresh();
     if (tab === 'todos') todos.refresh();
-    if (tab === 'notes') notes.refresh();
+    if (tab === 'memos') memos.refresh();
     if (tab === 'timers') timers.refresh();
     if (tab === 'shutdown') shutdown.refresh();
     if (tab === 'usage') usage.refresh();

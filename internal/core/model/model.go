@@ -2,18 +2,28 @@ package model
 
 import "time"
 
-type Note struct {
-	ID        string    `json:"id"`
-	Text      string    `json:"text"`
-	Tags      []string  `json:"tags,omitempty"`
-	Tint      string    `json:"tint,omitempty"`
-	Pinned    bool      `json:"pinned"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+type MemoAttachment struct {
+	ID   string `json:"id"`
+	Kind string `json:"kind"`
+	Name string `json:"name"`
+	Path string `json:"path,omitempty"`
+	URL  string `json:"url,omitempty"`
+	Size int64  `json:"size,omitempty"`
 }
 
-type NotesData struct {
-	Items []Note `json:"items"`
+type Memo struct {
+	ID          string           `json:"id"`
+	Text        string           `json:"text"`
+	Tags        []string         `json:"tags,omitempty"`
+	Tint        string           `json:"tint,omitempty"`
+	Pinned      bool             `json:"pinned"`
+	Attachments []MemoAttachment `json:"attachments,omitempty"`
+	CreatedAt   time.Time        `json:"createdAt"`
+	UpdatedAt   time.Time        `json:"updatedAt"`
+}
+
+type MemosData struct {
+	Items []Memo `json:"items"`
 }
 
 type Todo struct {
@@ -59,10 +69,10 @@ type ShelfData struct {
 }
 
 type LaunchCategory struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Order int    `json:"order"`
-	LegacySystem bool `json:"system,omitempty"`
+	ID           string `json:"id"`
+	Name         string `json:"name"`
+	Order        int    `json:"order"`
+	LegacySystem bool   `json:"system,omitempty"`
 }
 
 type LaunchShortcut struct {
@@ -134,11 +144,15 @@ type Settings struct {
 	HideCalendarFestivals bool     `json:"hideCalendarFestivals"`
 	AlarmSound            string   `json:"alarmSound"`
 	CountdownSound        string   `json:"countdownSound"`
+	RingEffect            string   `json:"ringEffect"`
+	MaxAlarms             int      `json:"maxAlarms"`
 	LaunchColumns         int      `json:"launchColumns"`
 	LaunchRows            int      `json:"launchRows"`
 	LaunchIconSize        int      `json:"launchIconSize"`
 	HideLaunchNames       bool     `json:"hideLaunchNames"`
 	HideLaunch            bool     `json:"hideLaunch"`
+	HiddenUsagePlatforms  []string `json:"hiddenUsagePlatforms"`
+	MemoAttachmentLimit   int      `json:"memoAttachmentLimit"`
 	Clock12               bool     `json:"clock12"`
 	ShelfView             string   `json:"shelfView"`
 	ShelfScale            string   `json:"shelfScale"`
@@ -148,27 +162,30 @@ type Settings struct {
 
 func DefaultSettings() Settings {
 	return Settings{
-		Edge:           "right",
-		PanelWidth:     340,
-		Peek:           30,
-		TargetMonitor:  -1,
-		Hotkey:         "ctrl+alt+space",
-		Language:       "auto",
-		EdgeEnabled:    false,
-		Autostart:      false,
-		Opacity:        0.8,
-		Background:     "#0a0c11",
-		Animations:     true,
-		ShowClock:      true,
-		ShowCalendar:   true,
-		AlarmSound:     "chime",
-		CountdownSound: "chime",
-		LaunchColumns:  5,
-		LaunchRows:     1,
-		LaunchIconSize: 32,
-		ShelfView:      "grid",
-		ShelfScale:     "normal",
-		MountView:      "list",
-		MountScale:     "normal",
+		Edge:                "right",
+		PanelWidth:          340,
+		Peek:                30,
+		TargetMonitor:       -1,
+		Hotkey:              "ctrl+alt+space",
+		Language:            "auto",
+		EdgeEnabled:         false,
+		Autostart:           false,
+		Opacity:             0.8,
+		Background:          "#0a0c11",
+		Animations:          true,
+		ShowClock:           true,
+		ShowCalendar:        true,
+		AlarmSound:          "chime",
+		CountdownSound:      "chime",
+		RingEffect:          "pulse",
+		MaxAlarms:           8,
+		LaunchColumns:       5,
+		LaunchRows:          1,
+		LaunchIconSize:      32,
+		ShelfView:           "grid",
+		ShelfScale:          "normal",
+		MountView:           "list",
+		MountScale:          "normal",
+		MemoAttachmentLimit: 200,
 	}
 }

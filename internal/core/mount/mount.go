@@ -11,6 +11,7 @@ import (
 	"zhi-ai-assistant/internal/core/id"
 	"zhi-ai-assistant/internal/core/model"
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 type Manager struct {
@@ -59,11 +60,11 @@ func (m *Manager) List() []model.Mount {
 func (m *Manager) Add(path string) (model.Mount, error) {
 	path = filepath.Clean(strings.TrimSpace(path))
 	if path == "" {
-		return model.Mount{}, errors.New("路径为空")
+		return model.Mount{}, errors.New(i18n.T("路径为空"))
 	}
 	st, err := os.Stat(path)
 	if err != nil || !st.IsDir() {
-		return model.Mount{}, errors.New("目录不存在")
+		return model.Mount{}, errors.New(i18n.T("目录不存在"))
 	}
 	exists := false
 	var added model.Mount
@@ -101,7 +102,7 @@ func (m *Manager) Remove(mountID string) error {
 		}
 	})
 	if !found {
-		return errors.New("挂载项不存在")
+		return errors.New(i18n.T("挂载项不存在"))
 	}
 	return nil
 }
@@ -119,7 +120,7 @@ func (m *Manager) Get(mountID string) (model.Mount, error) {
 		}
 	})
 	if !found {
-		return model.Mount{}, errors.New("挂载项不存在")
+		return model.Mount{}, errors.New(i18n.T("挂载项不存在"))
 	}
 	return res, nil
 }
@@ -131,7 +132,7 @@ func Children(root, rel string, o ListOptions) ([]Entry, error) {
 	}
 	entries, err := os.ReadDir(dir)
 	if err != nil {
-		return nil, errors.New("无法读取目录")
+		return nil, errors.New(i18n.T("无法读取目录"))
 	}
 	out := make([]Entry, 0, len(entries))
 	for _, e := range entries {

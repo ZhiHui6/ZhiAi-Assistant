@@ -2,7 +2,7 @@
   <img src="build/appicon.png" width="40" alt="ZhiAi Assistant app icon"> ZhiAi Assistant
 </h1>
 
-<p align="center">A <b>Windows</b> desktop sidebar docked to the screen edge — calendar, todos, notes, shelf, quick launch, timers and usage quotas in one panel</p>
+<p align="center">A <b>Windows</b> desktop sidebar docked to the screen edge — calendar, todos, memos, shelf, quick launch, timers and usage quotas in one panel</p>
 
 <p align="center">English · <a href="README.zh.md">简体中文</a></p>
 
@@ -10,7 +10,7 @@
   <img alt="Windows 10/11 x64" src="https://img.shields.io/badge/Windows-10%2F11%20x64-0078D6?logo=windows&logoColor=white">
   <img alt="Go 1.27+" src="https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white">
   <img alt="Wails v2" src="https://img.shields.io/badge/Wails-v2-DF0000">
-  <img alt="version 1.1.0" src="https://img.shields.io/badge/version-1.1.0-2F6FED">
+  <img alt="version 1.2.0" src="https://img.shields.io/badge/version-1.2.0-2F6FED">
   <img alt="GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-blue">
 </p>
 
@@ -21,8 +21,8 @@
 <table align="center">
   <tr>
     <td align="center" width="33%">
-      <a href="docs/screenshots/notes.png"><img src="docs/screenshots/notes.png" width="210" alt="Notes: tags, search and color markers"></a><br>
-      <sub>Notes · #tags, search and color markers</sub>
+      <a href="docs/screenshots/notes.png"><img src="docs/screenshots/notes.png" width="210" alt="Memos: tags, search, color markers and attachments"></a><br>
+      <sub>Memos · #tags, search, colors and attachments</sub>
     </td>
     <td align="center" width="33%">
       <a href="docs/screenshots/todos.png"><img src="docs/screenshots/todos.png" width="210" alt="Todos: today, this week and overdue filters"></a><br>
@@ -81,13 +81,14 @@ Schedule a shutdown by minute countdown or at a specific time; a confirmation st
 - Minimum 60 seconds, maximum 7 days; cancel any time before it fires.
 - The plan is stored locally and survives closing the sidebar; a "Full reset" also cancels any scheduled shutdown.
 
-> **Notes & Storage**
+> **Memos & Storage**
 
-### 5. Notes
+### 5. Memos
 
-Click New to create a note that is saved immediately and opened for editing; it auto-saves when you pause, without interrupting your flow.
+Click New to create a memo that is saved immediately and opened for editing; it auto-saves when you pause, without interrupting your flow.
 
 - `#tag` grouping, full-text search, pinning and 9 color markers.
+- Attach images, audio, video, text files or links with the paperclip button, or drop files straight onto a memo card. Attachments are copied into the data folder and included in backups.
 - `Enter` ends editing, `Ctrl+Enter` starts a new paragraph, `Shift+Enter` inserts a line break.
 
 ### 6. Shelf
@@ -111,6 +112,7 @@ The app dock below the calendar. Shortcuts dropped into the quick-launch area be
 Aggregates quotas, reset dates and last-updated times for Qoder, WorkBuddy and Trae — no need to open every client.
 
 - **One-click check-in**: automatic check-in runs once a day, with up to 3 retries on failure.
+- **Show only what you need**: hide Qoder, WorkBuddy or Trae individually in Settings.
 - **Sign-in**: Qoder / Trae reuse the login state saved by the local client; WorkBuddy authorizes in a browser inside the card.
 - A first-visit confirmation is shown on the Usage page; credentials are encrypted at the Windows user level (DPAPI).
 
@@ -140,10 +142,10 @@ wails build -debug -windowsconsole   # debug build, logs to the current console 
 wails build -clean                   # clean build\bin first, then build
 ```
 
-- **Version**: the in-app version comes from `Version` in `internal/buildinfo/buildinfo.go` (default 1.1.0). Before a release it should match `info.productVersion` in `wails.json`; override it with `wails build -ldflags "-X zhi-ai-assistant/internal/buildinfo.Version=<version>"`. The release tag must equal the version (e.g. `v1.0.0`), otherwise "Check for updates" reports incorrectly.
+- **Version**: the in-app version comes from `Version` in `internal/buildinfo/buildinfo.go` (default 1.2.0). Before a release it should match `info.productVersion` in `wails.json`; override it with `wails build -ldflags "-X zhi-ai-assistant/internal/buildinfo.Version=<version>"`. The release tag must equal the version (e.g. `v1.0.0`), otherwise "Check for updates" reports incorrectly.
 - **Release**: pushing a `v*` tag (e.g. `v1.0.0`) triggers `.github/workflows/release.yml`, which builds on Windows and uploads `ZhiAi-Assistant.exe` plus a same-named `.sha256` checksum.
 - **Updates**: release assets must include `ZhiAi-Assistant.exe` and `ZhiAi-Assistant.exe.sha256` (or a `digest`); otherwise the app can only open the release page for a manual download.
-- **Locales**: source entries live in `tools/i18n/`; `frontend/js/locales.js` is generated — run `node tools/i18n/build-locales.js` after changing them.
+- **Locales**: UI strings live in `tools/i18n/strings.json` (`"中文": ["English", "繁體中文"]`) and backend strings in `internal/i18n/`; `frontend/js/locales.js` is generated — run `node tools/i18n/build-locales.js` to rebuild and `node tools/i18n/check-i18n.js` to verify missing or stale entries in both dictionaries.
 - **Checks**: `npx eslint --config eslint.config.check.mjs frontend/js` checks frontend syntax and undefined references (run `npm i -D eslint globals` first). The project has no automated tests yet.
 
 ## Usage Tips
@@ -168,7 +170,7 @@ The app only goes online to refresh statutory holidays (`timor.tech`), read quot
 ```
 main.go                  Entry point and Wails setup (sidebar / settings window)
 internal/buildinfo/      App name, version and repository URL
-internal/core/           Domain modules: calendar/holidays, notes, todos, shelf, mounts, quick launch, timers, usage
+internal/core/           Domain modules: calendar/holidays, memos, todos, shelf, mounts, quick launch, timers, usage
 internal/i18n/           UI languages
 internal/platform/       Win32 window shell, tray, hotkeys, notifications, dialogs, autostart
 internal/service/        Frontend bindings, settings, backup and update logic

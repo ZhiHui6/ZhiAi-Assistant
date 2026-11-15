@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform"
 )
 
@@ -24,30 +25,30 @@ func qoderOSCryptKey(appDir string) ([]byte, error) {
 	}
 	crypt, ok := state["os_crypt"].(map[string]any)
 	if !ok {
-		return nil, errors.New("OSCrypt 配置缺失")
+		return nil, errors.New(i18n.T("OSCrypt 配置缺失"))
 	}
 	encoded, ok := crypt["encrypted_key"].(string)
 	if !ok || strings.TrimSpace(encoded) == "" {
-		return nil, errors.New("OSCrypt 密钥缺失")
+		return nil, errors.New(i18n.T("OSCrypt 密钥缺失"))
 	}
 	blob, err := base64.StdEncoding.DecodeString(encoded)
 	if err != nil || len(blob) <= 5 {
-		return nil, errors.New("OSCrypt 密钥格式无效")
+		return nil, errors.New(i18n.T("OSCrypt 密钥格式无效"))
 	}
 	key, err := platform.UnprotectSecret(blob[5:])
 	if err != nil || len(key) != 32 {
-		return nil, errors.New("OSCrypt 密钥无法解锁")
+		return nil, errors.New(i18n.T("OSCrypt 密钥无法解锁"))
 	}
 	return key, nil
 }
 
 func qoderDecryptOSCrypt(raw, key []byte) ([]byte, error) {
 	if len(raw) < 3+12+16 {
-		return nil, errors.New("OSCrypt 数据过短")
+		return nil, errors.New(i18n.T("OSCrypt 数据过短"))
 	}
 	prefix := string(raw[:3])
 	if prefix != "v10" && prefix != "v11" {
-		return nil, errors.New("OSCrypt 版本不受支持")
+		return nil, errors.New(i18n.T("OSCrypt 版本不受支持"))
 	}
 	nonce := raw[3:15]
 	payload := raw[15:]
@@ -61,7 +62,7 @@ func qoderDecryptOSCrypt(raw, key []byte) ([]byte, error) {
 	}
 	plain, err := gcm.Open(nil, nonce, payload, nil)
 	if err != nil {
-		return nil, errors.New("OSCrypt 解密失败")
+		return nil, errors.New(i18n.T("OSCrypt 解密失败"))
 	}
 	return plain, nil
 }

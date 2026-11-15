@@ -1,11 +1,13 @@
 package store
 
 import (
-	"fmt"
+	"errors"
 	"io"
 	"os"
 	"path/filepath"
 	"sort"
+
+	"zhi-ai-assistant/internal/i18n"
 )
 
 type fileEntry struct {
@@ -64,7 +66,7 @@ func copyVerified(src, dst string, size int64) error {
 		return closeErr
 	}
 	if written != size {
-		return fmt.Errorf("写入不完整: %s", dst)
+		return errors.New(i18n.TF("写入不完整: %s", dst))
 	}
 	return nil
 }
@@ -79,7 +81,7 @@ func index(entries []fileEntry) map[string]int64 {
 
 func CopyDataTree(src, dst string) error {
 	if src == "" || dst == "" {
-		return fmt.Errorf("路径为空")
+		return errors.New(i18n.T("路径为空"))
 	}
 	if filepath.Clean(src) == filepath.Clean(dst) {
 		return nil
@@ -116,11 +118,11 @@ func CopyDataTree(src, dst string) error {
 		got, ok := dstIndex[rel]
 		if !ok {
 			rollback()
-			return fmt.Errorf("缺少文件: %s", rel)
+			return errors.New(i18n.TF("缺少文件: %s", rel))
 		}
 		if got != size {
 			rollback()
-			return fmt.Errorf("大小不一致: %s", rel)
+			return errors.New(i18n.TF("大小不一致: %s", rel))
 		}
 	}
 	return nil

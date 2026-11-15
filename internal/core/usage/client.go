@@ -2,12 +2,12 @@ package usage
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform"
 )
 
@@ -50,7 +50,7 @@ func (m *Manager) OpenClient(id string) (string, error) {
 		cmd := exec.Command(path)
 		cmd.Dir = dir
 		if startErr := cmd.Start(); startErr != nil {
-			return path, fmt.Errorf("启动失败：%v", startErr)
+			return path, errors.New(i18n.TF("启动失败：%v", startErr))
 		}
 	}
 	return path, nil
@@ -70,7 +70,7 @@ func clientRoots(env Env) []string {
 func findClientExecutable(env Env, id string) (string, error) {
 	spec, ok := clientSpecs[id]
 	if !ok {
-		return "", errors.New("未知平台")
+		return "", errors.New(i18n.T("未知平台"))
 	}
 	roots := clientRoots(env)
 	for _, root := range roots {
@@ -108,7 +108,7 @@ func findClientExecutable(env Env, id string) (string, error) {
 			return best, nil
 		}
 	}
-	return "", errors.New("未找到客户端程序，请先安装客户端")
+	return "", errors.New(i18n.T("未找到客户端程序，请先安装客户端"))
 }
 
 func bestExecutable(dir, dirName string, spec clientSpec) (string, int) {

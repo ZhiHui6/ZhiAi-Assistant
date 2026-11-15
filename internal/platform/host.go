@@ -15,9 +15,9 @@ import (
 	"syscall"
 	"time"
 	"unsafe"
-	"zhi-ai-assistant/internal/i18n"
 
 	"zhi-ai-assistant/internal/buildinfo"
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform/win32"
 )
 
@@ -147,7 +147,7 @@ func (h *Host) init() error {
 	}
 	atom, err := win32.RegisterClassEx(&wc)
 	if err != nil {
-		return errors.New("注册宿主窗口类失败: " + err.Error())
+		return errors.New(i18n.T("注册宿主窗口类失败: ") + err.Error())
 	}
 	h.classAtom = atom
 
@@ -156,9 +156,9 @@ func (h *Host) init() error {
 		win32.WS_POPUP, 0, 0, 0, 0, 0, 0, hinst, 0)
 	if h.hwnd == 0 {
 		if e := syscall.GetLastError(); e != nil {
-			return errors.New("创建宿主窗口失败: " + e.Error())
+			return errors.New(i18n.T("创建宿主窗口失败: ") + e.Error())
 		}
-		return errors.New("创建宿主窗口失败")
+		return errors.New(i18n.T("创建宿主窗口失败"))
 	}
 
 	enableDarkMenus(h.hwnd)
@@ -381,7 +381,7 @@ func (h *Host) addTray() error {
 	}
 	nid := h.trayData()
 	if err := win32.ShellNotifyIcon(win32.NIM_ADD, &nid); err != nil {
-		return errors.New("添加托盘图标失败")
+		return errors.New(i18n.T("添加托盘图标失败"))
 	}
 	h.trayAdded = true
 	ver := h.trayData()

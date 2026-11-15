@@ -10,6 +10,7 @@ import (
 
 	"zhi-ai-assistant/internal/core/model"
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 var platformOrder = []string{"qoder", "workbuddy", "trae"}
@@ -182,7 +183,7 @@ func (m *Manager) preferred(id string) string {
 func (m *Manager) resolve(id string) (Auth, string, error) {
 	provider := m.providers[id]
 	if provider == nil {
-		return Auth{}, SourceNone, errors.New("未知平台")
+		return Auth{}, SourceNone, errors.New(i18n.T("未知平台"))
 	}
 	localAuth, localErr := provider.ReadLocal(m.env)
 	if localErr == nil && localAuth.Source == "" {
@@ -233,7 +234,7 @@ func (m *Manager) loggedIn(id string) bool {
 
 func (m *Manager) Refresh(ctx context.Context, id string) (model.UsageState, error) {
 	if !m.valid(id) {
-		return m.List(), errors.New("未知平台")
+		return m.List(), errors.New(i18n.T("未知平台"))
 	}
 	if !m.loggedIn(id) {
 		return m.List(), ErrNotLoggedIn
@@ -242,7 +243,7 @@ func (m *Manager) Refresh(ctx context.Context, id string) (model.UsageState, err
 		m.update(id, func(st *model.UsagePlatformState) {
 			st.LastError = "正在刷新"
 		})
-		return m.List(), errors.New("正在刷新")
+		return m.List(), errors.New(i18n.T("正在刷新"))
 	}
 	defer m.end(id)
 	err := m.refresh(ctx, id)
@@ -343,7 +344,7 @@ func isAuthError(err error) bool {
 
 func (m *Manager) Checkin(ctx context.Context, id string) (model.UsageState, error) {
 	if !m.valid(id) {
-		return m.List(), errors.New("未知平台")
+		return m.List(), errors.New(i18n.T("未知平台"))
 	}
 	if m.signedOut(id) {
 		return m.List(), ErrSignedOut
@@ -352,7 +353,7 @@ func (m *Manager) Checkin(ctx context.Context, id string) (model.UsageState, err
 		m.update(id, func(st *model.UsagePlatformState) {
 			st.LastError = "正在处理中"
 		})
-		return m.List(), errors.New("正在处理中")
+		return m.List(), errors.New(i18n.T("正在处理中"))
 	}
 	defer m.end(id)
 	provider := m.providers[id]
@@ -440,7 +441,7 @@ func (m *Manager) markFailure(id string, now time.Time, err error) {
 
 func (m *Manager) SignOut(id string) (model.UsageState, error) {
 	if !m.valid(id) {
-		return m.List(), errors.New("未知平台")
+		return m.List(), errors.New(i18n.T("未知平台"))
 	}
 	if err := m.creds.Delete(id); err != nil {
 		return m.List(), err
@@ -453,14 +454,14 @@ func (m *Manager) SignOut(id string) (model.UsageState, error) {
 
 func (m *Manager) ReRead(id string) (model.UsageState, error) {
 	if !m.valid(id) {
-		return m.List(), errors.New("未知平台")
+		return m.List(), errors.New(i18n.T("未知平台"))
 	}
 	m.update(id, func(st *model.UsagePlatformState) { st.SignedOut = false })
 	if !m.begin(id) {
 		m.update(id, func(st *model.UsagePlatformState) {
 			st.LastError = "正在处理中"
 		})
-		return m.List(), errors.New("正在处理中")
+		return m.List(), errors.New(i18n.T("正在处理中"))
 	}
 	defer m.end(id)
 	provider := m.providers[id]
@@ -503,7 +504,7 @@ func (m *Manager) ReRead(id string) (model.UsageState, error) {
 
 func (m *Manager) AccountFull(id string) (string, error) {
 	if !m.valid(id) {
-		return "", errors.New("未知平台")
+		return "", errors.New(i18n.T("未知平台"))
 	}
 	cred, ok := m.creds.Get(id)
 	if !ok {
@@ -548,7 +549,7 @@ func autoCheckinAllEnabled(auto map[string]bool) bool {
 func (m *Manager) StartWorkBuddyLogin(ctx context.Context) (LoginStart, error) {
 	provider, ok := m.providers["workbuddy"].(*workBuddyProvider)
 	if !ok {
-		return LoginStart{}, errors.New("WorkBuddy 不可用")
+		return LoginStart{}, errors.New(i18n.T("WorkBuddy 不可用"))
 	}
 	return provider.oauth.start(ctx, m.doer)
 }
@@ -556,7 +557,7 @@ func (m *Manager) StartWorkBuddyLogin(ctx context.Context) (LoginStart, error) {
 func (m *Manager) PollWorkBuddyLogin(ctx context.Context, loginID string) (LoginPoll, error) {
 	provider, ok := m.providers["workbuddy"].(*workBuddyProvider)
 	if !ok {
-		return LoginPoll{Done: true, Error: "WorkBuddy 不可用"}, errors.New("WorkBuddy 不可用")
+		return LoginPoll{Done: true, Error: "WorkBuddy 不可用"}, errors.New(i18n.T("WorkBuddy 不可用"))
 	}
 	auth, done, message := provider.oauth.poll(ctx, m.doer, loginID)
 	if !done {

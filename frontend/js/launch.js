@@ -342,7 +342,7 @@ export function createLaunch() {
         toast(tp('已添加 {n} 个程序', { n: added.length }));
       }
     } catch (err) {
-      if (!/取消/.test(String(err))) toast(errText(err));
+      if (!/cancel|取消/i.test(String(err))) toast(errText(err));
     }
   });
 

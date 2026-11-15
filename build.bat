@@ -1,5 +1,5 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
 cd /d "%~dp0"
 
 set "VER="
@@ -19,5 +19,21 @@ if errorlevel 1 (
   exit /b 1
 )
 
+set "RELEASE=ZhiAi-Assistant-%VER%-win-x64.exe"
+copy /y "build\bin\ZhiAi-Assistant.exe" "build\bin\%RELEASE%" >nul
+if errorlevel 1 (
+  echo [build] failed to create release copy
+  exit /b 1
+)
+
+set "HASH="
+for /f "tokens=*" %%h in ('powershell -NoProfile -Command "(Get-FileHash -LiteralPath 'build\bin\%RELEASE%' -Algorithm SHA256).Hash.ToLower()"') do set "HASH=%%h"
+if defined HASH (
+  >"build\bin\%RELEASE%.sha256" echo !HASH!  %RELEASE%
+) else (
+  echo [build] warning: checksum not generated
+)
+
 echo [build] output: build\bin\ZhiAi-Assistant.exe
+echo [build] release: build\bin\%RELEASE%
 endlocal

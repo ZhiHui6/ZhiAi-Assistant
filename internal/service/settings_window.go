@@ -3,16 +3,16 @@ package service
 import (
 	"encoding/json"
 	"errors"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"time"
 
-	"github.com/wailsapp/wails/v2/pkg/runtime"
-
 	"zhi-ai-assistant/internal/core/model"
 	"zhi-ai-assistant/internal/core/store"
 	"zhi-ai-assistant/internal/core/usage"
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform"
 	"zhi-ai-assistant/internal/winstate"
 )
@@ -149,13 +149,13 @@ func (a *App) UsageAutoAll() bool {
 
 func (a *App) SetUsageAutoAll(enabled bool) error {
 	if !platform.SidebarRunning() {
-		return errors.New("侧边栏未运行，无法生效")
+		return errors.New(i18n.T("侧边栏未运行，无法生效"))
 	}
 	if err := writeSettingsCommand(settingsCommand{Action: actionUsageAuto, Enabled: enabled}); err != nil {
 		return err
 	}
 	if !platform.NotifySettingsCommand() {
-		return errors.New("无法通知侧边栏")
+		return errors.New(i18n.T("无法通知侧边栏"))
 	}
 	return nil
 }

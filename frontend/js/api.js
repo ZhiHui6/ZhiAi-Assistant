@@ -78,12 +78,18 @@ export const WindowSvc = {
   activate: () => call('Window', 'Activate'),
 };
 
-export const Notes = {
-  list: (kw, limit) => call('Notes', 'List', kw || '', limit || 0),
-  create: (text, tags) => call('Notes', 'Create', text, tags || []),
-  update: (id, text, tags, pinned) => call('Notes', 'Update', id, text, tags, pinned),
-  remove: (id) => call('Notes', 'Delete', id),
-  setTint: (id, tint) => call('Notes', 'SetTint', id, tint || ''),
+export const Memos = {
+  list: (kw, limit) => call('Memos', 'List', kw || '', limit || 0),
+  create: (text, tags) => call('Memos', 'Create', text, tags || []),
+  update: (id, text, tags, pinned) => call('Memos', 'Update', id, text, tags, pinned),
+  remove: (id) => call('Memos', 'Delete', id),
+  setTint: (id, tint) => call('Memos', 'SetTint', id, tint || ''),
+  pickAttachments: (id) => call('Memos', 'PickAttachments', id),
+  addPaths: (id, paths) => call('Memos', 'AddPaths', id, paths || []),
+  addPayloads: (id, items) => call('Memos', 'AddPayloads', id, items || []),
+  addLink: (id, link) => call('Memos', 'AddLink', id, link),
+  removeAttachment: (id, attachmentId) => call('Memos', 'RemoveAttachment', id, attachmentId),
+  openAttachment: (id, attachmentId) => call('Memos', 'OpenAttachment', id, attachmentId),
 };
 
 export const Todos = {

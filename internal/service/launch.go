@@ -7,6 +7,7 @@ import (
 
 	"zhi-ai-assistant/internal/core/launch"
 	"zhi-ai-assistant/internal/core/model"
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform"
 )
 
@@ -54,7 +55,7 @@ func (s *Launch) Launch(itemID string) error {
 		return err
 	}
 	if _, statErr := os.Stat(it.Path); statErr != nil {
-		return errors.New("程序不存在: " + it.Path)
+		return errors.New(i18n.T("程序不存在: ") + it.Path)
 	}
 	return platform.ShellExecute(0, "open", it.Path, "", "", 1)
 }

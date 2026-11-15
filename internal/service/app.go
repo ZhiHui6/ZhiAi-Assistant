@@ -3,7 +3,9 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"log"
 	"os"
 	"path/filepath"
@@ -12,15 +14,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/wailsapp/wails/v2/pkg/runtime"
-
 	"zhi-ai-assistant/internal/buildinfo"
 	"zhi-ai-assistant/internal/core/festival"
 	"zhi-ai-assistant/internal/core/holiday"
 	"zhi-ai-assistant/internal/core/launch"
+	"zhi-ai-assistant/internal/core/memos"
 	"zhi-ai-assistant/internal/core/model"
 	"zhi-ai-assistant/internal/core/mount"
-	"zhi-ai-assistant/internal/core/notes"
 	"zhi-ai-assistant/internal/core/shelf"
 	"zhi-ai-assistant/internal/core/store"
 	"zhi-ai-assistant/internal/core/timers"
@@ -49,7 +49,7 @@ type App struct {
 	ctx context.Context
 
 	settingsDoc  *store.Doc[model.Settings]
-	notesMgr     *notes.Manager
+	memoMgr      *memos.Manager
 	todosMgr     *todos.Manager
 	shelfMgr     *shelf.Manager
 	launchMgr    *launch.Launcher
@@ -60,7 +60,7 @@ type App struct {
 	host   *platform.Host
 	window *Window
 
-	notesSvc    *Notes
+	memoSvc     *Memos
 	todosSvc    *Todos
 	calendarSvc *Calendar
 	shelfSvc    *Shelf
@@ -96,7 +96,7 @@ type App struct {
 func NewApp() (*App, error) {
 	var (
 		settingsDoc *store.Doc[model.Settings]
-		notesMgr    *notes.Manager
+		memoMgr     *memos.Manager
 		todosMgr    *todos.Manager
 		shelfMgr    *shelf.Manager
 		launchMgr   *launch.Launcher
@@ -111,7 +111,7 @@ func NewApp() (*App, error) {
 	loadAsync(&wg, errs, func() (*store.Doc[model.Settings], error) {
 		return store.Open("settings.json", 1, model.DefaultSettings())
 	}, &settingsDoc)
-	loadAsync(&wg, errs, notes.New, &notesMgr)
+	loadAsync(&wg, errs, memos.New, &memoMgr)
 	loadAsync(&wg, errs, todos.New, &todosMgr)
 	loadAsync(&wg, errs, shelf.New, &shelfMgr)
 	loadAsync(&wg, errs, launch.New, &launchMgr)
@@ -128,7 +128,7 @@ func NewApp() (*App, error) {
 	}
 
 	if settingsDoc.Path() == "" {
-		return nil, fmt.Errorf("数据目录不可写")
+		return nil, errors.New(i18n.T("数据目录不可写"))
 	}
 
 	holidayStore := holiday.New(filepath.Join(store.DataDir(), "data", "holidays"))
@@ -137,7 +137,7 @@ func NewApp() (*App, error) {
 
 	a := &App{
 		settingsDoc:  settingsDoc,
-		notesMgr:     notesMgr,
+		memoMgr:      memoMgr,
 		todosMgr:     todosMgr,
 		shelfMgr:     shelfMgr,
 		launchMgr:    launchMgr,
@@ -149,7 +149,13 @@ func NewApp() (*App, error) {
 	}
 	a.window.attach(a)
 	a.migrateSettingsKeys()
-	a.notesSvc = NewNotes(notesMgr)
+	a.memoSvc = NewMemos(memoMgr, func() int64 {
+		limit := a.GetSettings().MemoAttachmentLimit
+		if limit <= 0 {
+			return 0
+		}
+		return int64(limit) * 1024 * 1024
+	})
 	a.todosSvc = NewTodos(todosMgr)
 	a.calendarSvc = NewCalendar(todosMgr)
 	a.shelfSvc = NewShelf(shelfMgr)
@@ -157,6 +163,7 @@ func NewApp() (*App, error) {
 	a.mountSvc = NewMount(mountMgr)
 	a.timersSvc = NewTimers(timersMgr)
 	a.timersSvc.SetFireHandler(a.onTimerFired)
+	a.timersSvc.SetAlarmLimit(a.GetSettings().MaxAlarms)
 	a.iconsSvc = NewIcons()
 	a.thumbsSvc = NewThumbs()
 	a.usageSvc = NewUsage(usageMgr, func(state model.UsageState) {
@@ -268,6 +275,39 @@ func (a *App) migrateSettingsKeys() {
 
 const maxPanelWidth = 560
 
+var usagePlatformIDs = map[string]bool{
+	"qoder":     true,
+	"workbuddy": true,
+	"trae":      true,
+}
+
+func normalizeMemoLimit(v int) int {
+	if v == 0 || v < -1 || v > 2048 {
+		return 200
+	}
+	return v
+}
+
+func normalizeHiddenPlatforms(ids []string) []string {
+	if len(ids) == 0 {
+		return nil
+	}
+	seen := make(map[string]bool, len(ids))
+	out := make([]string, 0, len(ids))
+	for _, id := range ids {
+		id = strings.TrimSpace(id)
+		if !usagePlatformIDs[id] || seen[id] {
+			continue
+		}
+		seen[id] = true
+		out = append(out, id)
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
+}
+
 func normalizeSettings(s model.Settings) model.Settings {
 	if s.PanelWidth < 340 {
 		s.PanelWidth = 340
@@ -311,6 +351,8 @@ func normalizeSettings(s model.Settings) model.Settings {
 	if s.LaunchIconSize < 24 || s.LaunchIconSize > 40 {
 		s.LaunchIconSize = 32
 	}
+	s.HiddenUsagePlatforms = normalizeHiddenPlatforms(s.HiddenUsagePlatforms)
+	s.MemoAttachmentLimit = normalizeMemoLimit(s.MemoAttachmentLimit)
 	if s.ShelfView != "list" {
 		s.ShelfView = "grid"
 	}
@@ -327,10 +369,18 @@ func normalizeSettings(s model.Settings) model.Settings {
 	default:
 		s.MountScale = "normal"
 	}
+	switch s.RingEffect {
+	case "pulse", "sweep", "flash", "off":
+	default:
+		s.RingEffect = "pulse"
+	}
+	if s.MaxAlarms < 1 || s.MaxAlarms > 8 {
+		s.MaxAlarms = 8
+	}
 	return s
 }
 
-func (a *App) Notes() *Notes          { return a.notesSvc }
+func (a *App) Memos() *Memos          { return a.memoSvc }
 func (a *App) Todos() *Todos          { return a.todosSvc }
 func (a *App) Calendar() *Calendar    { return a.calendarSvc }
 func (a *App) Shelf() *Shelf          { return a.shelfSvc }
@@ -650,6 +700,10 @@ func (a *App) GetSettings() model.Settings {
 		s.PanelWidth = maxPanelWidth
 	}
 	s.Background = normalizeBackground(s.Background)
+	s.MemoAttachmentLimit = normalizeMemoLimit(s.MemoAttachmentLimit)
+	if s.MaxAlarms < 1 || s.MaxAlarms > 8 {
+		s.MaxAlarms = 8
+	}
 	return s
 }
 
@@ -659,6 +713,9 @@ func (a *App) saveSettings(s model.Settings) {
 	}
 	i18n.Set(resolveLanguage(s.Language))
 	a.settingsDoc.Update(func(d *model.Settings) { *d = s })
+	if a.timersSvc != nil {
+		a.timersSvc.SetAlarmLimit(s.MaxAlarms)
+	}
 	if a.host != nil && s.Hotkey != "" {
 		if spec, ok := ParseHotkey(s.Hotkey); ok {
 			a.host.SetHotkey(spec)
@@ -718,7 +775,7 @@ func (a *App) OpenDataDir() error {
 
 func (a *App) OpenExternal(target string) error {
 	if !strings.HasPrefix(target, "http://") && !strings.HasPrefix(target, "https://") {
-		return fmt.Errorf("仅支持打开网页链接")
+		return errors.New(i18n.T("仅支持打开网页链接"))
 	}
 	return platform.ShellExecute(0, "open", target, "", "", 1)
 }
@@ -776,8 +833,8 @@ func (a *App) Shutdown(ctx context.Context) {
 }
 
 func (a *App) flushAll() {
-	if a.notesMgr != nil {
-		_ = a.notesMgr.Flush()
+	if a.memoMgr != nil {
+		_ = a.memoMgr.Flush()
 	}
 	if a.todosMgr != nil {
 		_ = a.todosMgr.Flush()

@@ -4,6 +4,8 @@ import (
 	"errors"
 	"syscall"
 	"unsafe"
+
+	"zhi-ai-assistant/internal/i18n"
 )
 
 type dataBlob struct {
@@ -30,7 +32,7 @@ func UnprotectSecret(data []byte) ([]byte, error) {
 
 func cryptData(data []byte, proc *syscall.LazyProc) ([]byte, error) {
 	if len(data) == 0 {
-		return nil, errors.New("空数据")
+		return nil, errors.New(i18n.T("空数据"))
 	}
 	in := dataBlob{cbData: uint32(len(data)), pbData: &data[0]}
 	var out dataBlob
@@ -47,7 +49,7 @@ func cryptData(data []byte, proc *syscall.LazyProc) ([]byte, error) {
 		if err != nil && err != syscall.Errno(0) {
 			return nil, err
 		}
-		return nil, errors.New("DPAPI 操作失败")
+		return nil, errors.New(i18n.T("DPAPI 操作失败"))
 	}
 	defer procLocalFree.Call(uintptr(unsafe.Pointer(out.pbData)))
 	result := make([]byte, int(out.cbData))

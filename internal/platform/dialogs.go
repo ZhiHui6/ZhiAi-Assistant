@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"syscall"
 	"unsafe"
-	"zhi-ai-assistant/internal/i18n"
 
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform/win32"
 )
 
@@ -112,13 +112,13 @@ func OpenFileDialog(title string, multi bool) ([]string, error) {
 	}
 	r1, _, _ := procGetOpenFileNameW.Call(uintptr(unsafe.Pointer(&ofn)))
 	if r1 == 0 {
-		return nil, errors.New("已取消")
+		return nil, errors.New(i18n.T("已取消"))
 	}
 
 	first := win32.UTF16ToString(buf)
 	if !multi || !containsZeroPair(buf) {
 		if first == "" {
-			return nil, errors.New("未选择文件")
+			return nil, errors.New(i18n.T("未选择文件"))
 		}
 		return []string{first}, nil
 	}
@@ -164,17 +164,17 @@ func BrowseFolder(title string) (string, error) {
 	}
 	r1, _, _ := procSHBrowseForFolder.Call(uintptr(unsafe.Pointer(&bi)))
 	if r1 == 0 {
-		return "", errors.New("已取消")
+		return "", errors.New(i18n.T("已取消"))
 	}
 	defer procCoTaskMemFree.Call(r1)
 	path := make([]uint16, 1024)
 	ok, _, _ := procSHGetPathFromIDList.Call(r1, uintptr(unsafe.Pointer(&path[0])))
 	if ok == 0 {
-		return "", errors.New("无法解析所选目录")
+		return "", errors.New(i18n.T("无法解析所选目录"))
 	}
 	p := win32.UTF16ToString(path)
 	if p == "" {
-		return "", errors.New("未选择目录")
+		return "", errors.New(i18n.T("未选择目录"))
 	}
 	return p, nil
 }

@@ -2,14 +2,13 @@ package main
 
 import (
 	"embed"
-	"io/fs"
-	"log"
-	"os"
-
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
+	"io/fs"
+	"log"
+	"os"
 
 	"zhi-ai-assistant/internal/buildinfo"
 	"zhi-ai-assistant/internal/i18n"
@@ -72,14 +71,15 @@ func runSidebar() {
 		StartHidden:              false,
 		BackgroundColour:         &options.RGBA{R: 0, G: 0, B: 0, A: 0},
 		AssetServer: &assetserver.Options{
-			Assets: frontendFS(),
+			Assets:  frontendFS(),
+			Handler: service.MediaHandler(),
 		},
 		OnStartup:     app.Startup,
 		OnBeforeClose: app.BeforeClose,
 		OnShutdown:    app.Shutdown,
 		Bind: []interface{}{
 			app,
-			app.Notes(),
+			app.Memos(),
 			app.Todos(),
 			app.Calendar(),
 			app.Shelf(),
@@ -135,7 +135,8 @@ func runSettingsWindow() {
 		BackgroundColour:         &options.RGBA{R: 12, G: 14, B: 20, A: 255},
 		EnableDefaultContextMenu: false,
 		AssetServer: &assetserver.Options{
-			Assets: frontendFS(),
+			Assets:  frontendFS(),
+			Handler: service.MediaHandler(),
 		},
 		OnStartup:     app.Startup,
 		OnBeforeClose: app.BeforeCloseSettings,

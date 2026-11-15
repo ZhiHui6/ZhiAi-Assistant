@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"time"
 
 	"zhi-ai-assistant/internal/buildinfo"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 type Doer interface {
@@ -64,12 +66,12 @@ func requestJSON(ctx context.Context, doer Doer, method, url string, headers map
 	}
 	resp, err := doer.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("网络不可用")
+		return nil, errors.New(i18n.T("网络不可用"))
 	}
 	defer resp.Body.Close()
 	raw, err := io.ReadAll(io.LimitReader(resp.Body, 2<<20))
 	if err != nil {
-		return nil, fmt.Errorf("读取响应失败")
+		return nil, errors.New(i18n.T("读取响应失败"))
 	}
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return raw, &HTTPError{Status: resp.StatusCode, Body: string(raw)}
@@ -82,11 +84,11 @@ func decodeMap(raw []byte) (map[string]any, error) {
 	dec := json.NewDecoder(bytes.NewReader(raw))
 	dec.UseNumber()
 	if err := dec.Decode(&value); err != nil {
-		return nil, fmt.Errorf("响应格式无法解析")
+		return nil, errors.New(i18n.T("响应格式无法解析"))
 	}
 	m, ok := value.(map[string]any)
 	if !ok {
-		return nil, fmt.Errorf("响应格式无法解析")
+		return nil, errors.New(i18n.T("响应格式无法解析"))
 	}
 	return m, nil
 }

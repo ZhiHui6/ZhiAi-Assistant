@@ -10,6 +10,12 @@ const PLATFORMS = [
 
 const numberFormat = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 2 });
 
+const hiddenPlatforms = new Set();
+
+function visiblePlatforms() {
+  return PLATFORMS.filter((platform) => !hiddenPlatforms.has(platform.id));
+}
+
 function fmt(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return '—';
@@ -585,8 +591,19 @@ export function createUsage() {
 
   function render() {
     listEl.innerHTML = '';
-    PLATFORMS.forEach((platform) => listEl.appendChild(renderCard(platform)));
+    const visible = visiblePlatforms();
+    if (!visible.length) {
+      listEl.appendChild(el('div', 'usage-empty usage-all-hidden', t('所有平台已隐藏，可在设置中开启')));
+    } else {
+      visible.forEach((platform) => listEl.appendChild(renderCard(platform)));
+    }
     syncAutoAll();
+  }
+
+  function setHiddenPlatforms(ids) {
+    hiddenPlatforms.clear();
+    (Array.isArray(ids) ? ids : []).forEach((id) => hiddenPlatforms.add(String(id)));
+    render();
   }
 
   function syncAutoAll() {
@@ -651,5 +668,5 @@ export function createUsage() {
     render();
   });
 
-  return { refresh: activate };
+  return { refresh: activate, setHiddenPlatforms };
 }

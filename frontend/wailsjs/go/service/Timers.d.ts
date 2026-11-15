@@ -17,6 +17,8 @@ export function ResumeCountdown():Promise<model.Countdown>;
 
 export function ScheduleShutdown(arg1:number):Promise<model.ShutdownPlan>;
 
+export function SetAlarmLimit(arg1:number):Promise<void>;
+
 export function SetFireHandler(arg1:any):Promise<void>;
 
 export function StartCountdown(arg1:number,arg2:string):Promise<model.Countdown>;

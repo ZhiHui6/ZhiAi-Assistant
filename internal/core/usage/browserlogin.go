@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/gorilla/websocket"
 	"net"
 	"net/http"
 	"net/url"
@@ -15,9 +16,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gorilla/websocket"
-
 	"zhi-ai-assistant/internal/core/model"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 const (
@@ -81,11 +81,11 @@ type browserLoginSession struct {
 
 func (m *Manager) StartBrowserLogin(platform string) (BrowserLoginStart, error) {
 	if !m.valid(platform) {
-		return BrowserLoginStart{}, errors.New("未知平台")
+		return BrowserLoginStart{}, errors.New(i18n.T("未知平台"))
 	}
 	loginURL, ok := loginURLs[platform]
 	if !ok {
-		return BrowserLoginStart{}, errors.New("该平台暂不支持浏览器登录")
+		return BrowserLoginStart{}, errors.New(i18n.T("该平台暂不支持浏览器登录"))
 	}
 	exe, err := findBrowserExecutable()
 	if err != nil {
@@ -111,7 +111,7 @@ func (m *Manager) StartBrowserLogin(platform string) (BrowserLoginStart, error) 
 	cmd := exec.Command(exe, args...)
 	if err := cmd.Start(); err != nil {
 		_ = os.RemoveAll(profile)
-		return BrowserLoginStart{}, fmt.Errorf("无法启动浏览器：%w", err)
+		return BrowserLoginStart{}, fmt.Errorf(i18n.T("无法启动浏览器：%w"), err)
 	}
 	session := &browserLoginSession{
 		id:       randomLoginID(),
@@ -239,7 +239,7 @@ func (s *browserLoginSession) exited() bool {
 func (m *Manager) validateCandidates(platform string, candidates []string) (model.UsageCredential, model.UsageSnapshot, error) {
 	provider := m.providers[platform]
 	if provider == nil {
-		return model.UsageCredential{}, model.UsageSnapshot{}, errors.New("未知平台")
+		return model.UsageCredential{}, model.UsageSnapshot{}, errors.New(i18n.T("未知平台"))
 	}
 	for _, token := range candidates {
 		ctx, cancel := context.WithTimeout(context.Background(), browserCandidateTimeout)
@@ -254,7 +254,7 @@ func (m *Manager) validateCandidates(platform string, candidates []string) (mode
 		}
 		return model.UsageCredential{Token: token}, snapshot, nil
 	}
-	return model.UsageCredential{}, model.UsageSnapshot{}, errors.New("没有可用凭据")
+	return model.UsageCredential{}, model.UsageSnapshot{}, errors.New(i18n.T("没有可用凭据"))
 }
 
 func harvestTokens(ctx context.Context, debugBase, host string) ([]string, error) {
@@ -340,7 +340,7 @@ func pageWebSocketURL(ctx context.Context, debugBase, host string) (string, erro
 	if fallback != "" {
 		return fallback, nil
 	}
-	return "", errors.New("未找到可调试的登录页面")
+	return "", errors.New(i18n.T("未找到可调试的登录页面"))
 }
 
 func loginHost(rawURL string) string {
@@ -376,5 +376,5 @@ func findBrowserExecutable() (string, error) {
 			return path, nil
 		}
 	}
-	return "", errors.New("未找到可用的浏览器，请先安装 Edge 或 Chrome")
+	return "", errors.New(i18n.T("未找到可用的浏览器，请先安装 Edge 或 Chrome"))
 }

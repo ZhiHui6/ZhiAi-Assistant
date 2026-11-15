@@ -3,17 +3,27 @@ package timers
 import (
 	"errors"
 	"strings"
+	"sync"
 	"time"
 
 	"zhi-ai-assistant/internal/core/id"
 	"zhi-ai-assistant/internal/core/model"
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 const maxCountdown = 24 * 60 * 60
 
+const (
+	defaultAlarmLimit = 8
+	maxAlarmLimit     = 8
+)
+
 type Manager struct {
 	doc *store.Doc[model.TimerData]
+
+	limitMu    sync.Mutex
+	alarmLimit int
 }
 
 func New() (*Manager, error) {
@@ -21,9 +31,30 @@ func New() (*Manager, error) {
 	if err != nil {
 		return nil, err
 	}
-	m := &Manager{doc: doc}
+	m := &Manager{doc: doc, alarmLimit: defaultAlarmLimit}
 	m.sanitize()
 	return m, nil
+}
+
+func (m *Manager) SetAlarmLimit(n int) {
+	if n < 1 {
+		n = defaultAlarmLimit
+	}
+	if n > maxAlarmLimit {
+		n = maxAlarmLimit
+	}
+	m.limitMu.Lock()
+	m.alarmLimit = n
+	m.limitMu.Unlock()
+}
+
+func (m *Manager) alarmLimitValue() int {
+	m.limitMu.Lock()
+	defer m.limitMu.Unlock()
+	if m.alarmLimit < 1 {
+		return defaultAlarmLimit
+	}
+	return m.alarmLimit
 }
 
 func (m *Manager) Flush() error { return m.doc.Flush() }
@@ -71,7 +102,7 @@ func (m *Manager) Snapshot() model.TimerData {
 func (m *Manager) AddAlarm(at, label string, repeat bool) (model.Alarm, error) {
 	at = strings.TrimSpace(at)
 	if _, err := time.Parse("15:04", at); err != nil {
-		return model.Alarm{}, errors.New("时间格式应为 HH:MM")
+		return model.Alarm{}, errors.New(i18n.T("时间格式应为 HH:MM"))
 	}
 	alarm := model.Alarm{
 		ID:      id.New(),
@@ -80,9 +111,18 @@ func (m *Manager) AddAlarm(at, label string, repeat bool) (model.Alarm, error) {
 		Repeat:  repeat,
 		Enabled: true,
 	}
+	limit := m.alarmLimitValue()
+	full := false
 	m.doc.Update(func(d *model.TimerData) {
+		if len(d.Alarms) >= limit {
+			full = true
+			return
+		}
 		d.Alarms = append(d.Alarms, alarm)
 	})
+	if full {
+		return model.Alarm{}, errors.New(i18n.T("闹钟数量已达上限"))
+	}
 	return alarm, nil
 }
 
@@ -98,7 +138,7 @@ func (m *Manager) SetAlarmEnabled(alarmID string, enabled bool) error {
 		}
 	})
 	if !found {
-		return errors.New("闹钟不存在")
+		return errors.New(i18n.T("闹钟不存在"))
 	}
 	return nil
 }
@@ -115,17 +155,17 @@ func (m *Manager) RemoveAlarm(alarmID string) error {
 		}
 	})
 	if !found {
-		return errors.New("闹钟不存在")
+		return errors.New(i18n.T("闹钟不存在"))
 	}
 	return nil
 }
 
 func (m *Manager) StartCountdown(seconds int, label string) (model.Countdown, error) {
 	if seconds < 1 {
-		return model.Countdown{}, errors.New("倒计时至少 1 秒")
+		return model.Countdown{}, errors.New(i18n.T("倒计时至少 1 秒"))
 	}
 	if seconds > maxCountdown {
-		return model.Countdown{}, errors.New("倒计时最长 24 小时")
+		return model.Countdown{}, errors.New(i18n.T("倒计时最长 24 小时"))
 	}
 	end := time.Now().Add(time.Duration(seconds) * time.Second)
 	next := model.Countdown{
@@ -171,7 +211,7 @@ func (m *Manager) ResumeCountdown() (model.Countdown, error) {
 			return
 		}
 		if c.Remaining <= 0 {
-			err = errors.New("没有可继续的倒计时")
+			err = errors.New(i18n.T("没有可继续的倒计时"))
 			return
 		}
 		end := time.Now().Add(time.Duration(c.Remaining) * time.Second)

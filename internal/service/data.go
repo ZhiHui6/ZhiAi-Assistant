@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/base64"
 	"errors"
 	"os"
 	"os/exec"
@@ -9,40 +10,126 @@ import (
 	"time"
 
 	"zhi-ai-assistant/internal/core/festival"
+	"zhi-ai-assistant/internal/core/memos"
 	"zhi-ai-assistant/internal/core/model"
 	"zhi-ai-assistant/internal/core/mount"
-	"zhi-ai-assistant/internal/core/notes"
 	"zhi-ai-assistant/internal/core/shelf"
 	"zhi-ai-assistant/internal/core/todos"
 	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform"
 )
 
-type Notes struct {
-	mgr *notes.Manager
+type Memos struct {
+	mgr   *memos.Manager
+	limit func() int64
 }
 
-func NewNotes(mgr *notes.Manager) *Notes { return &Notes{mgr: mgr} }
+func NewMemos(mgr *memos.Manager, limit func() int64) *Memos {
+	if limit == nil {
+		limit = func() int64 { return 0 }
+	}
+	return &Memos{mgr: mgr, limit: limit}
+}
 
-func (s *Notes) List(keyword string, limit int) []model.Note {
+type MemoAttachResult struct {
+	Memo    model.Memo `json:"memo"`
+	Added   int        `json:"added"`
+	Skipped []string   `json:"skipped"`
+}
+
+type MemoPayload struct {
+	Name string `json:"name"`
+	Data string `json:"data"`
+}
+
+func (s *Memos) List(keyword string, limit int) []model.Memo {
 	return s.mgr.List(keyword, limit)
 }
 
-func (s *Notes) Create(text string, tags []string) (model.Note, error) {
+func (s *Memos) Create(text string, tags []string) (model.Memo, error) {
 	return s.mgr.Create(text, tags)
 }
 
-func (s *Notes) Update(id string, text *string, tags *[]string, pinned *bool) (model.Note, error) {
+func (s *Memos) Update(id string, text *string, tags *[]string, pinned *bool) (model.Memo, error) {
 	return s.mgr.Update(id, text, tags, pinned)
 }
 
-func (s *Notes) SetTint(id string, tint string) (model.Note, error) {
+func (s *Memos) SetTint(id string, tint string) (model.Memo, error) {
 	return s.mgr.SetTint(id, tint)
 }
 
-func (s *Notes) Delete(id string) error { return s.mgr.Delete(id) }
+func (s *Memos) Delete(id string) error { return s.mgr.Delete(id) }
 
-func (s *Notes) Get(id string) (model.Note, error) { return s.mgr.Get(id) }
+func (s *Memos) Get(id string) (model.Memo, error) { return s.mgr.Get(id) }
+
+func (s *Memos) PickAttachments(id string) (MemoAttachResult, error) {
+	paths, err := openFileDialog(i18n.T("选择要添加的附件"), true)
+	if err != nil {
+		return MemoAttachResult{}, err
+	}
+	if len(paths) == 0 {
+		return MemoAttachResult{}, errors.New(i18n.T("未选择文件"))
+	}
+	return s.AddPaths(id, paths)
+}
+
+func (s *Memos) AddPaths(id string, paths []string) (MemoAttachResult, error) {
+	memo, added, skipped := s.mgr.AddFiles(id, paths, s.limit())
+	if memo.ID == "" {
+		message := strings.Join(skipped, "；")
+		if message == "" {
+			message = "添加附件失败"
+		}
+		return MemoAttachResult{}, errors.New(message)
+	}
+	return MemoAttachResult{Memo: memo, Added: added, Skipped: skipped}, nil
+}
+
+func (s *Memos) AddPayloads(id string, items []MemoPayload) (MemoAttachResult, error) {
+	payloads := make([]memos.Payload, 0, len(items))
+	for _, item := range items {
+		raw, err := base64.StdEncoding.DecodeString(item.Data)
+		if err != nil {
+			return MemoAttachResult{}, errors.New(i18n.T("附件数据无效"))
+		}
+		payloads = append(payloads, memos.Payload{Name: item.Name, Data: raw})
+	}
+	memo, added, skipped := s.mgr.AddPayloads(id, payloads, s.limit())
+	if memo.ID == "" {
+		message := strings.Join(skipped, "；")
+		if message == "" {
+			message = "添加附件失败"
+		}
+		return MemoAttachResult{}, errors.New(message)
+	}
+	return MemoAttachResult{Memo: memo, Added: added, Skipped: skipped}, nil
+}
+
+func (s *Memos) AddLink(id, link string) (model.Memo, error) {
+	return s.mgr.AddLink(id, link)
+}
+
+func (s *Memos) RemoveAttachment(id, attachmentID string) (model.Memo, error) {
+	return s.mgr.RemoveAttachment(id, attachmentID)
+}
+
+func (s *Memos) OpenAttachment(id, attachmentID string) error {
+	att, err := s.mgr.Attachment(id, attachmentID)
+	if err != nil {
+		return err
+	}
+	if att.Kind == "link" {
+		if att.URL == "" {
+			return errors.New(i18n.T("链接无效"))
+		}
+		return platform.ShellExecute(0, "open", att.URL, "", "", 1)
+	}
+	path, err := s.mgr.AttachmentFilePath(att)
+	if err != nil {
+		return err
+	}
+	return platform.ShellExecute(0, "open", path, "", "", 1)
+}
 
 type Todos struct {
 	mgr *todos.Manager
@@ -127,7 +214,7 @@ func (s *Shelf) Launch(itemID string) error {
 		return platform.ShellExecute(0, "open", it.Path, "", "", 1)
 	}
 	if _, statErr := os.Stat(it.Path); statErr != nil {
-		return errors.New("目标不存在: " + it.Path)
+		return errors.New(i18n.T("目标不存在: ") + it.Path)
 	}
 	if it.Kind == "dir" || it.Kind == "file" {
 		return platform.ShellExecute(0, "open", it.Path, "", "", 1)
@@ -141,7 +228,7 @@ func (s *Shelf) Reveal(itemID string) error {
 		return err
 	}
 	if it.Kind == "url" {
-		return errors.New("链接无法定位")
+		return errors.New(i18n.T("链接无法定位"))
 	}
 	cmd := exec.Command("explorer.exe", "/select,"+it.Path)
 	return cmd.Start()
@@ -179,7 +266,7 @@ func (s *Mount) Pick() (model.Mount, error) {
 		return model.Mount{}, err
 	}
 	if path == "" {
-		return model.Mount{}, errors.New("未选择文件夹")
+		return model.Mount{}, errors.New(i18n.T("未选择文件夹"))
 	}
 	return s.mgr.Add(path)
 }

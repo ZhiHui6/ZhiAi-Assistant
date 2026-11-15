@@ -1,0 +1,2374 @@
+{
+ "一": [
+  "Mon",
+  "一"
+ ],
+ "二": [
+  "Tue",
+  "二"
+ ],
+ "三": [
+  "Wed",
+  "三"
+ ],
+ "四": [
+  "Thu",
+  "四"
+ ],
+ "五": [
+  "Fri",
+  "五"
+ ],
+ "六": [
+  "Sat",
+  "六"
+ ],
+ "日": [
+  "Sun",
+  "日"
+ ],
+ "分": [
+  "min",
+  "分"
+ ],
+ "秒": [
+  "sec",
+  "秒"
+ ],
+ "今天": [
+  "Today",
+  "今天"
+ ],
+ "快捷启动": [
+  "Quick launch",
+  "快捷啟動"
+ ],
+ "待办": [
+  "To-do",
+  "待辦"
+ ],
+ "收纳": [
+  "Shelf",
+  "收納"
+ ],
+ "计时": [
+  "Timers",
+  "計時"
+ ],
+ "关机": [
+  "Power",
+  "關機"
+ ],
+ "用量": [
+  "Usage",
+  "用量"
+ ],
+ "本周": [
+  "This week",
+  "本週"
+ ],
+ "逾期": [
+  "Overdue",
+  "逾期"
+ ],
+ "分组": [
+  "Group",
+  "分組"
+ ],
+ "挂载": [
+  "Mount",
+  "掛載"
+ ],
+ "闹钟": [
+  "Alarms",
+  "鬧鐘"
+ ],
+ "每天": [
+  "Daily",
+  "每天"
+ ],
+ "添加": [
+  "Add",
+  "新增"
+ ],
+ "铃音": [
+  "Sound",
+  "鈴聲"
+ ],
+ "开始": [
+  "Start",
+  "開始"
+ ],
+ "重置": [
+  "Reset",
+  "重設"
+ ],
+ "安排": [
+  "Schedule",
+  "安排"
+ ],
+ "取消": [
+  "Cancel",
+  "取消"
+ ],
+ "设置": [
+  "Settings",
+  "設定"
+ ],
+ "帮助": [
+  "Help",
+  "說明"
+ ],
+ "关于": [
+  "About",
+  "關於"
+ ],
+ "外观": [
+  "Appearance",
+  "外觀"
+ ],
+ "恢复": [
+  "Reset",
+  "還原"
+ ],
+ "列数": [
+  "Columns",
+  "欄數"
+ ],
+ "行数": [
+  "Rows",
+  "列數"
+ ],
+ "窗口与启动": [
+  "Window & Startup",
+  "視窗與啟動"
+ ],
+ "时钟与日历": [
+  "Clock & Calendar",
+  "時鐘與日曆"
+ ],
+ "数据": [
+  "Data",
+  "資料"
+ ],
+ "更新": [
+  "Updates",
+  "更新"
+ ],
+ "链接": [
+  "Links",
+  "連結"
+ ],
+ "关闭": [
+  "Close",
+  "關閉"
+ ],
+ "石墨": [
+  "Graphite",
+  "石墨"
+ ],
+ "藏蓝": [
+  "Navy",
+  "藏藍"
+ ],
+ "墨绿": [
+  "Forest",
+  "墨綠"
+ ],
+ "紫夜": [
+  "Violet",
+  "紫夜"
+ ],
+ "暖褐": [
+  "Warm Brown",
+  "暖褐"
+ ],
+ "墨青": [
+  "Teal",
+  "墨青"
+ ],
+ "黛蓝": [
+  "Indigo",
+  "黛藍"
+ ],
+ "绛紫": [
+  "Plum",
+  "絳紫"
+ ],
+ "绛红": [
+  "Wine",
+  "絳紅"
+ ],
+ "黛灰": [
+  "Slate",
+  "黛灰"
+ ],
+ "橄榄": [
+  "Olive",
+  "橄欖"
+ ],
+ "默认": [
+  "Default",
+  "預設"
+ ],
+ "深棕": [
+  "Espresso",
+  "深棕"
+ ],
+ "碳灰": [
+  "Charcoal",
+  "碳灰"
+ ],
+ "刚刚": [
+  "Just now",
+  "剛剛"
+ ],
+ "启动": [
+  "Launch",
+  "啟動"
+ ],
+ "周日": [
+  "Sun",
+  "週日"
+ ],
+ "周一": [
+  "Mon",
+  "週一"
+ ],
+ "周二": [
+  "Tue",
+  "週二"
+ ],
+ "周三": [
+  "Wed",
+  "週三"
+ ],
+ "周四": [
+  "Thu",
+  "週四"
+ ],
+ "周五": [
+  "Fri",
+  "週五"
+ ],
+ "周六": [
+  "Sat",
+  "週六"
+ ],
+ "上午": [
+  "AM",
+  "上午"
+ ],
+ "下午": [
+  "PM",
+  "下午"
+ ],
+ "撤销": [
+  "Undo",
+  "復原"
+ ],
+ "重做": [
+  "Redo",
+  "重做"
+ ],
+ "剪切": [
+  "Cut",
+  "剪下"
+ ],
+ "复制": [
+  "Copy",
+  "複製"
+ ],
+ "粘贴": [
+  "Paste",
+  "貼上"
+ ],
+ "全选": [
+  "Select all",
+  "全選"
+ ],
+ "展开": [
+  "Expand",
+  "展開"
+ ],
+ "收起": [
+  "Collapse",
+  "收合"
+ ],
+ "打开": [
+  "Open",
+  "開啟"
+ ],
+ "农历": [
+  "Lunar",
+  "農曆"
+ ],
+ "静音": [
+  "Mute",
+  "靜音"
+ ],
+ "暂停": [
+  "Pause",
+  "暫停"
+ ],
+ "继续": [
+  "Resume",
+  "繼續"
+ ],
+ "一次": [
+  "Once",
+  "一次"
+ ],
+ "删除": [
+  "Delete",
+  "刪除"
+ ],
+ "明天": [
+  "Tomorrow",
+  "明天"
+ ],
+ "刷新": [
+  "Refresh",
+  "重新整理"
+ ],
+ "签到": [
+  "Check in",
+  "簽到"
+ ],
+ "一键签到": [
+  "Check in all",
+  "一鍵簽到"
+ ],
+ "签到中…": [
+  "Checking in…",
+  "簽到中…"
+ ],
+ "签到失败": [
+  "Check-in failed",
+  "簽到失敗"
+ ],
+ "暂无可签到平台": [
+  "Nothing to check in",
+  "暫無可簽到平台"
+ ],
+ "已签到 {n} 个平台": [
+  "Checked in {n} platform(s)",
+  "已簽到 {n} 個平台"
+ ],
+ "未完成": [
+  "Open",
+  "未完成"
+ ],
+ "已完成": [
+  "Done",
+  "已完成"
+ ],
+ "知道了": [
+  "Got it",
+  "知道了"
+ ],
+ "倒计时": [
+  "Countdown",
+  "倒數"
+ ],
+ "5 分": [
+  "5 min",
+  "5 分"
+ ],
+ "分钟后": [
+  "min later",
+  "分鐘後"
+ ],
+ "日历": [
+  "Calendar",
+  "日曆"
+ ],
+ "标签页": [
+  "Tabs",
+  "標籤頁"
+ ],
+ "分类": [
+  "Category",
+  "分類"
+ ],
+ "分类名": [
+  "Category name",
+  "分類名稱"
+ ],
+ "重命名": [
+  "Rename",
+  "重新命名"
+ ],
+ "根目录": [
+  "Root",
+  "根目錄"
+ ],
+ "已收纳": [
+  "Shelved",
+  "已收納"
+ ],
+ "新分组": [
+  "New Group",
+  "新分組"
+ ],
+ "已挂载": [
+  "Mounted",
+  "已掛載"
+ ],
+ "未登录": [
+  "Not signed in",
+  "未登入"
+ ],
+ "重置 ": [
+  "Reset ",
+  "重設 "
+ ],
+ "加载中…": [
+  "Loading…",
+  "載入中…"
+ ],
+ "返回收纳": [
+  "Back to shelf",
+  "返回收納"
+ ],
+ "10 分": [
+  "10 min",
+  "10 分"
+ ],
+ "15 分": [
+  "15 min",
+  "15 分"
+ ],
+ "25 分": [
+  "25 min",
+  "25 分"
+ ],
+ "45 分": [
+  "45 min",
+  "45 分"
+ ],
+ "60 分": [
+  "60 min",
+  "60 分"
+ ],
+ "定时关机": [
+  "Scheduled shutdown",
+  "定時關機"
+ ],
+ "取消关机": [
+  "Cancel shutdown",
+  "取消關機"
+ ],
+ "指定时间": [
+  "Specific Time",
+  "指定時間"
+ ],
+ "确认关机": [
+  "Confirm shutdown",
+  "確認關機"
+ ],
+ "刷新全部": [
+  "Refresh all",
+  "重新整理全部"
+ ],
+ "点击展开": [
+  "Click to expand",
+  "點選展開"
+ ],
+ "面板宽度": [
+  "Panel Width",
+  "面板寬度"
+ ],
+ "玻璃浓度": [
+  "Glass Opacity",
+  "玻璃濃度"
+ ],
+ "界面底色": [
+  "Background",
+  "介面底色"
+ ],
+ "书签宽度": [
+  "Edge Tab Width",
+  "邊緣書籤寬度"
+ ],
+ "贴边位置": [
+  "Edge Position",
+  "貼邊位置"
+ ],
+ "屏幕右侧": [
+  "Right side",
+  "螢幕右側"
+ ],
+ "屏幕左侧": [
+  "Left side",
+  "螢幕左側"
+ ],
+ "图标大小": [
+  "Icon Size",
+  "圖示大小"
+ ],
+ "显示日历": [
+  "Show Calendar",
+  "顯示日曆"
+ ],
+ "开机自启": [
+  "Launch at Login",
+  "開機時啟動"
+ ],
+ "全局热键": [
+  "Global Hotkey",
+  "全域熱鍵"
+ ],
+ "完全重置": [
+  "Full reset",
+  "完全重設"
+ ],
+ "快速开始": [
+  "Quick Start",
+  "快速開始"
+ ],
+ "更新程序": [
+  "Update App",
+  "更新程式"
+ ],
+ "当前版本": [
+  "Current version",
+  "目前版本"
+ ],
+ "检查更新": [
+  "Check updates",
+  "檢查更新"
+ ],
+ "确认安装": [
+  "Confirm install",
+  "確認安裝"
+ ],
+ "项目主页": [
+  "Project home",
+  "專案首頁"
+ ],
+ "问题反馈": [
+  "Report an issue",
+  "問題回報"
+ ],
+ "确认重置": [
+  "Confirm reset",
+  "確認重設"
+ ],
+ "删除分类": [
+  "Delete category",
+  "刪除分類"
+ ],
+ "无法启动": [
+  "Can't launch",
+  "無法啟動"
+ ],
+ "定位失败": [
+  "Can't locate",
+  "定位失敗"
+ ],
+ "重置失败": [
+  "Reset failed",
+  "重設失敗"
+ ],
+ "主显示器": [
+  "Primary display",
+  "主螢幕"
+ ],
+ "移动失败": [
+  "Move failed",
+  "移動失敗"
+ ],
+ "删除分组": [
+  "Delete group",
+  "刪除分組"
+ ],
+ "挂载目录": [
+  "Mount folder",
+  "掛載目錄"
+ ],
+ "打开失败": [
+  "Open failed",
+  "開啟失敗"
+ ],
+ "取消挂载": [
+  "Unmount",
+  "取消掛載"
+ ],
+ "无法打开": [
+  "Can't open",
+  "無法開啟"
+ ],
+ "挂载失败": [
+  "Mount failed",
+  "掛載失敗"
+ ],
+ "操作失败": [
+  "Action failed",
+  "操作失敗"
+ ],
+ "自定义：": [
+  "Custom: ",
+  "自訂："
+ ],
+ "启用闹钟": [
+  "Enable alarm",
+  "啟用鬧鐘"
+ ],
+ "删除闹钟": [
+  "Delete alarm",
+  "刪除鬧鐘"
+ ],
+ "计时结束": [
+  "Timer done",
+  "計時結束"
+ ],
+ "暂无待办": [
+  "No to-dos",
+  "暫無待辦"
+ ],
+ "低优先级": [
+  "Low priority",
+  "低優先"
+ ],
+ "中优先级": [
+  "Medium priority",
+  "中優先"
+ ],
+ "高优先级": [
+  "High priority",
+  "高優先"
+ ],
+ "撤销失败": [
+  "Undo failed",
+  "復原失敗"
+ ],
+ "删除失败": [
+  "Delete failed",
+  "刪除失敗"
+ ],
+ "保存失败": [
+  "Save failed",
+  "儲存失敗"
+ ],
+ "添加失败": [
+  "Add failed",
+  "新增失敗"
+ ],
+ "我已知晓": [
+  "Got it",
+  "我已知曉"
+ ],
+ "刷新中…": [
+  "Refreshing…",
+  "重新整理中…"
+ ],
+ "签到成功": [
+  "Checked in",
+  "簽到成功"
+ ],
+ "尚未刷新": [
+  "Not refreshed",
+  "尚未重新整理"
+ ],
+ "智爱小助手": [
+  "ZhiAi Assistant",
+  "智爱小助手"
+ ],
+ "目标显示器": [
+  "Target display",
+  "目標螢幕"
+ ],
+ "显示与收起": [
+  "Show and collapse",
+  "顯示與收合"
+ ],
+ "待办与日历": [
+  "To-dos and calendar",
+  "待辦與日曆"
+ ],
+ "数据与备份": [
+  "Data and backup",
+  "資料與備份"
+ ],
+ "下载并安装": [
+  "Download and install",
+  "下載並安裝"
+ ],
+ "前往发布页": [
+  "Go to releases",
+  "前往發佈頁"
+ ],
+ "重命名分类": [
+  "Rename category",
+  "重新命名分類"
+ ],
+ "无法启动：": [
+  "Can't launch: ",
+  "無法啟動："
+ ],
+ "重命名失败": [
+  "Rename failed",
+  "重新命名失敗"
+ ],
+ "已自动保存": [
+  "Auto-saved",
+  "已自動儲存"
+ ],
+ "保存失败：": [
+  "Save failed: ",
+  "儲存失敗："
+ ],
+ "正在重置…": [
+  "Resetting…",
+  "正在重設…"
+ ],
+ "初始化失败": [
+  "Init failed",
+  "初始化失敗"
+ ],
+ "双击重命名": [
+  "Double-click to rename",
+  "按兩下重新命名"
+ ],
+ "重命名分组": [
+  "Rename group",
+  "重新命名分組"
+ ],
+ "无法打开：": [
+  "Can't open: ",
+  "無法開啟："
+ ],
+ "未选择文件": [
+  "No file selected",
+  "未選擇檔案"
+ ],
+ "还没有闹钟": [
+  "No alarms yet",
+  "尚無鬧鐘"
+ ],
+ "标记为完成": [
+  "Mark as done",
+  "標記為完成"
+ ],
+ "使用前确认": [
+  "Before You Start",
+  "使用前確認"
+ ],
+ "浏览器登录": [
+  "Browser sign-in",
+  "瀏覽器登入"
+ ],
+ "今日已签到": [
+  "Checked in today",
+  "今日已簽到"
+ ],
+ "显示程序名称": [
+  "Show Program Names",
+  "顯示程式名稱"
+ ],
+ "显示快捷启动": [
+  "Show Quick Launch",
+  "顯示快捷啟動"
+ ],
+ "打开数据目录": [
+  "Open data folder",
+  "開啟資料目錄"
+ ],
+ "尚未检查更新": [
+  "No update checked yet",
+  "尚未檢查更新"
+ ],
+ "标签（可选）": [
+  "Label (optional)",
+  "標籤（選填）"
+ ],
+ "试听闹钟铃音": [
+  "Preview alarm sound",
+  "試聽鬧鐘鈴聲"
+ ],
+ "移除程序": [
+  "Remove program",
+  "移除程式"
+ ],
+ "读取设置失败": [
+  "Can't load settings",
+  "讀取設定失敗"
+ ],
+ "收纳到侧边栏": [
+  "Add to shelf",
+  "收納到側邊欄"
+ ],
+ "从收纳区移除": [
+  "Remove from shelf",
+  "從收納區移除"
+ ],
+ "恢复自动隐藏": [
+  "Back to auto-hide",
+  "還原自動隱藏"
+ ],
+ "本周暂无待办": [
+  "No to-dos this week",
+  "本週暫無待辦"
+ ],
+ "这天没有安排": [
+  "Nothing on this day",
+  "這天沒有安排"
+ ],
+ "标记为未完成": [
+  "Mark as open",
+  "標記為未完成"
+ ],
+ "尚未获取额度": [
+  "No quota yet",
+  "尚未取得額度"
+ ],
+ "读取用量失败": [
+  "Can't load usage",
+  "讀取用量失敗"
+ ],
+ "试听倒计时铃音": [
+  "Preview timer sound",
+  "試聽倒數鈴聲"
+ ],
+ "读取程序列表失败": [
+  "Could not load programs",
+  "讀取程式清單失敗"
+ ],
+ "正在检查更新…": [
+  "Checking for updates…",
+  "正在檢查更新…"
+ ],
+ "读取收纳区失败": [
+  "Can't load shelf",
+  "讀取收納區失敗"
+ ],
+ "把文件拖到这里": [
+  "Drag files here",
+  "將檔案拖曳到這裡"
+ ],
+ "无法读取该目录": [
+  "Can't read this folder",
+  "無法讀取該目錄"
+ ],
+ "只能挂载文件夹": [
+  "Only folders can be mounted",
+  "只能掛載資料夾"
+ ],
+ "无法播放该铃音": [
+  "Can't play this sound",
+  "無法播放該鈴聲"
+ ],
+ "请选择闹钟时间": [
+  "Pick an alarm time",
+  "請選擇鬧鐘時間"
+ ],
+ "请选择关机时间": [
+  "Pick a shutdown time",
+  "請選擇關機時間"
+ ],
+ "已安排系统关机": [
+  "Shutdown scheduled",
+  "已安排系統關機"
+ ],
+ "已取消关机计划": [
+  "Shutdown cancelled",
+  "已取消關機計畫"
+ ],
+ "没有逾期的待办": [
+  "No overdue to-dos",
+  "沒有逾期的待辦"
+ ],
+ "暂无可领取签到": [
+  "No check-in available",
+  "暫無可領取簽到"
+ ],
+ "12 小时制显示": [
+  "12-Hour Clock",
+  "12 小時制顯示"
+ ],
+ "无法读取版本信息": [
+  "Can't read version info",
+  "無法讀取版本資訊"
+ ],
+ "这个文件夹是空的": [
+  "This folder is empty",
+  "這個資料夾是空的"
+ ],
+ "请先创建一个分组": [
+  "Create a group first",
+  "請先建立一個分組"
+ ],
+ "无法打开设置窗口": [
+  "Can't open settings",
+  "無法開啟設定視窗"
+ ],
+ "自定义 WAV…": [
+  "Custom WAV…",
+  "自訂 WAV…"
+ ],
+ "读取计时设置失败": [
+  "Can't load timer settings",
+  "讀取計時設定失敗"
+ ],
+ "读取关机计划失败": [
+  "Can't load shutdown plan",
+  "讀取關機計畫失敗"
+ ],
+ "请设置倒计时时长": [
+  "Set a countdown length",
+  "請設定倒數時長"
+ ],
+ "没有未完成的待办": [
+  "No open to-dos",
+  "沒有未完成的待辦"
+ ],
+ "还没有完成的待办": [
+  "Nothing done yet",
+  "還沒有完成的待辦"
+ ],
+ "未获取到登录地址": [
+  "No sign-in URL returned",
+  "未取得登入網址"
+ ],
+ "松手即收纳到侧边栏": [
+  "Drop to add to shelf",
+  "放開即收納到側邊欄"
+ ],
+ "日历显示农历/节日": [
+  "Show Lunar Dates and Holidays",
+  "日曆顯示農曆/節日"
+ ],
+ "添加待办，回车确认": [
+  "Add a to-do, press Enter",
+  "新增待辦，按 Enter 確認"
+ ],
+ "后端服务尚未就绪：": [
+  "Backend not ready: ",
+  "後端服務尚未就緒："
+ ],
+ "在资源管理器中显示": [
+  "Show in Explorer",
+  "在檔案總管中顯示"
+ ],
+ "已重置，正在重启…": [
+  "Reset done, restarting…",
+  "已重設，正在重新啟動…"
+ ],
+ "在资源管理器中打开": [
+  "Open in Explorer",
+  "在檔案總管中開啟"
+ ],
+ "平台拒绝了当前请求": [
+  "Platform rejected the request",
+  "平台拒絕了目前請求"
+ ],
+ "正在获取登录链接…": [
+  "Getting sign-in link…",
+  "正在取得登入連結…"
+ ],
+ "完全重置 智爱小助手": [
+  "Full reset ZhiAi Assistant",
+  "完全重設 智爱小助手"
+ ],
+ "正在下载并校验更新…": [
+  "Downloading and verifying update…",
+  "正在下載並驗證更新…"
+ ],
+ "等待浏览器完成登录…": [
+  "Waiting for browser sign-in…",
+  "等待瀏覽器完成登入…"
+ ],
+ "请输入关机倒计时分钟数": [
+  "Enter shutdown minutes",
+  "請輸入關機倒數分鐘數"
+ ],
+ "登录已超时，请重新发起": [
+  "Sign-in timed out, try again",
+  "登入已逾時，請重新發起"
+ ],
+ "由 Windows 执行": [
+  "Run by Windows",
+  "由 Windows 執行"
+ ],
+ "请输入「完全重置」以确认": [
+  "Type “Full reset” to confirm",
+  "請輸入「完全重設」以確認"
+ ],
+ "该版本没有提供更新说明。": [
+  "No release notes for this version.",
+  "此版本沒有提供更新說明。"
+ ],
+ "登录成功，正在刷新额度…": [
+  "Signed in, refreshing quota…",
+  "登入成功，正在重新整理額度…"
+ ],
+ "更新完成，正在重启侧边栏…": [
+  "Update installed, restarting sidebar…",
+  "更新完成，正在重新啟動側邊欄…"
+ ],
+ "拖入文件收藏，挂载可直接浏览": [
+  "Drop files to save; mount folders to browse",
+  "拖入檔案收藏，掛載可直接瀏覽"
+ ],
+ "WorkBuddy 浏览器登录": [
+  "WorkBuddy browser sign-in",
+  "WorkBuddy 瀏覽器登入"
+ ],
+ "把程序拖到这里，或点「程序」添加": [
+  "Drag a program here, or tap “Program”",
+  "把程式拖到這裡，或點「程式」新增"
+ ],
+ "临时保持展开（取消/重启后恢复自动隐藏）": [
+  "Keep open for now (auto-hide returns after restart)",
+  "臨時保持展開（取消/重新啟動後還原自動隱藏）"
+ ],
+ " · 发布包未提供校验文件，请前往发布页下载": [
+  " · No checksum in release; download from releases page",
+  " · 發佈包未提供校驗檔案，請前往發佈頁下載"
+ ],
+ "确认后由 Windows 执行关机，至少延迟 60 秒；已安排的关机可在上方取消。": [
+  "Windows runs the shutdown after you confirm, with at least a 60-second delay; cancel a scheduled shutdown above.",
+  "確認後由 Windows 執行關機，至少延遲 60 秒；已安排的關機可在上方取消。"
+ ],
+ "待办点击标题进入编辑，回车保存，Esc 取消；完成、删除后列表会保留当前滚动位置。": [
+  "Click a to-do title to edit, Enter saves, Esc cancels; the list keeps its scroll position after completing or deleting.",
+  "待辦點選標題進入編輯，按 Enter 儲存，Esc 取消；完成、刪除後清單會保留目前捲動位置。"
+ ],
+ "内置更新会先关闭侧边栏、校验文件哈希、替换程序并自动重启；数据目录与设置不受影响。": [
+  "Built-in updates close the sidebar, verify the file hash, replace the app and restart it; data and settings are kept.",
+  "內建更新會先關閉側邊欄、驗證檔案雜湊、替換程式並自動重新啟動；資料目錄與設定不受影響。"
+ ],
+ "将在浏览器打开 WorkBuddy 授权页。完成登录后会自动保存凭据并刷新额度，不会读取本机加密文件。": [
+  "Opens the WorkBuddy authorization page in your browser. Credentials are saved and quota refreshed once you sign in; no local encrypted files are read.",
+  "將在瀏覽器開啟 WorkBuddy 授權頁。完成登入後會自動儲存憑證並重新整理額度，不會讀取本機加密檔案。"
+ ],
+ "这些平台没有公开的第三方额度接口。本功能复用本机客户端登录态读取额度并签到，属于非官方方式，可能随时失效或违反平台条款。": [
+  "These platforms have no public third-party quota API. This feature reuses the local client sign-in to read quota and check in; it is unofficial and may stop working or violate platform terms at any time.",
+  "這些平台沒有公開的第三方額度介面。本功能沿用本機用戶端登入狀態讀取額度並簽到，屬於非官方方式，可能隨時失效或違反平台條款。"
+ ],
+ "添加标签，回车确认": [
+  "Add tag, Enter to confirm",
+  "新增標籤，Enter 確認"
+ ],
+ "移除标签": [
+  "Remove tag",
+  "移除標籤"
+ ],
+ "新建": [
+  "New",
+  "新增"
+ ],
+ "减少动画效果": [
+  "Reduce motion",
+  "減少動態效果"
+ ],
+ "程序": [
+  "Program",
+  "程式"
+ ],
+ "退出后会删除本机保存的凭据，并清空已读取的额度；本机客户端自身的登录状态不受影响。": [
+  "Signing out deletes the credentials stored on this device and clears the quota already read. The client app's own sign-in is not affected.",
+  "登出後會刪除本機儲存的憑據，並清空已讀取的額度；本機用戶端自身的登入狀態不受影響。"
+ ],
+ "确认退出": [
+  "Sign out",
+  "確認登出"
+ ],
+ "退出 {name} 登录": [
+  "Sign out of {name}",
+  "登出 {name}"
+ ],
+ "已退出 {name}": [
+  "Signed out of {name}",
+  "已登出 {name}"
+ ],
+ "退出登录": [
+  "Sign out",
+  "登出"
+ ],
+ "已退出登录，可重新登录": [
+  "Signed out. Sign in again to continue.",
+  "已登出，可重新登入"
+ ],
+ "登录已过期，请重新登录": [
+  "Sign-in expired. Please sign in again.",
+  "登入已過期，請重新登入"
+ ],
+ "登录信息已加密，请在客户端重新登录": [
+  "Sign-in info is encrypted. Sign in again in the client app.",
+  "登入資訊已加密，請在用戶端重新登入"
+ ],
+ "凭据只在本机读取；保存的登录凭据使用 Windows DPAPI 加密，不会回显、上传或写入普通设置文件。": [
+  "Credentials are read on this device only; saved sign-in credentials are encrypted with Windows DPAPI and are never echoed, uploaded, or written to plain settings files.",
+  "憑據只在本機讀取；儲存的登入憑據使用 Windows DPAPI 加密，不會回顯、上傳或寫入一般設定檔。"
+ ],
+ "将打开独立浏览器窗口访问 {name} 登录页，登录成功后自动读取额度并关闭窗口。": [
+  "Open the {name} sign-in page in a separate browser window; quota loads automatically once you sign in, then the window closes.",
+  "將開啟獨立瀏覽器視窗前往 {name} 登入頁，登入成功後自動讀取額度並關閉視窗。"
+ ],
+ "{name} 浏览器登录": [
+  "{name} browser sign-in",
+  "{name} 瀏覽器登入"
+ ],
+ "正在启动登录窗口…": [
+  "Launching sign-in window…",
+  "正在啟動登入視窗…"
+ ],
+ "请在浏览器的登录窗口中完成登录…": [
+  "Complete sign-in in the browser window…",
+  "請在瀏覽器的登入視窗完成登入…"
+ ],
+ "未获取到登录会话": [
+  "No sign-in session returned",
+  "未取得登入工作階段"
+ ],
+ "登录会话不存在，请重新发起": [
+  "Sign-in session not found, start again",
+  "登入工作階段不存在，請重新發起"
+ ],
+ "登录窗口已关闭，请重新发起": [
+  "The sign-in window was closed, start again",
+  "登入視窗已關閉，請重新發起"
+ ],
+ "未能读取到可用的登录信息，请确认已完成登录": [
+  "Could not read a usable credential; make sure you finished signing in",
+  "未能讀取到可用的登入資訊，請確認已完成登入"
+ ],
+ "未找到可用的浏览器，请先安装 Edge 或 Chrome": [
+  "No supported browser found. Install Edge or Chrome first.",
+  "找不到可用的瀏覽器，請先安裝 Edge 或 Chrome"
+ ],
+ "该平台暂不支持浏览器登录": [
+  "Browser sign-in is not available for this platform",
+  "此平台暫不支援瀏覽器登入"
+ ],
+ "客户端载入": [
+  "Load from client",
+  "用戶端載入"
+ ],
+ "未找到客户端登录态": [
+  "No client sign-in found",
+  "找不到用戶端登入狀態"
+ ],
+ "打开官网": [
+  "Open website",
+  "開啟官網"
+ ],
+ "打开客户端": [
+  "Open client app",
+  "開啟用戶端"
+ ],
+ "未找到客户端程序，请先安装客户端": [
+  "Client app not found. Install it first.",
+  "找不到用戶端程式，請先安裝用戶端"
+ ],
+ "侧边栏未运行，无法生效": [
+  "Sidebar is not running, change not applied",
+  "側邊欄未執行，無法生效"
+ ],
+ "无法通知侧边栏": [
+  "Cannot reach the sidebar",
+  "無法通知側邊欄"
+ ],
+ "自动签到": [
+  "Auto check-in",
+  "自動簽到"
+ ],
+ "已启动 {name}": [
+  "Launched {name}",
+  "已啟動 {name}"
+ ],
+ "更新于": [
+  "Updated",
+  "更新於"
+ ],
+ "打开官网查询用量": [
+  "Open website for usage details",
+  "開啟官網查詢用量"
+ ],
+ "显示完整账号": [
+  "Show full account",
+  "顯示完整帳號"
+ ],
+ "隐藏账号": [
+  "Hide account",
+  "隱藏帳號"
+ ],
+ "请先登录后再刷新": [
+  "Sign in first to refresh",
+  "請先登入後再重新整理"
+ ],
+ "{n} 个平台未登录，已跳过": [
+  "{n} platform(s) not signed in, skipped",
+  "{n} 個平台未登入，已跳過"
+ ],
+ "把文件、文件夹或程序快捷方式拖到面板上：落到快捷启动是添加程序，落到其它位置会切到收纳页并收藏起来；挂载常用文件夹请在收纳页点「+ 挂载」选择。": [
+  "Drop files, folders or app shortcuts onto the panel: on Quick Launch they become apps, anywhere else they switch to the Shelf page and get collected. To mount a frequent folder, click “+ Mount” on the Shelf page.",
+  "把檔案、資料夾或程式捷徑拖到面板上：落到快捷啟動是新增程式，落到其它位置會切到收納頁並收藏起來；掛載常用資料夾請在收納頁點「+ 掛載」選擇。"
+ ],
+ "收纳与挂载": [
+  "Shelf & mounts",
+  "收納與掛載"
+ ],
+ "「+ 挂载」选择常用文件夹后可在同一页逐级浏览，用顶部面包屑或「返回收纳」退出；挂载条目右键可把它收纳到侧边栏。": [
+  "“+ Mount” picks a frequent folder you can then browse level by level on the same page, leaving through the breadcrumb or “Back to Shelf”. Right-click a mounted entry to collect it into the sidebar.",
+  "「+ 掛載」選擇常用資料夾後可在同一頁逐級瀏覽，用頂部面包屑或「返回收納」退出；掛載條目右鍵可把它收納到側邊欄。"
+ ],
+ "计时与关机": [
+  "Timers & shutdown",
+  "計時與關機"
+ ],
+ "用量与签到": [
+  "Usage and check-in",
+  "用量與簽到"
+ ],
+ "用量页汇总 Qoder、WorkBuddy、Trae 的额度、重置日期与更新时间，「刷新全部」重新读取，「一键签到」为支持的平台领取签到奖励。": [
+  "The Usage page summarises quota, reset date and last refresh for Qoder, WorkBuddy and Trae. “Refresh all” re-reads them, and “Check in all” claims the daily reward on platforms that support it.",
+  "用量頁彙總 Qoder、WorkBuddy、Trae 的額度、重設日期與更新時間，「刷新全部」重新讀取，「一鍵簽到」為支援的平台領取簽到獎勵。"
+ ],
+ "快捷键与设置": [
+  "Hotkey and settings",
+  "快速鍵與設定"
+ ],
+ "默认全局热键为 ctrl+alt+space，可在设置 → 窗口与启动 中修改；写法是用 ctrl、alt、shift、win 加「+」连接主键，主键支持字母、数字、空格、反引号与 F1 至 F12，且必须带至少一个修饰键。": [
+  "The default global hotkey is ctrl+alt+space, editable under Settings → Window and startup. Write ctrl, alt, shift or win joined by “+” to one main key: a letter, a digit, space, backquote or F1-F12, with at least one modifier.",
+  "預設全域熱鍵為 ctrl+alt+space，可在設定 → 視窗與啟動中修改；寫法是 ctrl、alt、shift、win 加「+」連接主鍵，主鍵支援字母、數字、空格、反引號與 F1 至 F12，且必須帶至少一個修飾鍵。"
+ ],
+ "简体中文": [
+  "简体中文",
+  "简体中文"
+ ],
+ "繁體中文": [
+  "繁體中文",
+  "繁體中文"
+ ],
+ "置顶": [
+  "Pin to top",
+  "置頂"
+ ],
+ "取消置顶": [
+  "Unpin",
+  "取消置頂"
+ ],
+ "清除": [
+  "Clear",
+  "清除"
+ ],
+ "跟随系统": [
+  "Follow system",
+  "跟隨系統"
+ ],
+ "显示器": [
+  "Monitor",
+  "螢幕"
+ ],
+ "（主）": [
+  " (primary)",
+  "（主）"
+ ],
+ "接口不存在：{svc}.{method}": [
+  "Unknown API: {svc}.{method}",
+  "介面不存在：{svc}.{method}"
+ ],
+ "{n} 分钟前": [
+  "{n} min ago",
+  "{n} 分鐘前"
+ ],
+ "{n} 小时前": [
+  "{n} hr ago",
+  "{n} 小時前"
+ ],
+ "{n} 天前": [
+  "{n} d ago",
+  "{n} 天前"
+ ],
+ "{m}月{d}日": [
+  "{m}/{d}",
+  "{m}月{d}日"
+ ],
+ "{y}年{m}月": [
+  "{y}/{m}",
+  "{y}年{m}月"
+ ],
+ "{y}年{m}月{d}日": [
+  "{m}/{d}/{y}",
+  "{y}年{m}月{d}日"
+ ],
+ "移到「{name}」": [
+  "Move to “{name}”",
+  "移到「{name}」"
+ ],
+ "已添加 {n} 个程序": [
+  "Added {n} program(s)",
+  "已新增 {n} 個程式"
+ ],
+ "今天 {time}": [
+  "Today {time}",
+  "今天 {time}"
+ ],
+ "明天 {time}": [
+  "Tomorrow {time}",
+  "明天 {time}"
+ ],
+ "{m}月{d}日 {time}": [
+  "{m}/{d} {time}",
+  "{m}月{d}日 {time}"
+ ],
+ "已安排 {time} 关机（还剩 {left}）": [
+  "Shutdown set for {time} ({left} left)",
+  "已安排 {time} 關機（還剩 {left}）"
+ ],
+ "将在 {time} 关闭电脑，约 {n} 分钟后。": [
+  "Shutting down at {time}, in about {n} min.",
+  "將在 {time} 關閉電腦，約 {n} 分鐘後。"
+ ],
+ "显示更早的 {n} 条": [
+  "Show {n} earlier",
+  "顯示更早的 {n} 筆"
+ ],
+ "已删除「{title}」": [
+  "Deleted “{title}”",
+  "已刪除「{title}」"
+ ],
+ "{name} 登录": [
+  "{name} sign-in",
+  "{name} 登入"
+ ],
+ "签到 +{n}": [
+  "Check-in +{n}",
+  "簽到 +{n}"
+ ],
+ "展开宽度 {min}–{max} px，拖动预览": [
+  "Expanded width {min}–{max} px, live preview",
+  "展開寬度 {min}–{max} px，拖曳預覽"
+ ],
+ "展开宽度 340–560 px，拖动预览": [
+  "Expanded width 340–560 px, live preview",
+  "展開寬度 340–560 px，拖曳預覽"
+ ],
+ "已是最新版本（v{v}）": [
+  "Up to date (v{v})",
+  "已是最新版本（v{v}）"
+ ],
+ "智爱小助手 · 桌面侧边栏工具": [
+  "ZhiAi Assistant · Desktop sidebar tool",
+  "智爱小助手 · 桌面側邊欄工具"
+ ],
+ "版本信息不可用": [
+  "Version information unavailable",
+  "版本資訊不可用"
+ ],
+ "恢复默认": [
+  "Restore defaults",
+  "恢復預設"
+ ],
+ "恢复默认设置": [
+  "Restore default settings",
+  "恢復預設設定"
+ ],
+ "将外观、快捷启动、窗口与启动、时钟与日历、语言与自动签到恢复为初始值；存储位置、备份与数据不受影响。": [
+  "Restores appearance, quick launch, window and startup, clock and calendar, language and auto check-in to their initial values; storage location, backups and data are unaffected.",
+  "將外觀、快捷啟動、視窗與啟動、時鐘與日曆、語言與自動簽到恢復為初始值；儲存位置、備份與資料不受影響。"
+ ],
+ "已恢复默认设置": [
+  "Default settings restored",
+  "已恢復預設設定"
+ ],
+ "更新会关闭并重启侧边栏，校验 SHA-256 后替换程序文件；数据与设置不受影响。": [
+  "Updating closes and restarts the sidebar and replaces the program after SHA-256 verification; data and settings are untouched.",
+  "更新會關閉並重新啟動側邊欄，校驗 SHA-256 後替換程式檔案；資料與設定不受影響。"
+ ],
+ " · 可前往发布页手动下载": [
+  " · Download manually from the release page",
+  " · 可前往發佈頁手動下載"
+ ],
+ "自动检查更新": [
+  "Check for updates automatically",
+  "自動檢查更新"
+ ],
+ "查看": [
+  "View",
+  "檢視"
+ ],
+ "忽略此版本": [
+  "Ignore this version",
+  "忽略此版本"
+ ],
+ "自动检查会在启动时与每 6 小时静默进行一次，发现新版本会在侧边栏顶部提示；可在关于页关闭自动检查。": [
+  "Automatic checks run silently at startup and every 6 hours; new versions appear in a bar at the top of the sidebar and can be turned off on the About page.",
+  "自動檢查會在啟動時與每 6 小時靜默進行一次，發現新版本會在側邊欄頂端提示；可在關於頁關閉自動檢查。"
+ ],
+ "发现新版本 v{v}": [
+  "New version v{v}",
+  "發現新版本 v{v}"
+ ],
+ "最新版本 v{v}": [
+  "Latest v{v}",
+  "最新版本 v{v}"
+ ],
+ "已挂载 {n} 个文件夹": [
+  "Mounted {n} folder(s)",
+  "已掛載 {n} 個資料夾"
+ ],
+ "拖入文件夹以挂载": [
+  "Drop folders here to mount",
+  "拖入資料夾以掛載"
+ ],
+ "文件收纳": [
+  "Collected files",
+  "檔案收納"
+ ],
+ "显示方式": [
+  "View as",
+  "顯示方式"
+ ],
+ "网格": [
+  "Grid",
+  "網格"
+ ],
+ "列表": [
+  "List",
+  "清單"
+ ],
+ "紧凑": [
+  "Compact",
+  "緊湊"
+ ],
+ "标准": [
+  "Standard",
+  "標準"
+ ],
+ "大图标": [
+  "Large icons",
+  "大圖示"
+ ],
+ "拖入文件即自动分组": [
+  "Drop files to group them",
+  "拖入檔案即自動分組"
+ ],
+ "已收纳 {n} 项": [
+  "Collected {n} item(s)",
+  "已收納 {n} 項"
+ ],
+ "读取中…": [
+  "Loading…",
+  "讀取中…"
+ ],
+ "界面语言": [
+  "Language",
+  "介面語言"
+ ],
+ "开": [
+  "On",
+  "開"
+ ],
+ "关": [
+  "Off",
+  "關"
+ ],
+ "界面文字即时切换，无需重启": [
+  "UI text switches instantly; no restart",
+  "介面文字即時切換，無需重新啟動"
+ ],
+ "收起后边缘露出的宽度 24–40 px": [
+  "Exposed edge width when collapsed, 24–40 px",
+  "收合後邊緣露出的寬度 24–40 px"
+ ],
+ "面板不透明度 25–90 %，越高越不透明": [
+  "Panel opacity 25–90 %; higher is more opaque",
+  "面板不透明度 25–90 %，越高越不透明"
+ ],
+ "面板与书签底色，过浅自动压暗": [
+  "Panel and bookmark color; light values dimmed",
+  "面板與書籤底色，過淺自動壓暗"
+ ],
+ "每行图标数 3–8，超出可左右滚动": [
+  "Icons per row 3–8; extras scroll sideways",
+  "每列圖示數 3–8，超出可左右捲動"
+ ],
+ "显示 1–3 行，列×行即一屏": [
+  "Shows 1–3 rows; columns × rows per view",
+  "顯示 1–3 列，欄 × 列即一屏"
+ ],
+ "图标与整格 24–40 px，步进 2": [
+  "Icon and cell 24–40 px, step 2",
+  "圖示與整格 24–40 px，步進 2"
+ ],
+ "图标下方显示名称，过长悬停看全名": [
+  "Names under icons; hover for the full name",
+  "圖示下方顯示名稱，過長懸停看全名"
+ ],
+ "关闭后隐藏，拖入文件改存收纳页": [
+  "Hidden when off; dropped files go to Shelf",
+  "關閉後隱藏，拖入檔案改存收納頁"
+ ],
+ "停靠屏幕左侧或右侧": [
+  "Docks to the left or right edge",
+  "停靠螢幕左側或右側"
+ ],
+ "贴边自动隐藏": [
+  "Auto-hide at edge",
+  "貼邊自動隱藏"
+ ],
+ "多屏时选择停靠哪块屏": [
+  "Pick which display to dock on",
+  "多螢幕時選擇停靠哪個螢幕"
+ ],
+ "开：靠近展开，移开收起；关：常驻手动收起": [
+  "On: hover opens, leaving hides; Off: stays",
+  "開：靠近展開，移開收合；關：常駐手動收合"
+ ],
+ "登录 Windows 后自动运行": [
+  "Runs automatically after Windows sign-in",
+  "登入 Windows 後自動執行"
+ ],
+ "唤出或收起，须带修饰键": [
+  "Shows or hides the panel; needs a modifier",
+  "喚出或收合，須帶修飾鍵"
+ ],
+ "取消收放动画，移开立即收起": [
+  "No motion; hides as soon as the mouse leaves",
+  "取消收放動畫，移開立即收合"
+ ],
+ "隐藏整块日历，顶栏时间保留": [
+  "Hides the calendar; header clock stays",
+  "隱藏整塊日曆，頂欄時間保留"
+ ],
+ "日期格只留公历，悬停看农历": [
+  "Gregorian only; hover for lunar and festivals",
+  "日期格僅留公曆，懸停看農曆"
+ ],
+ "仅顶栏时钟，其余仍 24 小时": [
+  "Header clock only; others stay 24-hour",
+  "僅頂欄時鐘，其餘仍 24 小時"
+ ],
+ "清空全部数据并重启，不可撤销": [
+  "Clears all data and restarts; cannot be undone",
+  "清空全部資料並重新啟動，無法復原"
+ ],
+ "设置 → 数据 → 完全重置 需在弹窗输入「完全重置」才能确认，会退出侧边栏、取消已安排的关机、关闭开机自启并删除当前存储位置的全部数据，操作不可撤销。": [
+  "Settings → Data → Full reset asks you to type “Full reset” in the dialog before it confirms. It quits the sidebar, cancels any scheduled shutdown, turns off autostart and deletes all data at the active location; this cannot be undone.",
+  "設定 → 資料 → 完全重設 需在彈窗輸入「完全重設」才能確認，會退出側邊欄、取消已安排的關機、關閉開機自啟並刪除目前儲存位置的全部資料，操作無法復原。"
+ ],
+ "设置中的「自动签到」让已登录的平台每天自动签到一次，失败当天最多重试 3 次；用量面板顶部只显示当前状态。首次进入会先显示使用前确认，未登录时可在卡片内用浏览器登录或从客户端载入。": [
+  "Auto check-in in Settings makes signed-in platforms check in once a day, with up to 3 retries that day after a failure; the Usage header only shows the current state. The first visit shows a usage notice, and unsigned platforms can sign in from the card in a browser or load credentials from the client.",
+  "設定中的「自動簽到」讓已登入的平台每天自動簽到一次，失敗當天最多重試 3 次；用量面板頂端只顯示目前狀態。首次進入會先顯示使用前確認，未登入時可在卡片內用瀏覽器登入或從用戶端載入。"
+ ],
+ "数据保存在「设置 → 数据 → 存储位置」指定的目录，采用 JSON 原子写入并保留 .bak 备份；无法读取的旧文件会转存为 .corrupt。": [
+  "Data lives in the folder set under Settings → Data → Location, written atomically with .bak copies; unreadable older files are moved aside as .corrupt.",
+  "資料保存在「設定 → 資料 → 儲存位置」指定的目錄，採用 JSON 原子寫入並保留 .bak 備份；無法讀取的舊檔案會轉存為 .corrupt。"
+ ],
+ "顶栏齿轮打开独立的设置窗口，设置、帮助与关于都在其中，改动会自动保存。": [
+  "The gear in the top bar opens a separate Settings window that also hosts Help and About; changes save automatically.",
+  "頂欄齒輪開啟獨立的設定視窗，設定、說明與關於都在其中，變更會自動儲存。"
+ ],
+ "贴边自动隐藏开启时，鼠标靠近屏幕边缘即展开，离开后约 0.2 秒收起；开启「减少动画效果」后立即收起。收起后边缘仍露出书签条，鼠标移到边缘即可再次展开。": [
+  "With edge auto-hide on, move the pointer near the screen edge to open; it collapses about 0.2 s after you leave, or immediately with Reduce motion. A bookmark strip stays visible when collapsed; move the pointer to the edge to open again.",
+  "貼邊自動隱藏開啟時，滑鼠靠近螢幕邊緣即展開，離開後約 0.2 秒收合；開啟「減少動畫效果」後立即收合。收合後邊緣仍露出書籤條，滑鼠移到邊緣即可再次展開。"
+ ],
+ "关闭自动隐藏后侧边栏常驻，用顶栏「收起」按钮手动收起；手动收起后，点击边缘书签展开。": [
+  "With auto-hide off the sidebar stays open; collapse it with the top-bar collapse button. After a manual collapse, click the edge bookmark to expand.",
+  "關閉自動隱藏後側邊欄常駐，用頂欄「收合」按鈕手動收合；手動收合後，點擊邊緣書籤展開。"
+ ],
+ "图钉按钮仅在贴边自动隐藏开启时出现，钉住期间不会自动收起；取消钉住或重启后恢复自动隐藏。": [
+  "The pin button appears only while edge auto-hide is on; a pinned panel never auto-collapses, and auto-hide resumes after you unpin or restart.",
+  "圖釘按鈕僅在貼邊自動隱藏開啟時出現，釘住期間不會自動收合；取消釘住或重新啟動後恢復自動隱藏。"
+ ],
+ "托盘图标左键只唤出面板，不会收起；右键菜单提供显示或收起、钉住、贴边自动隐藏、开机自启、设置与退出。": [
+  "Left-clicking the tray icon only reveals the panel, never hides it. The right-click menu offers show/hide, pin, auto-hide at edge, start with Windows, Settings and Exit.",
+  "托盤圖示左鍵只喚出面板，不會收合；右鍵選單提供顯示或收合、釘住、貼邊自動隱藏、開機自啟、設定與退出。"
+ ],
+ "「刷新全部」会跳过未登录的平台；「一键签到」只为当天可领取的平台签到，没有可签到的平台时会提示。": [
+  "Refresh all skips platforms that are not signed in; One-click check-in only claims rewards available today and shows a notice when there is nothing to claim.",
+  "「重新整理全部」會跳過未登入的平台；「一鍵簽到」只為當天可領取的平台簽到，沒有可簽到的平台時會提示。"
+ ],
+ "导出备份时可勾选要包含的内容；导入时只覆盖所选类别，导入前会自动留一份完整备份，完成后关闭设置窗口，侧边栏在运行时会自动重启。": [
+  "Export lets you tick what to include; import replaces only the selected categories and saves a full backup first, then closes Settings and restarts the sidebar if it is running.",
+  "匯出備份時可勾選要包含的內容；匯入時只覆蓋所選類別，匯入前會自動保留一份完整備份，完成後關閉設定視窗，側邊欄在執行時會自動重新啟動。"
+ ],
+ "今天只显示今天到期；本周按自然周统计未完成；逾期单独列出；未完成包含无日期与未来任务；已完成按完成时间倒序，默认显示最近 50 条，可展开更早。": [
+  "Today shows items due today; This week counts unfinished items in the current natural week; Overdue is listed separately; Open includes undated and future tasks; Done is sorted by completion time, showing the latest 50 with earlier ones expandable.",
+  "今天只顯示今天到期；本週按自然週統計未完成；逾期單獨列出；未完成包含無日期與未來任務；已完成按完成時間倒序，預設顯示最近 50 筆，可展開更早。"
+ ],
+ "在当前视图新增时会自动归入合适位置：逾期与已完成视图会先切回今天，本周视图创建今天到期任务；未完成视图创建无日期任务。": [
+  "New items are placed sensibly for the current filter: Overdue and Done switch back to Today, This week creates a task due today, and Open creates an undated task.",
+  "在目前檢視新增時會自動歸入合適位置：逾期與已完成檢視會先切回今天，本週檢視建立今天到期任務；未完成檢視建立無日期任務。"
+ ],
+ "删除待办后 4 秒内可通过底部提示撤销；日历点选日期可直接查看或新增当天任务，节日名被省略时悬停可看完整说明。": [
+  "Deleted to-dos can be undone from the bottom hint within 4 seconds. Clicking a calendar date filters that day's tasks; hover a day cell to read a truncated festival name.",
+  "刪除待辦後 4 秒內可透過底部提示復原；日曆點選日期可直接查看或新增當天任務，節日名稱被省略時懸停可看完整說明。"
+ ],
+ "删除分组会连同组内条目一起删除，操作前请确认。": [
+  "Deleting a group also deletes all its items; confirm before doing so.",
+  "刪除分組會連同組內項目一起刪除，操作前請確認。"
+ ],
+ "快捷启动位于日历与标签页之间，可在设置中调整列数、行数、图标大小与名称显隐，或整块隐藏；超出「列 × 行」的程序可在区块内左右滚动，名称过长会省略，悬停显示完整名称。": [
+  "Quick launch sits between the calendar and the tabs. Adjust columns, rows, icon size and name visibility in Settings, or hide the whole block; items beyond columns × rows scroll sideways, and long names truncate with a hover tooltip.",
+  "快捷啟動位於日曆與標籤頁之間，可在設定中調整欄數、列數、圖示大小與名稱顯示，或整塊隱藏；超出「欄 × 列」的程式可在區塊內左右捲動，名稱過長會省略，懸停顯示完整名稱。"
+ ],
+ "顶部分类可切换与新建；右键分类可重命名或删除。把程序或快捷方式拖入即可添加，右键条目可启动、在资源管理器中显示、重命名、移到其它分类或移除。": [
+  "Category chips can be switched and added; right-click a chip to rename or delete it. Drag programs or shortcuts in to add them; right-click an item to launch it, show it in Explorer, rename, move to another category or remove it.",
+  "頂部分類可切換與新增；右鍵分類可重新命名或刪除。將程式或捷徑拖入即可新增，右鍵項目可啟動、在檔案總管中顯示、重新命名、移到其它分類或移除。"
+ ],
+ "关机页可按分钟倒数或指定时间安排，需二次确认；不足 60 秒会按 60 秒执行，最长 7 天，到点前可随时取消，实际关机由 Windows 执行。": [
+  "On the Shutdown tab, schedule by countdown minutes or a clock time and confirm; values under 60 seconds run at 60 seconds, the maximum is 7 days, and you can cancel any time before it fires. Windows performs the shutdown.",
+  "關機頁可按分鐘倒數或指定時間安排，需二次確認；不足 60 秒會按 60 秒執行，最長 7 天，到點前可隨時取消，實際關機由 Windows 執行。"
+ ],
+ "存储位置支持系统应用数据、随程序存放与自定义路径；切换时会复制现有数据到新位置并自动重启，原位置保留不动。": [
+  "The data location can be system app data, portable (next to the app) or a custom folder. Switching copies the data to the new location and restarts; the original copy is kept.",
+  "儲存位置支援系統應用程式資料、隨程式存放與自訂路徑；切換時會複製現有資料到新位置並自動重新啟動，原位置保留不動。"
+ ],
+ "用量登录凭据由 Windows 用户加密保存，换机或换用户导入后会失效，需要重新登录。": [
+  "Usage sign-in credentials are encrypted per Windows user; after importing on another machine or account they expire and you must sign in again.",
+  "用量登入憑證由 Windows 使用者加密儲存，換機或換使用者匯入後會失效，需要重新登入。"
+ ],
+ "在设置窗口的「关于」页点击检查更新，程序会读取 GitHub Releases 的最新版本。发布包带校验信息时可下载并自动替换；缺少校验文件时只能前往发布页手动下载。": [
+  "Click Check for updates on the About page of the Settings window to read the latest GitHub Releases version. If the release includes checksum info the app can download and replace itself; without it you can only open the release page and download manually.",
+  "在設定視窗的「關於」頁點擊檢查更新，程式會讀取 GitHub Releases 的最新版本。發佈包帶校驗資訊時可下載並自動替換；缺少校驗檔案時只能前往發佈頁手動下載。"
+ ],
+ "启动时若首选组合被占用，会依次尝试备用组合并在托盘提示；在设置中改成被占用的组合不会自动回落，只会提示注册失败。设置窗口中的改动实时预览并自动保存，关闭窗口不会回滚；侧边栏未运行时，部分设置会在下次启动生效。": [
+  "If the preferred hotkey is taken at startup, the app tries fallback combinations and reports it in the tray. A combination typed in Settings is not replaced automatically; you only get a registration failure notice. Changes preview live and save automatically; they are not rolled back when the window closes, and some apply on the next sidebar start if it is not running.",
+  "啟動時若首選組合被佔用，會依序嘗試備用組合並在托盤提示；在設定中改成被佔用的組合不會自動回落，只會提示註冊失敗。設定視窗中的變更即時預覽並自動儲存，關閉視窗不會回滾；側邊欄未執行時，部分設定會在下次啟動生效。"
+ ],
+ "操作指南": [
+  "Guide",
+  "操作指南"
+ ],
+ "快速上手 智爱小助手": [
+  "Get started with ZhiAi Assistant",
+  "快速上手 智愛小助手"
+ ],
+ "拖入文件即可收纳，点「新建」即可记录，设置改动会自动保存；常用操作都在下方。": [
+  "Drop a file to collect it, tap New to jot a note, and settings save automatically. Common tasks are listed below.",
+  "拖入檔案即可收納，點「新增」即可記錄，設定變更會自動儲存；常用操作都在下方。"
+ ],
+ "已登录平台每天一次，失败重试 3 次": [
+  "Signed-in platforms once daily; 3 retries",
+  "已登入平台每天一次，失敗重試 3 次"
+ ],
+ "列": [
+  "cols",
+  "列"
+ ],
+ "行": [
+  "rows",
+  "行"
+ ],
+ "部分": [
+  "Partial",
+  "部分"
+ ],
+ "自动签到已开启": [
+  "Auto check-in is on",
+  "自動簽到已開啟"
+ ],
+ "自动签到已关闭": [
+  "Auto check-in is off",
+  "自動簽到已關閉"
+ ],
+ "自动签到部分开启": [
+  "Auto check-in is partly on",
+  "自動簽到部分開啟"
+ ],
+ "{state}，可在设置中修改": [
+  "{state}; change it in Settings",
+  "{state}，可在設定中修改"
+ ],
+ "存储位置": [
+  "Data location",
+  "儲存位置"
+ ],
+ "系统应用数据（默认）": [
+  "System app data (default)",
+  "系統應用程式資料（預設）"
+ ],
+ "随程序存放（便携）": [
+  "Next to the app (portable)",
+  "隨程式存放（可攜）"
+ ],
+ "自定义路径": [
+  "Custom path",
+  "自訂路徑"
+ ],
+ "浏览": [
+  "Browse",
+  "瀏覽"
+ ],
+ "仅自定义模式可用，需已存在的文件夹": [
+  "Custom mode only; folder must exist",
+  "僅自訂模式可用，需已存在的資料夾"
+ ],
+ "数据目录": [
+  "Data folder",
+  "資料目錄"
+ ],
+ "更改数据存储位置": [
+  "Change data location",
+  "變更資料儲存位置"
+ ],
+ "确认更改": [
+  "Confirm change",
+  "確認變更"
+ ],
+ "读取存储位置失败": [
+  "Unable to read the data location",
+  "無法讀取儲存位置"
+ ],
+ "{path}（自定义不可用，已回退）": [
+  "{path} (custom path unavailable, fell back)",
+  "{path}（自訂路徑不可用，已回退）"
+ ],
+ "将从「{from}」复制到「{to}」，约 {size}。原位置保留不动，完成后自动重启侧边栏与本窗口。": [
+  "Copies about {size} from “{from}” to “{to}”. The original location is kept; the sidebar and this window restart when it is done.",
+  "將從「{from}」複製到「{to}」，約 {size}。原位置保留不動，完成後自動重啟側邊欄與此視窗。"
+ ],
+ "{size} MB": [
+  "{size} MB",
+  "{size} MB"
+ ],
+ "{size} KB": [
+  "{size} KB",
+  "{size} KB"
+ ],
+ "{size} B": [
+  "{size} B",
+  "{size} B"
+ ],
+ "正在迁移…": [
+  "Migrating…",
+  "正在遷移…"
+ ],
+ "存储位置已更新，正在重启…": [
+  "Location updated, restarting…",
+  "儲存位置已更新，正在重啟…"
+ ],
+ "选择数据存放文件夹": [
+  "Choose the data folder",
+  "選擇資料存放資料夾"
+ ],
+ "当前生效：{path}": [
+  "Active location: {path}",
+  "目前生效：{path}"
+ ],
+ "打开当前生效目录": [
+  "Opens the active folder",
+  "開啟目前生效目錄"
+ ],
+ "备份数据": [
+  "Backup data",
+  "備份資料"
+ ],
+ "可选内容打包，不含缓存与日志": [
+  "Optional contents; no cache or logs",
+  "可選內容打包，不含快取與日誌"
+ ],
+ "只覆盖所选内容，导入前自动备份": [
+  "Replaces only selected contents; a backup is saved first",
+  "只覆蓋所選內容，匯入前自動備份"
+ ],
+ "选择要写入备份的内容，未勾选的不会打包。": [
+  "Choose what to include; unchecked items are not packed.",
+  "選擇要寫入備份的內容，未勾選的不會打包。"
+ ],
+ "备份包含 {n} 类内容。只覆盖所选类别，其余数据保留。": [
+  "The backup has {n} categories. Only the selected ones are replaced.",
+  "備份包含 {n} 類內容。只覆蓋所選類別，其餘資料保留。"
+ ],
+ "备份包含 {n} 类内容（旧版备份按文件识别）。只覆盖所选类别，其余数据保留。": [
+  "The backup has {n} categories (legacy backup, detected by file name). Only the selected ones are replaced.",
+  "備份包含 {n} 類內容（舊版備份按檔案辨識）。只覆蓋所選類別，其餘資料保留。"
+ ],
+ "选择文件夹并导出": [
+  "Choose folder and export",
+  "選擇資料夾並匯出"
+ ],
+ "正在处理…": [
+  "Working…",
+  "正在處理…"
+ ],
+ "{n} 个文件": [
+  "{n} files",
+  "{n} 個檔案"
+ ],
+ "{n} 项": [
+  "{n} items",
+  "{n} 項"
+ ],
+ "清空": [
+  "Clear",
+  "清空"
+ ],
+ "用量记录": [
+  "Usage records",
+  "用量記錄"
+ ],
+ "用量登录凭据": [
+  "Usage sign-in credentials",
+  "用量登入憑證"
+ ],
+ "设置与外观": [
+  "Settings & appearance",
+  "設定與外觀"
+ ],
+ "节假日数据": [
+  "Holiday data",
+  "節假日資料"
+ ],
+ "任务、完成记录与逾期": [
+  "Tasks, completion and overdue",
+  "任務、完成記錄與逾期"
+ ],
+ "收藏分组、条目与挂载目录": [
+  "Groups, items and mounted folders",
+  "收藏分組、項目與掛載目錄"
+ ],
+ "程序图标、分类与排列": [
+  "Icons, categories and order",
+  "程式圖示、分類與排列"
+ ],
+ "闹钟、倒计时与关机安排": [
+  "Alarms, countdowns and shutdown plans",
+  "鬧鐘、倒數與關機安排"
+ ],
+ "各平台额度与签到状态": [
+  "Quotas and check-in state",
+  "各平台額度與簽到狀態"
+ ],
+ "本机加密，换机后需重新登录": [
+  "Encrypted per machine; sign in again elsewhere",
+  "本機加密，換機後需重新登入"
+ ],
+ "面板外观、开关与热键": [
+  "Panel look, toggles and hotkey",
+  "面板外觀、開關與熱鍵"
+ ],
+ "离线日历所需的节假日缓存": [
+  "Holiday cache for the offline calendar",
+  "離線日曆所需的節假日快取"
+ ],
+ "未选择要备份的内容": [
+  "No contents selected for backup",
+  "未選擇要備份的內容"
+ ],
+ "所选内容没有可备份的数据": [
+  "Selected contents have no data",
+  "所選內容沒有可備份的資料"
+ ],
+ "备份中没有可导入的数据": [
+  "No importable data in this backup",
+  "備份中沒有可匯入的資料"
+ ],
+ "备份中没有所选内容": [
+  "Selected contents are not in this backup",
+  "備份中沒有所選內容"
+ ],
+ "未选择要导入的内容": [
+  "No contents selected for import",
+  "未選擇要匯入的內容"
+ ],
+ "导出备份": [
+  "Export backup",
+  "匯出備份"
+ ],
+ "导入备份": [
+  "Import backup",
+  "匯入備份"
+ ],
+ "选择备份": [
+  "Choose a backup",
+  "選擇備份"
+ ],
+ "确认导入": [
+  "Confirm import",
+  "確認匯入"
+ ],
+ "选择备份保存文件夹": [
+  "Choose where to save the backup",
+  "選擇備份儲存資料夾"
+ ],
+ "已备份 {files} 项 · {size}": [
+  "Backed up {files} files · {size}",
+  "已備份 {files} 項 · {size}"
+ ],
+ "已生成 {name}": [
+  "Created {name}",
+  "已產生 {name}"
+ ],
+ "数据已导入，正在重启…": [
+  "Data imported, restarting…",
+  "資料已匯入，正在重啟…"
+ ],
+ "登录状态已过期": [
+  "Sign-in expired",
+  "登入狀態已過期"
+ ],
+ "登录信息已加密": [
+  "Sign-in info is encrypted",
+  "登入資訊已加密"
+ ],
+ "平台拒绝了该请求": [
+  "The platform rejected the request",
+  "平台拒絕了該請求"
+ ],
+ "暂不支持该区域": [
+  "Region not supported",
+  "暫不支援該區域"
+ ],
+ "今日已领取": [
+  "Already claimed today",
+  "今日已領取"
+ ],
+ "节气": [
+  "solar term",
+  "節氣"
+ ],
+ "法定节假日": [
+  "public holiday",
+  "法定假日"
+ ],
+ "调休上班": [
+  "make-up workday",
+  "調休上班"
+ ],
+ "休": [
+  "Off",
+  "休"
+ ],
+ "班": [
+  "Work",
+  "班"
+ ],
+ "元旦": [
+  "New Year's Day",
+  "元旦"
+ ],
+ "春节": [
+  "Spring Festival",
+  "春節"
+ ],
+ "元宵": [
+  "Lantern Festival",
+  "元宵"
+ ],
+ "清明": [
+  "Qingming",
+  "清明"
+ ],
+ "劳动": [
+  "Labor Day",
+  "勞動"
+ ],
+ "端午": [
+  "Dragon Boat",
+  "端午"
+ ],
+ "中秋": [
+  "Mid-Autumn",
+  "中秋"
+ ],
+ "国庆": [
+  "National Day",
+  "國慶"
+ ],
+ "除夕": [
+  "New Year's Eve",
+  "除夕"
+ ],
+ "重阳": [
+  "Double Ninth",
+  "重陽"
+ ],
+ "腊八": [
+  "Laba",
+  "臘八"
+ ],
+ "七夕": [
+  "Qixi",
+  "七夕"
+ ],
+ "妇女": [
+  "Women's Day",
+  "婦女"
+ ],
+ "儿童": [
+  "Children's Day",
+  "兒童"
+ ],
+ "教师": [
+  "Teachers' Day",
+  "教師"
+ ],
+ "立春": [
+  "Start of Spring",
+  "立春"
+ ],
+ "雨水": [
+  "Rain Water",
+  "雨水"
+ ],
+ "惊蛰": [
+  "Awakening",
+  "驚蟄"
+ ],
+ "春分": [
+  "Spring Equinox",
+  "春分"
+ ],
+ "谷雨": [
+  "Grain Rain",
+  "穀雨"
+ ],
+ "立夏": [
+  "Start of Summer",
+  "立夏"
+ ],
+ "小满": [
+  "Grain Buds",
+  "小滿"
+ ],
+ "芒种": [
+  "Grain in Ear",
+  "芒種"
+ ],
+ "夏至": [
+  "Summer Solstice",
+  "夏至"
+ ],
+ "小暑": [
+  "Minor Heat",
+  "小暑"
+ ],
+ "大暑": [
+  "Major Heat",
+  "大暑"
+ ],
+ "立秋": [
+  "Start of Autumn",
+  "立秋"
+ ],
+ "处暑": [
+  "End of Heat",
+  "處暑"
+ ],
+ "白露": [
+  "White Dew",
+  "白露"
+ ],
+ "秋分": [
+  "Autumn Equinox",
+  "秋分"
+ ],
+ "寒露": [
+  "Cold Dew",
+  "寒露"
+ ],
+ "霜降": [
+  "Frost's Descent",
+  "霜降"
+ ],
+ "立冬": [
+  "Start of Winter",
+  "立冬"
+ ],
+ "小雪": [
+  "Minor Snow",
+  "小雪"
+ ],
+ "大雪": [
+  "Major Snow",
+  "大雪"
+ ],
+ "冬至": [
+  "Winter Solstice",
+  "冬至"
+ ],
+ "小寒": [
+  "Minor Cold",
+  "小寒"
+ ],
+ "大寒": [
+  "Major Cold",
+  "大寒"
+ ],
+ "速记": [
+  "Memos",
+  "速記"
+ ],
+ "面板从上到下依次是日历、快捷启动和六个标签页：速记、待办、收纳、计时、关机、用量。功能区顺序固定，不能拖动调整。": [
+  "Top to bottom, the panel shows the calendar, quick launch and six tabs: Memos, To-do, Shelf, Timers, Shutdown and Usage. The zone order is fixed and cannot be dragged.",
+  "面板由上到下依序是日曆、快捷啟動和六個標籤頁：速記、待辦、收納、計時、關機、用量。功能區順序固定，無法拖動調整。"
+ ],
+ "点「新建」立即生成一张空白速记并开始输入，停手约半秒自动保存；回车结束编辑，Ctrl+Enter 另起一段，Shift+Enter 只换行。": [
+  "Tap New to create a blank memo and start typing; it saves about half a second after you stop. Enter ends editing, Ctrl+Enter starts a new paragraph and Shift+Enter only breaks the line.",
+  "點「新增」立即產生一張空白速記並開始輸入，停手約半秒自動儲存；Enter 結束編輯，Ctrl+Enter 另起一段，Shift+Enter 只換行。"
+ ],
+ "在设置 → 用量中可以逐个隐藏不想看到的平台。": [
+  "Hide platforms you do not need one by one under Settings → Usage.",
+  "在設定 → 用量中可以逐個隱藏不想看到的平台。"
+ ],
+ "编辑时卡片底部有标签输入框，回车确认；正文里以 # 开头的词也会自动成为标签。静态展示时标签显示在时间行右侧，悬停淡出并换成取色、置顶与删除。顶部搜索框可同时匹配正文、标签与附件名称；结果中置顶的排前面，其余按更新时间倒序。": [
+  "While editing, a tag field sits at the bottom of the card — press Enter to confirm; words starting with # in the body also become tags. Idle cards show tags at the right of the time row, fading out on hover in favour of the color, pin and delete controls. The search box matches body text, tags and attachment names at once; pinned memos come first, the rest by update time.",
+  "編輯時卡片底部有標籤輸入框，Enter 確認；正文中以 # 開頭的詞也會自動成為標籤。靜態展示時標籤顯示在時間列右側，懸停淡出並換成取色、置頂與刪除。頂部搜尋框可同時比對正文、標籤與附件名稱；結果中置頂的排在前面，其餘依更新時間倒序。"
+ ],
+ "「+ 分组」新建收藏分类，双击分组标题改名，右键删除；分组标题右侧显示该组条目数。条目可以拖到其它分组，也能在组内调整顺序。": [
+  "“+ Group” adds a collection; double-click its title to rename and right-click to delete. The item count shows next to the group title, and items can be dragged into other groups or reordered within one.",
+  "「+ 分組」新增收藏分類，雙擊分組標題改名，右鍵刪除；分組標題右側顯示該組項目數。項目可以拖到其它分組，也能在組內調整順序。"
+ ],
+ "列表右上角的「显示方式」按钮可切换网格、列表，以及紧凑、标准、大图标三档；图片文件直接显示缩略图，无需打开即可辨认内容。": [
+  "The View button at the top right of the list switches between grid and list, and between compact, standard and large icons; image files show thumbnails so you can recognise them without opening.",
+  "清單右上角的「顯示方式」按鈕可切換網格、清單，以及緊湊、標準、大圖示三檔；圖片檔案直接顯示縮圖，無需開啟即可辨認內容。"
+ ],
+ "计时页的闹钟可设时间、标签与每天重复，时间用选择器拖动或步进调整；到点会展开面板、弹出提示并触发响铃动效，单次闹钟触发后自动停用。": [
+  "Alarms take a time, label and daily repeat, with the time set by dragging or stepping the picker. When one fires the panel opens, an alert pops up and the ring effect plays; one-off alarms switch off afterwards.",
+  "計時頁的鬧鐘可設時間、標籤與每天重複，時間用選擇器拖曳或步進調整；到點會展開面板、彈出提示並觸發響鈴動效，單次鬧鐘觸發後自動停用。"
+ ],
+ "点「添加」展开折叠面板，点「开始」才保存生效，「取消」收起；闹钟数量上限在「设置 → 计时与闹铃」中设为 1–8 个，达到上限后「添加」自动置灰。": [
+  "Tap Add to unfold the setup panel and Start to save it, or Cancel to fold it back. The alarm limit is set to 1–8 under Settings → Timers & alarms; once reached, Add greys out.",
+  "點「新增」展開摺疊面板，點「開始」才儲存生效，「取消」收合；鬧鐘數量上限在「設定 → 計時與鬧鈴」中設為 1–8 個，達到上限後「新增」自動變灰。"
+ ],
+ "倒计时支持时、分、秒输入与 5、10、15、25、45、60 分钟预设，最长 24 小时；开始后可暂停或继续，收起面板仍继续计时。": [
+  "Countdowns accept hours, minutes and seconds plus 5/10/15/25/45/60-minute presets and run up to 24 hours; they can be paused and resumed, and keep running when the panel is collapsed.",
+  "倒數支援時、分、秒輸入與 5、10、15、25、45、60 分鐘預設，最長 24 小時；開始後可暫停或繼續，收合面板仍繼續計時。"
+ ],
+ "闹钟与倒计时各自可选铃音：内置 10 种、可试听，也可选静音或自选 WAV 文件；响铃时面板四边泛红，动效可选呼吸脉冲、追光流转、警闪双拍或关闭，设置页内可直接预览。": [
+  "Alarms and countdowns each pick their own sound: 10 built-in rings with preview, silence, or a custom WAV file. While ringing the panel edges glow red — choose breathing pulse, light sweep, double flash or none, and preview it right in Settings.",
+  "鬧鐘與倒數各自可選鈴音：內建 10 種、可試聽，也可選靜音或自訂 WAV 檔案；響鈴時面板四邊泛紅，動效可選呼吸脈衝、追光流轉、警閃雙拍或關閉，設定頁內可直接預覽。"
+ ],
+ "没有匹配的速记": [
+  "No matching memos",
+  "沒有符合的速記"
+ ],
+ "已添加 {n} 个附件": [
+  "Added {n} attachment(s)",
+  "已新增 {n} 個附件"
+ ],
+ "选择文件…": [
+  "Choose files…",
+  "選擇檔案…"
+ ],
+ "添加链接…": [
+  "Add link…",
+  "新增連結…"
+ ],
+ "添加链接": [
+  "Add link",
+  "新增連結"
+ ],
+ "链接地址": [
+  "Link URL",
+  "連結網址"
+ ],
+ "附件": [
+  "Attachment",
+  "附件"
+ ],
+ "移除附件": [
+  "Remove attachment",
+  "移除附件"
+ ],
+ "添加附件": [
+  "Add attachment",
+  "新增附件"
+ ],
+ "随手速记…（Ctrl+Enter 分段）": [
+  "Jot a memo… (Ctrl+Enter to split)",
+  "隨手速記…（Ctrl+Enter 分段）"
+ ],
+ "读取速记失败": [
+  "Could not load memos",
+  "讀取速記失敗"
+ ],
+ "新建速记": [
+  "New memo",
+  "新增速記"
+ ],
+ "搜索速记与标签": [
+  "Search memos and tags",
+  "搜尋速記與標籤"
+ ],
+ "正在启动…": [
+  "Starting…",
+  "正在啟動…"
+ ],
+ "动效已关闭": [
+  "Effects are off",
+  "動效已關閉"
+ ],
+ "所有平台已隐藏，可在设置中开启": [
+  "All platforms are hidden; enable them in Settings",
+  "所有平台已隱藏，可在設定中開啟"
+ ],
+ "项": [
+  "items",
+  "項"
+ ],
+ "增加": [
+  "Increase",
+  "增加"
+ ],
+ "减少": [
+  "Decrease",
+  "減少"
+ ],
+ "时": [
+  "hr",
+  "時"
+ ],
+ "个": [
+  "alarms",
+  "個"
+ ],
+ "确认": [
+  "Add",
+  "確認"
+ ],
+ "选好时长后点开始": [
+  "Pick a duration, then Start",
+  "選好時長後點開始"
+ ],
+ "选好时间后点确认": [
+  "Pick a time, then Add",
+  "選好時間後點確認"
+ ],
+ "闹钟数量已达上限": [
+  "Alarm limit reached",
+  "鬧鐘數量已達上限"
+ ],
+ "闹钟数量上限": [
+  "Alarm limit",
+  "鬧鐘數量上限"
+ ],
+ "最多可添加 1–8 个闹钟": [
+  "Add 1–8 alarms",
+  "最多可新增 1–8 個鬧鐘"
+ ],
+ "计时与闹铃": [
+  "Timers & alarms",
+  "計時與鬧鈴"
+ ],
+ "响铃动效": [
+  "Ring effect",
+  "響鈴動效"
+ ],
+ "预览": [
+  "Preview",
+  "預覽"
+ ],
+ "呼吸脉冲": [
+  "Breathing pulse",
+  "呼吸脈衝"
+ ],
+ "追光流转": [
+  "Light sweep",
+  "追光流轉"
+ ],
+ "警闪双拍": [
+  "Double flash",
+  "警閃雙拍"
+ ],
+ "关闭动效": [
+  "No effect",
+  "關閉動效"
+ ],
+ "响铃时面板四边泛红，选「关闭动效」可停用": [
+  "Panel edges glow red while ringing; choose No effect to stop it",
+  "響鈴時面板四邊泛紅，選「關閉動效」可停用"
+ ],
+ "附件大小上限": [
+  "Attachment size limit",
+  "附件大小上限"
+ ],
+ "不限": [
+  "Unlimited",
+  "不限"
+ ],
+ "超过上限的文件不会被添加；附件会复制到数据目录": [
+  "Files above the limit are skipped; attachments are copied into the data folder",
+  "超過上限的檔案不會被新增；附件會複製到資料目錄"
+ ],
+ "显示 Qoder": [
+  "Show Qoder",
+  "顯示 Qoder"
+ ],
+ "显示 WorkBuddy": [
+  "Show WorkBuddy",
+  "顯示 WorkBuddy"
+ ],
+ "显示 Trae": [
+  "Show Trae",
+  "顯示 Trae"
+ ],
+ "关闭后不在用量页显示该平台": [
+  "Hidden from the Usage tab when off",
+  "關閉後不在用量頁顯示該平台"
+ ],
+ "Windows 桌面侧边栏 · 日历、速记、待办与用量": [
+  "Windows desktop sidebar · Calendar, Memos, To-do and Usage",
+  "Windows 桌面側邊欄 · 日曆、速記、待辦與用量"
+ ],
+ "将永久删除待办、速记、收纳、快捷启动、挂载、计时数据以及全部设置，并恢复首次启动状态。此操作无法撤销。": [
+  "Permanently deletes to-dos, memos, shelf, quick launch, mounts, timer data and all settings, and returns to first-run state. This cannot be undone.",
+  "將永久刪除待辦、速記、收納、快捷啟動、掛載、計時資料以及全部設定，並還原首次啟動狀態。此操作無法復原。"
+ ],
+ "内容、标签、颜色与附件": [
+  "Content, tags, colors and attachments",
+  "內容、標籤、顏色與附件"
+ ],
+ "清脆铃": [
+  "Clear chime",
+  "清脆鈴"
+ ],
+ "大钟": [
+  "Bell",
+  "大鐘"
+ ],
+ "木琴": [
+  "Marimba",
+  "木琴"
+ ],
+ "三连音": [
+  "Arpeggio",
+  "三連音"
+ ],
+ "晨光": [
+  "Dawn",
+  "晨光"
+ ],
+ "脉冲": [
+  "Pulse",
+  "脈衝"
+ ],
+ "水滴": [
+  "Drop",
+  "水滴"
+ ],
+ "和弦": [
+  "Chord",
+  "和弦"
+ ],
+ "木鱼": [
+  "Wood block",
+  "木魚"
+ ],
+ "叮咚": [
+  "Ding-dong",
+  "叮咚"
+ ],
+ "还没有速记\n点「新建」记一条": [
+  "No memos yet\nTap New to jot one down",
+  "還沒有速記\n點「新增」記一筆"
+ ],
+ "今天没有到期的待办\n添加一条开始吧": [
+  "Nothing due today\nAdd one to get started",
+  "今天沒有到期的待辦\n新增一筆開始吧"
+ ],
+ "悬停速记时，时间行右端出现 9 个颜色点（含默认），可标记颜色；编辑过程中不显示。回形针按钮可添加图片、音频、视频、文本等文件或超链接，也可以把文件直接拖到速记卡片上；附件会复制到数据目录并随备份导出，单个附件的大小上限在「设置 → 速记」中调整，默认 200 MB。悬停附件条目会在文件名提示上方显示预览：图片看画面、文本看开头、视频取第 30 帧。在输入框按 Ctrl+V 可把剪贴板里的图片或文件直接存为附件。按 Ctrl+K 可直接定位到搜索框。": [
+  "Hovering a memo shows 9 color dots (including default) at the right end of the time row; they stay hidden while editing. The paperclip adds images, audio, video, text files or links, and files can also be dropped straight onto a memo card. Attachments are copied into the data folder and packed into backups; the per-file size limit lives under Settings → Memos and defaults to 200 MB. Hovering an attachment previews it above the filename tip: the picture for images, the opening lines for text and the 30th frame for videos. Press Ctrl+V in the input box to store clipboard images or files as attachments. Ctrl+K jumps to the search box.",
+  "懸停速記時，時間列右端出現 9 個顏色點（含預設），可標記顏色；編輯過程中不顯示。迴紋針按鈕可新增圖片、音訊、影片、文字等檔案或超連結，也可以把檔案直接拖到速記卡片上；附件會複製到資料目錄並隨備份匯出，單一附件的大小上限在「設定 → 速記」中調整，預設 200 MB。懸停附件項目會在檔名提示上方顯示預覽：圖片看畫面、文字看開頭、影片取第 30 幀。在輸入框按 Ctrl+V 可把剪貼簿中的圖片或檔案直接存為附件。按 Ctrl+K 可直接定位到搜尋框。"
+ ],
+ "文件过大，请改用拖入文件方式添加": [
+  "File too large; drop it from Explorer instead",
+  "檔案過大，請改用拖入檔案方式新增"
+ ]
+}

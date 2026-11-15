@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"zhi-ai-assistant/internal/core/model"
+	"zhi-ai-assistant/internal/i18n"
 	"zhi-ai-assistant/internal/platform"
 )
 
@@ -94,7 +95,7 @@ func (v *CredStore) persistLocked() error {
 	}
 	sealed, err := platform.ProtectSecret(plain)
 	if err != nil {
-		return errors.New("无法安全保存登录凭据")
+		return errors.New(i18n.T("无法安全保存登录凭据"))
 	}
 	dir := filepath.Dir(v.path)
 	if err := os.MkdirAll(dir, 0o755); err != nil {

@@ -11,6 +11,7 @@ import (
 	"zhi-ai-assistant/internal/core/id"
 	"zhi-ai-assistant/internal/core/model"
 	"zhi-ai-assistant/internal/core/store"
+	"zhi-ai-assistant/internal/i18n"
 )
 
 var appExts = map[string]bool{
@@ -93,7 +94,7 @@ func displayName(path string) string {
 
 func (m *Manager) AddPaths(groupID string, paths []string) ([]model.ShelfItem, error) {
 	if len(paths) == 0 {
-		return nil, errors.New("没有可添加的项目")
+		return nil, errors.New(i18n.T("没有可添加的项目"))
 	}
 	var added []model.ShelfItem
 	m.doc.Update(func(d *model.ShelfData) {
@@ -136,7 +137,7 @@ func (m *Manager) AddPaths(groupID string, paths []string) ([]model.ShelfItem, e
 		}
 	})
 	if len(added) == 0 {
-		return nil, errors.New("这些项目已经在收纳区里了")
+		return nil, errors.New(i18n.T("这些项目已经在收纳区里了"))
 	}
 	return added, nil
 }
@@ -153,7 +154,7 @@ func (m *Manager) Remove(itemID string) error {
 		}
 	})
 	if !found {
-		return errors.New("项目不存在")
+		return errors.New(i18n.T("项目不存在"))
 	}
 	return nil
 }
@@ -181,7 +182,7 @@ func (m *Manager) Update(itemID string, name, args, workDir *string) (model.Shel
 		}
 	})
 	if !found {
-		return model.ShelfItem{}, errors.New("项目不存在")
+		return model.ShelfItem{}, errors.New(i18n.T("项目不存在"))
 	}
 	return res, nil
 }
@@ -254,7 +255,7 @@ func (m *Manager) Move(itemID, toGroupID string, toIndex int) error {
 		found = true
 	})
 	if !found {
-		return errors.New("项目或分组不存在")
+		return errors.New(i18n.T("项目或分组不存在"))
 	}
 	return nil
 }
@@ -262,7 +263,7 @@ func (m *Manager) Move(itemID, toGroupID string, toIndex int) error {
 func (m *Manager) CreateGroup(name string) (model.ShelfGroup, error) {
 	name = strings.TrimSpace(name)
 	if name == "" {
-		return model.ShelfGroup{}, errors.New("分组名不能为空")
+		return model.ShelfGroup{}, errors.New(i18n.T("分组名不能为空"))
 	}
 	g := model.ShelfGroup{ID: id.New(), Name: name}
 	m.doc.Update(func(d *model.ShelfData) {
@@ -275,7 +276,7 @@ func (m *Manager) CreateGroup(name string) (model.ShelfGroup, error) {
 func (m *Manager) RenameGroup(groupID, name string) error {
 	name = strings.TrimSpace(name)
 	if name == "" {
-		return errors.New("分组名不能为空")
+		return errors.New(i18n.T("分组名不能为空"))
 	}
 	found := false
 	m.doc.Update(func(d *model.ShelfData) {
@@ -288,7 +289,7 @@ func (m *Manager) RenameGroup(groupID, name string) error {
 		}
 	})
 	if !found {
-		return errors.New("分组不存在")
+		return errors.New(i18n.T("分组不存在"))
 	}
 	return nil
 }
@@ -325,7 +326,7 @@ func (m *Manager) DeleteGroup(groupID string) error {
 		}
 	})
 	if !found {
-		return errors.New("分组不存在")
+		return errors.New(i18n.T("分组不存在"))
 	}
 	return nil
 }
@@ -343,7 +344,7 @@ func (m *Manager) Get(itemID string) (model.ShelfItem, error) {
 		}
 	})
 	if !found {
-		return model.ShelfItem{}, errors.New("项目不存在")
+		return model.ShelfItem{}, errors.New(i18n.T("项目不存在"))
 	}
 	return res, nil
 }

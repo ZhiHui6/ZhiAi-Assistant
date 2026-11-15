@@ -26,6 +26,11 @@ const hotkeyReset = document.getElementById('setHotkeyReset');
 const edgeEnabledEl = document.getElementById('setEdgeEnabled');
 const autostartEl = document.getElementById('setAutostart');
 const animationsEl = document.getElementById('setAnimations');
+const ringEffectEl = document.getElementById('setRingEffect');
+const ringPreviewBtn = document.getElementById('ringPreview');
+const alarmMaxRange = document.getElementById('setAlarmMax');
+const alarmMaxNum = document.getElementById('setAlarmMaxNum');
+const alarmMaxReset = document.getElementById('setAlarmMaxReset');
 const clock12El = document.getElementById('setClock12');
 const showCalendarEl = document.getElementById('setShowCalendar');
 const calendarFestivalsEl = document.getElementById('setCalendarFestivals');
@@ -41,6 +46,12 @@ const launchIconNum = document.getElementById('setLaunchIconNum');
 const launchNamesEl = document.getElementById('setLaunchNames');
 const showLaunchEl = document.getElementById('setShowLaunch');
 const usageAutoMasterEl = document.getElementById('usageAutoMaster');
+const memoLimitEl = document.getElementById('setMemoLimit');
+const usagePlatformToggles = [
+  { id: 'qoder', el: document.getElementById('setUsageQoder') },
+  { id: 'workbuddy', el: document.getElementById('setUsageWorkBuddy') },
+  { id: 'trae', el: document.getElementById('setUsageTrae') },
+];
 const switchEls = Array.from(document.querySelectorAll('#pageSettings .switch'));
 const stateEls = switchEls.map((input) => document.getElementById(`${input.id}State`));
 const statusEl = document.getElementById('sStatus');
@@ -109,7 +120,7 @@ const backupCancelBtn = document.getElementById('backupCancel');
 
 const BACKUP_CATEGORIES = [
   { id: 'todos', name: '待办', desc: '任务、完成记录与逾期' },
-  { id: 'notes', name: '随记', desc: '内容、标签与颜色' },
+  { id: 'memos', name: '速记', desc: '内容、标签、颜色与附件' },
   { id: 'shelf', name: '收纳与挂载', desc: '收藏分组、条目与挂载目录' },
   { id: 'launch', name: '快捷启动', desc: '程序图标、分类与排列' },
   { id: 'timers', name: '计时与关机', desc: '闹钟、倒计时与关机安排' },
@@ -168,6 +179,7 @@ const PAIRS = [
   { key: 'cols', range: launchColsEl, num: launchColsNum, clamp: (v) => clampRange(v, 3, 8, 5, 1) },
   { key: 'rows', range: launchRowsEl, num: launchRowsNum, clamp: (v) => clampRange(v, 1, 3, 1, 1) },
   { key: 'icon', range: launchIconEl, num: launchIconNum, clamp: (v) => clampRange(v, 24, 40, 32, 2) },
+  { key: 'alarms', range: alarmMaxRange, num: alarmMaxNum, clamp: (v) => clampRange(v, 1, 8, 8, 1) },
 ];
 const pairOf = Object.fromEntries(PAIRS.map((pair) => [pair.key, pair]));
 
@@ -274,11 +286,15 @@ function collect() {
     hideCalendarFestivals: !calendarFestivalsEl.checked,
     alarmSound: saved ? saved.alarmSound : 'chime',
     countdownSound: saved ? saved.countdownSound : 'chime',
+    ringEffect: ringEffectEl.value,
+    maxAlarms: pairOf.alarms.clamp(alarmMaxRange.value),
     launchColumns: pairOf.cols.clamp(launchColsEl.value),
     launchRows: pairOf.rows.clamp(launchRowsEl.value),
     launchIconSize: pairOf.icon.clamp(launchIconEl.value),
     hideLaunchNames: !launchNamesEl.checked,
     hideLaunch: !showLaunchEl.checked,
+    hiddenUsagePlatforms: usagePlatformToggles.filter((item) => !item.el.checked).map((item) => item.id),
+    memoAttachmentLimit: Number(memoLimitEl.value),
     language: languageEl.value,
   };
 }
@@ -337,6 +353,7 @@ async function persistNow() {
 
 async function closeWindow() {
   if (resetBusy || restoreBusy) return;
+  clearRingPreview();
   if (previewTimer) {
     clearTimeout(previewTimer);
     previewTimer = null;
@@ -386,6 +403,7 @@ async function restoreDefaultSettings() {
   try {
     saved = defaults;
     fillControls(defaults);
+    clearRingPreview();
     if (usageAutoMasterEl && !usageAutoMasterEl.disabled) {
       usageAutoMasterEl.checked = false;
       await App.setUsageAutoAll(false).catch(() => {});
@@ -681,6 +699,29 @@ function commitNow() {
   persistNow();
 }
 
+const RING_CLASSES = ['ringing', 'pulse', 'sweep', 'flash'];
+let ringPreviewTimer = null;
+
+function clearRingPreview() {
+  if (ringPreviewTimer) {
+    clearTimeout(ringPreviewTimer);
+    ringPreviewTimer = null;
+  }
+  document.body.classList.remove(...RING_CLASSES);
+}
+
+function playRingPreview() {
+  const effect = ringEffectEl.value;
+  clearRingPreview();
+  if (effect === 'off') {
+    flashStatus(t('动效已关闭'));
+    return;
+  }
+  void document.body.offsetWidth;
+  document.body.classList.add('ringing', effect);
+  ringPreviewTimer = setTimeout(clearRingPreview, 3600);
+}
+
 async function init() {
   resetConfirmInput.placeholder = t('完全重置');
   bindAriaTip(dataDirEffectiveEl);
@@ -724,18 +765,27 @@ function fillControls(s) {
   edgeEnabledEl.checked = !!s.edgeEnabled;
   autostartEl.checked = !!s.autostart;
   animationsEl.checked = !s.animations;
+  ringEffectEl.value = s.ringEffect || 'pulse';
   clock12El.checked = !!s.clock12;
   showCalendarEl.checked = s.showCalendar !== false;
   calendarFestivalsEl.checked = !s.hideCalendarFestivals;
   setPairValue(pairOf.cols, s.launchColumns);
   setPairValue(pairOf.rows, s.launchRows);
   setPairValue(pairOf.icon, s.launchIconSize);
+  setPairValue(pairOf.alarms, s.maxAlarms);
   launchNamesEl.checked = !s.hideLaunchNames;
   showLaunchEl.checked = !s.hideLaunch;
+  const hiddenUsage = new Set(Array.isArray(s.hiddenUsagePlatforms) ? s.hiddenUsagePlatforms : []);
+  usagePlatformToggles.forEach((item) => {
+    item.el.checked = !hiddenUsage.has(item.id);
+  });
+  memoLimitEl.value = String(s.memoAttachmentLimit ?? 200);
   monitorEl.value = String(s.targetMonitor ?? -1);
   refreshSelect(edgeEl);
   refreshSelect(languageEl);
   refreshSelect(monitorEl);
+  refreshSelect(ringEffectEl);
+  refreshSelect(memoLimitEl);
   paintSwitchStates();
   syncOutputs();
 }
@@ -761,11 +811,18 @@ bgSwatches.querySelectorAll('.bg-swatch').forEach((swatch) => bindAriaTip(swatch
 edgeEl.addEventListener('change', commitNow);
 edgeEnabledEl.addEventListener('change', commitNow);
 animationsEl.addEventListener('change', commitNow);
+ringEffectEl.addEventListener('change', () => {
+  commitNow();
+  playRingPreview();
+});
+ringPreviewBtn.addEventListener('click', playRingPreview);
 clock12El.addEventListener('change', commitNow);
 showCalendarEl.addEventListener('change', commitNow);
 calendarFestivalsEl.addEventListener('change', commitNow);
 launchNamesEl.addEventListener('change', commitNow);
 showLaunchEl.addEventListener('change', commitNow);
+usagePlatformToggles.forEach((item) => item.el.addEventListener('change', commitNow));
+memoLimitEl.addEventListener('change', commitNow);
 monitorEl.addEventListener('change', commitNow);
 autostartEl.addEventListener('change', commitNow);
 hotkeyEl.addEventListener('change', commitNow);
@@ -897,6 +954,12 @@ function restoreLaunchIcon() {
   commitNow();
 }
 
+function restoreAlarmMax() {
+  if (!defaults) return;
+  setPairValue(pairOf.alarms, defaults.maxAlarms ?? 8);
+  commitNow();
+}
+
 widthReset.addEventListener('click', restoreWidth);
 opacityReset.addEventListener('click', restoreOpacity);
 bgReset.addEventListener('click', restoreBackground);
@@ -905,6 +968,7 @@ hotkeyReset.addEventListener('click', restoreHotkey);
 launchColsReset.addEventListener('click', restoreLaunchCols);
 launchRowsReset.addEventListener('click', restoreLaunchRows);
 launchIconReset.addEventListener('click', restoreLaunchIcon);
+alarmMaxReset.addEventListener('click', restoreAlarmMax);
 document.getElementById('sClose').addEventListener('click', closeWindow);
 restoreSettingsBtn.addEventListener('click', openRestoreDefaults);
 restoreDefaultsCancelBtn.addEventListener('click', closeRestoreDefaults);
@@ -1045,7 +1109,7 @@ async function installUpdate() {
   }
 }
 
-[edgeEl, languageEl, monitorEl, dataDirModeEl].forEach(enhanceSelect);
+[edgeEl, languageEl, monitorEl, dataDirModeEl, ringEffectEl, memoLimitEl].forEach(enhanceSelect);
 
 function setActiveNav(id) {
   navItems.forEach((item) => item.classList.toggle('active', item.dataset.target === id));

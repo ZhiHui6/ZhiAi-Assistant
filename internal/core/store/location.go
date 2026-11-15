@@ -5,6 +5,8 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+
+	"zhi-ai-assistant/internal/i18n"
 )
 
 const (
@@ -67,7 +69,7 @@ func ReadLocation() Location {
 
 func WriteLocation(loc Location) error {
 	if !ValidModes[loc.Mode] {
-		return errors.New("未知的存储方式")
+		return errors.New(i18n.T("未知的存储方式"))
 	}
 	dir := DefaultDir()
 	if err := os.MkdirAll(dir, 0o755); err != nil {
@@ -96,19 +98,19 @@ var ValidModes = map[string]bool{
 
 func ValidateDir(path string) error {
 	if path == "" {
-		return errors.New("路径为空")
+		return errors.New(i18n.T("路径为空"))
 	}
 	info, err := os.Stat(path)
 	if err != nil {
-		return errors.New("路径不存在")
+		return errors.New(i18n.T("路径不存在"))
 	}
 	if !info.IsDir() {
-		return errors.New("路径不是文件夹")
+		return errors.New(i18n.T("路径不是文件夹"))
 	}
 	probe := filepath.Join(path, ".zhi-ai-write-test")
 	f, err := os.OpenFile(probe, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0o644)
 	if err != nil {
-		return errors.New("该文件夹不可写入")
+		return errors.New(i18n.T("该文件夹不可写入"))
 	}
 	_ = f.Close()
 	_ = os.Remove(probe)

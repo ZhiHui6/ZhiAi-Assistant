@@ -62,19 +62,19 @@ func (a *App) PickBackupFile() (string, error) {
 		return "", err
 	}
 	if len(paths) == 0 || paths[0] == "" {
-		return "", errors.New("未选择备份文件")
+		return "", errors.New(i18n.T("未选择备份文件"))
 	}
 	return paths[0], nil
 }
 
 func (a *App) RestoreBackupData(zipPath string, categories []string) error {
 	if !a.settingsOnly {
-		return errors.New("请在设置窗口中导入备份")
+		return errors.New(i18n.T("请在设置窗口中导入备份"))
 	}
 	a.mu.Lock()
 	if a.restoreBusy || a.resetBusy || a.locationBusy {
 		a.mu.Unlock()
-		return errors.New("正在处理数据，请稍候")
+		return errors.New(i18n.T("正在处理数据，请稍候"))
 	}
 	a.restoreBusy = true
 	a.mu.Unlock()
@@ -91,11 +91,11 @@ func (a *App) RestoreBackupData(zipPath string, categories []string) error {
 	wasRunning := platform.SidebarRunning()
 	if wasRunning {
 		if err := writeSettingsCommand(settingsCommand{Action: actionQuit}); err != nil {
-			return errors.New("无法通知侧边栏退出")
+			return errors.New(i18n.T("无法通知侧边栏退出"))
 		}
 		platform.NotifySettingsCommand()
 		if !waitSidebarExit(20 * time.Second) {
-			return errors.New("侧边栏尚未退出，导入已取消")
+			return errors.New(i18n.T("侧边栏尚未退出，导入已取消"))
 		}
 		time.Sleep(500 * time.Millisecond)
 	}
@@ -115,10 +115,10 @@ func (a *App) RestoreBackupData(zipPath string, categories []string) error {
 	if wasRunning {
 		exe, err := os.Executable()
 		if err != nil {
-			return errors.New("数据已导入，请手动重新打开程序")
+			return errors.New(i18n.T("数据已导入，请手动重新打开程序"))
 		}
 		if err := exec.Command(exe).Start(); err != nil {
-			return errors.New("数据已导入，但自动启动失败，请手动重新打开程序")
+			return errors.New(i18n.T("数据已导入，但自动启动失败，请手动重新打开程序"))
 		}
 	}
 	return nil

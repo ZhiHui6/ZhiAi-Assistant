@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"zhi-ai-assistant/internal/i18n"
 )
 
 var backupSkipNames = map[string]bool{
@@ -28,7 +30,7 @@ type BackupCategory struct {
 
 var BackupCategories = []BackupCategory{
 	{ID: "todos", Files: []string{"todos.json"}},
-	{ID: "notes", Files: []string{"notes.json"}},
+	{ID: "memos", Files: []string{"memos.json", "notes.json"}, Dirs: []string{"memo-files"}},
 	{ID: "shelf", Files: []string{"shelf.json", "mounts.json"}},
 	{ID: "launch", Files: []string{"launch.json"}},
 	{ID: "timers", Files: []string{"timers.json"}},
@@ -149,7 +151,7 @@ func CreateBackup(dstDir string, selected []string) (BackupInfo, error) {
 	chosen := selectedCategorySet(selected)
 	selective := selected != nil
 	if selective && len(chosen) == 0 {
-		return BackupInfo{}, errors.New("未选择要备份的内容")
+		return BackupInfo{}, errors.New(i18n.T("未选择要备份的内容"))
 	}
 	src := DataRoot()
 	entries, present, err := backupEntries(src, chosen, selective)
@@ -157,7 +159,7 @@ func CreateBackup(dstDir string, selected []string) (BackupInfo, error) {
 		return BackupInfo{}, err
 	}
 	if len(entries) == 0 {
-		return BackupInfo{}, errors.New("所选内容没有可备份的数据")
+		return BackupInfo{}, errors.New(i18n.T("所选内容没有可备份的数据"))
 	}
 	final := filepath.Join(dstDir, backupName("zhi-ai-backup", ".zip"))
 	tmp := final + ".tmp"
@@ -248,18 +250,18 @@ func CreateAutoBackup() (BackupInfo, error) {
 func safeJoin(root, name string) (string, error) {
 	if name == "" || strings.HasPrefix(name, "/") || strings.HasPrefix(name, "\\") ||
 		filepath.IsAbs(name) || filepath.VolumeName(name) != "" {
-		return "", fmt.Errorf("备份内路径非法: %s", name)
+		return "", errors.New(i18n.TF("备份内路径非法: %s", name))
 	}
 	normalized := filepath.FromSlash(name)
 	for _, seg := range strings.Split(normalized, string(filepath.Separator)) {
 		if seg == ".." {
-			return "", fmt.Errorf("备份内路径越界: %s", name)
+			return "", errors.New(i18n.TF("备份内路径越界: %s", name))
 		}
 	}
 	target := filepath.Join(root, normalized)
 	rel, err := filepath.Rel(root, target)
 	if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
-		return "", fmt.Errorf("备份内路径越界: %s", name)
+		return "", errors.New(i18n.TF("备份内路径越界: %s", name))
 	}
 	return target, nil
 }
@@ -267,7 +269,7 @@ func safeJoin(root, name string) (string, error) {
 func VerifyBackup(path string) (int, int64, error) {
 	zr, err := zip.OpenReader(path)
 	if err != nil {
-		return 0, 0, errors.New("无法读取备份文件")
+		return 0, 0, errors.New(i18n.T("无法读取备份文件"))
 	}
 	defer zr.Close()
 	count := 0
@@ -283,7 +285,7 @@ func VerifyBackup(path string) (int, int64, error) {
 		total += int64(f.UncompressedSize64)
 	}
 	if count == 0 {
-		return 0, 0, errors.New("备份文件为空")
+		return 0, 0, errors.New(i18n.T("备份文件为空"))
 	}
 	return count, total, nil
 }
@@ -302,7 +304,7 @@ type BackupCategoryInfo struct {
 func ReadBackupContents(path string) (BackupContents, error) {
 	zr, err := zip.OpenReader(path)
 	if err != nil {
-		return BackupContents{}, errors.New("无法读取备份文件")
+		return BackupContents{}, errors.New(i18n.T("无法读取备份文件"))
 	}
 	defer zr.Close()
 	counts := make(map[string]*BackupCategoryInfo)
@@ -334,14 +336,14 @@ func ReadBackupContents(path string) (BackupContents, error) {
 		}
 	}
 	if len(out.Categories) == 0 {
-		return BackupContents{}, errors.New("备份中没有可导入的数据")
+		return BackupContents{}, errors.New(i18n.T("备份中没有可导入的数据"))
 	}
 	return out, nil
 }
 
 func RestoreBackup(zipPath string, selected []string) (BackupInfo, error) {
 	if _, err := os.Stat(zipPath); err != nil {
-		return BackupInfo{}, errors.New("备份文件不存在")
+		return BackupInfo{}, errors.New(i18n.T("备份文件不存在"))
 	}
 	wantCount, _, err := VerifyBackup(zipPath)
 	if err != nil {
@@ -363,7 +365,7 @@ func RestoreBackup(zipPath string, selected []string) (BackupInfo, error) {
 	}
 	extracted, copyErr := extractZip(zipPath, tmpDir)
 	if copyErr == nil && extracted != wantCount {
-		copyErr = fmt.Errorf("解压文件数不符: %d / %d", extracted, wantCount)
+		copyErr = errors.New(i18n.TF("解压文件数不符: %d / %d", extracted, wantCount))
 	}
 	if copyErr != nil {
 		_ = os.RemoveAll(tmpDir)
@@ -372,12 +374,12 @@ func RestoreBackup(zipPath string, selected []string) (BackupInfo, error) {
 	src := DataRoot()
 	if err := os.Rename(src, oldDir); err != nil {
 		_ = os.RemoveAll(tmpDir)
-		return pre, errors.New("无法切换数据目录，已保持原样")
+		return pre, errors.New(i18n.T("无法切换数据目录，已保持原样"))
 	}
 	if err := os.Rename(tmpDir, src); err != nil {
 		_ = os.Rename(oldDir, src)
 		_ = os.RemoveAll(tmpDir)
-		return pre, errors.New("无法切换数据目录，已恢复原数据")
+		return pre, errors.New(i18n.T("无法切换数据目录，已恢复原数据"))
 	}
 	_ = os.RemoveAll(oldDir)
 	return pre, nil
@@ -386,7 +388,7 @@ func RestoreBackup(zipPath string, selected []string) (BackupInfo, error) {
 func restoreSelected(zipPath string, selected []string) error {
 	chosen := selectedCategorySet(selected)
 	if len(chosen) == 0 {
-		return errors.New("未选择要导入的内容")
+		return errors.New(i18n.T("未选择要导入的内容"))
 	}
 	tmpDir, err := os.MkdirTemp(DataDir(), "data.pick-")
 	if err != nil {
@@ -421,7 +423,7 @@ func restoreSelected(zipPath string, selected []string) error {
 		}
 	}
 	if copied == 0 {
-		return errors.New("备份中没有所选内容")
+		return errors.New(i18n.T("备份中没有所选内容"))
 	}
 	return nil
 }
@@ -477,7 +479,7 @@ func copyDirInto(srcDir, dstDir string) (int, error) {
 func extractZip(zipPath, dst string) (int, error) {
 	zr, err := zip.OpenReader(zipPath)
 	if err != nil {
-		return 0, errors.New("无法读取备份文件")
+		return 0, errors.New(i18n.T("无法读取备份文件"))
 	}
 	defer zr.Close()
 	count := 0
@@ -511,7 +513,7 @@ func extractZip(zipPath, dst string) (int, error) {
 			return count, closeErr
 		}
 		if uint64(written) != f.UncompressedSize64 {
-			return count, fmt.Errorf("解压不完整: %s", f.Name)
+			return count, errors.New(i18n.TF("解压不完整: %s", f.Name))
 		}
 		count++
 	}
